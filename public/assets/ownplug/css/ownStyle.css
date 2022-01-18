@@ -1,0 +1,64 @@
+@keyframes hoverun {
+    0% {
+        position: relative;
+        top: 0px;
+    }
+    100% {
+        position: relative;
+        top: -10px;
+    }
+}
+
+
+td {
+    font-size: 15px !important;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+#hoveranimation {
+    transition: 0.5s;
+    position: relative;
+    top: 0px;
+}
+
+.hoverScroll {
+    overflow: auto;
+    position: relative!important;
+    transition: 0s!important;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+}
+
+.set-animate {
+    transition: 1s;
+    position: relative;
+    bottom: 0px;
+    top: 0px;
+}
+
+.set-animate.hide {
+    display: none;
+    opacity: 0;
+    transition: 0s!important;    
+}
+
+
+.set-animate.fade-up {
+    opacity: 1;
+    bottom: 0px;
+}
+
+
+
+#hoveranimation:hover {
+    animation-name: hoverun;
+    animation-duration: 0.5s;
+    position: relative;
+    top: -10px;
+}
