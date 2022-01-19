@@ -142,7 +142,7 @@
 						@php $tag = json_decode($item->tag_mb, 1) @endphp
     					<div class="item">
     						<div class="car-wrap rounded ftco-animate">
-		    					<div class="img rounded d-flex align-items-end" style="background-image: url(assets/img/dataImg/s);">
+		    					<div class="img rounded d-flex align-items-end" style="background-image: url(assets/img/dataImg/{{ $item->gmb_mb }});">
 		    					</div>
 		    					<div class="text">
 		    						<h2 class="mb-0"><a href="#">{{ $item->nama_mb }}</a></h2>
