@@ -17,7 +17,7 @@
                     <a href="#" class="btn btn-sm btn-neutral">Filters</a>
 
                     <!-- /.tambah pesanan Baru Modal -->
-                    @if (session()->get('pesananADD')) 
+                    @if (session()->get('pesananADD'))
                     @php $arr = collect(session()->all()); @endphp
                     @endif
                     <div class="modal fade" id="tambahPesanan" tabindex="-1" role="dialog" aria-hidden="true">
@@ -35,7 +35,7 @@
                                     <div class="card">
                                         <div class="card-body">
                                             <div class="row">
-                                                
+
 
                                                 <div class="col-sm-12 col-lg-{{(session()->get('pesananADD')) ? '12' : '4' }}">
                                                     <div class="card w-100">
@@ -45,7 +45,7 @@
                                                                 <span>{{ old('namaMB') }}</span>
                                                             </h3>
                                                             <p class="card-text">{{ old('descM') }}.</p>
-                                                            
+
                                                         </div>
                                                     </div>
                                                 </div>
@@ -75,7 +75,7 @@
                                                                     <tr>
                                                                         <th class="text-center text-muted fs-2">table is empty</th>
                                                                     </tr>
-                                                                </thead>                                                                
+                                                                </thead>
                                                                 @else
                                                                 <thead>
                                                                     <tr>
@@ -125,7 +125,7 @@
                                                                         </td>
                                                                     </tr>
                                                                     @endif
-                                                                    @endforeach                                                                
+                                                                    @endforeach
                                                                 </tbody>
                                                                 @endif
                                                             </table>
@@ -136,20 +136,20 @@
                                             </div>
                                         </div>
                                     </div>
-                                        
+
                                     <form id="formPesanan" action="{{ (session()->get('pesananADD')) ? route('addPesanan') : route('HitungPesanan') }}" method="POST" enctype="multipart/form-data">
                                         @csrf
                                         @if (session()->get('pesananADD')) <input type="hidden" name="NoMb" value="{{ old('NoMb') }}"> @endif
                                         <input type="hidden" name="ClickM" value="tambahPm">
                                         <div class="card text-left">
-    
+
                                             <div class="card-body">
                                                 <div class="row d-block px-2">
                                                     <div class="form-group">
                                                         <label for="catatan" class="mx-auto d-block"><span class="subheading" style="color: #01d28e">Harga Sewa</span></label>
-    
+
                                                         <div class="container content-center">
-                                                            
+
                                                             <div class="row">
                                                                 <div class="col">
                                                                     <p>Harga sewa Perhari</p>
@@ -160,11 +160,11 @@
                                                                     </p>
                                                                 </div>
                                                             </div>
-    
+
                                                         </div>
-    
+
                                                     </div>
-                                                    
+
                                                     <div class="form-group">
                                                         <label for="nama-customer" class="col-form-label">Nama Lengkap:</label>
                                                         <input class="form-control @error('nama_customer') is-invalid @enderror" {{ (old('nama_customer')) ? "" : "disabled"  }} type="text" value="{{ old('nama_customer') }}" name="nama_customer" class="form-control" id="nama-customer">
@@ -184,8 +184,21 @@
                                                         @enderror
                                                     </div>
                                                     <div class="form-group">
-                                                        <label for="tanggal-sewa" class="col-form-label">Tanggal Mulai Sewa: </label>
-                                                        <input daterange="datetimelocal" date-range-target="#Pengembalian" class="form-control @error('tgl_sewa') is-invalid @enderror" {{ (old('tgl_sewa')) ? "" : "disabled"  }} type="datetime-local" value="{{ old('tgl_sewa') }}" name="tgl_sewa"  class="form-control" min="@once{{ Carbon\Carbon::now()->toDateTimeLocalString('minute'); }}@endonce" id="tanggal-sewa">
+                                                        <label for="tanggal-sewa" class="col-form-label">Tanggal & Waktu Pengambilan: </label>
+                                                        <div class="form-group row px-3">
+                                                            <input daterange="date" date-range-target="#Pengembalian" class="col mr-3 form-control @error('tgl_sewa') is-invalid @enderror" {{ (old('tgl_sewa')) ? "" : "disabled"  }} type="date" value="{{ old('tgl_sewa') }}" name="tgl_sewa" class="form-control" min="@once{{ Carbon\Carbon::now()->toDateTimeLocalString('minute'); }}@endonce" id="tanggal-sewa">
+
+                                                            <select name="jam_sewa" class="col-2 mr-2 form-control">
+                                                                @for ($i = 1; $i <= 24; $i++) <option value="{{ $i }}">{{ $i }}</option>
+                                                                    @endfor
+                                                            </select>
+
+                                                            <select name="menit_sewa" class="col-2  form-control">
+                                                                <option value="00">00</option>
+                                                                <option value="30">30</option>
+                                                            </select>
+
+                                                        </div>
                                                         @error('tgl_sewa')
                                                         <div class="invalid-feedback">
                                                             {{ $message }}
@@ -195,9 +208,9 @@
 
                                                     <div class="form-group">
 
-                                                        <label for="Pengembalian" class="col-form-label">Tanggal Pengembalian Mobil:</label>
+                                                        <label for="Pengembalian" class="col-form-label">Tanggal & Waktu Pengembalian:</label>
                                                         <input {{ (old('tgl_pgmbl')) ? "" : "disabled "  }} type="datetime-local" value="{{ old('tgl_pgmbl') }}" name="tgl_pgmbl" class="form-control" id="Pengembalian">
-                                                        
+
                                                     </div>
                                                     <div class="form-group">
                                                         <label for="tp_sewa" class="col-form-label">Tipe Sewa</label>
@@ -232,21 +245,21 @@
                                                         </label>
                                                         <div class="container content-center">
                                                             <div class="row">
-                                                                <div class="col d-flex">                                                                    
-                                                                    <p>Harga sewa / Hari</p>                                                                                                                                                                                                  
+                                                                <div class="col d-flex">
+                                                                    <p>Harga sewa / Hari</p>
                                                                 </div>
                                                                 <div class="col">
                                                                     <p>Rp {{ placeRp($arr->get('harga_hari')) }}</p>
-                                                                </div>                                                                
+                                                                </div>
                                                             </div>
 
                                                             <div class="row">
-                                                                <div class="col d-flex">                                                                    
-                                                                    <p>Total Harga sewa ({{ $arr->get('hari_sewa') }} Hari)</p>                                                                                                                                                                                                  
+                                                                <div class="col d-flex">
+                                                                    <p>Total Harga sewa ({{ $arr->get('hari_sewa') }} Hari)</p>
                                                                 </div>
                                                                 <div class="col">
                                                                     <p>Rp {{ placeRp($arr->get('harga_total')) }}</p>
-                                                                </div>                                                                
+                                                                </div>
                                                             </div>
                                                             @if ($arr->get('plusDriver') && $arr->get('pesananADD'))
                                                             <div id="hargaSopirP" class="row">
@@ -268,7 +281,7 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-    
+
                                                     </div>
 
                                                     <div class="form-group">
@@ -302,7 +315,7 @@
                                         </section>
                                         @endif
                                     </form>
-                                    
+
                                 </div>
 
                             </div>
