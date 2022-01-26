@@ -44,6 +44,13 @@
               </a>
             </li>
 
+            <li class="nav-item">
+              <a class="nav-link {{ (Route::is('Transaksi')) ? 'active' : '' }}" href="{{ Route('Transaksi') }}">
+                <i class="fa fa-hammer text-yellow"></i>
+                <span class="nav-link-text">Build</span>
+              </a>
+            </li>
+
             
 
             <!-- /SideBarMenu -->
