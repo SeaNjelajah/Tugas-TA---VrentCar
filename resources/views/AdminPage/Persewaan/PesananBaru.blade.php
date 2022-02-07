@@ -56,22 +56,36 @@
 
                       <div class="modal-body">
 
-                          <div class="row d-flex text-center">
-                              <div class="col-{{ (!empty($item->address_serah_terima)) ? '6' : '12' }}">
-                                  <strong class="display-4">Alamat Rumah</strong>
-                                  <p class="display-5">{{ $item->address_home }}</p>
-                              </div>
+                          <table class="text-center table mx-auto table-hover table-bordered shadow mx-3">
+                            <thead>
+                              <tr>
+                                <th class="font-size-2 font-poppins-400">Lokasi</th>
+                              </tr>
+                            </thead>
+                            <tbody>
 
-                              @if (!empty($item->address_serah_terima))
-                              <div class="col-6">
-                                  <strong class="display-4">Alamat Serah Terima</strong>
-                                  <p class="display-5">{{ $item->address_serah_terima }}</p>
-                              </div>
-                              @endif
+                              <tr>
+                                <td class="d-flex">
+                                  <h3 class="col-3 text-left">Alamat Rumah</h3>
+                                  <h3 class="col-1"> : </h3>
+                                  <h3 class="col-8 ">{{ $item->address_home }}</h3>
+                                </td>                                      
+                              </tr>
 
-                          </div>
+                              <tr>
+                                <td class="d-flex">
+                                  <h3 class="col-3 text-left">Alamat Serah Terima</h3>
+                                  <h3 class="col-1"> : </h3>
+                                  <h3 class="col-8 ">{{ $item->address_serah_terima }}</h3>
+                                </td>                                      
+                              </tr>
 
-                          <table class="table mx-auto table-hover text-left table-bordered shadow table">                  
+
+                            </tbody>
+
+                          </table>
+
+                          <table class="mt-4 table mx-auto table-hover table-bordered shadow table">                  
                               <tbody class="text-center">
 
                                 <tr>
@@ -80,7 +94,14 @@
                                     <h3 class="col-1"> : </h3>
                                     <h3 class="col-8 ">{{ $item->nama }}</h3>
                                   </td>                                      
-                                </tr>                                                                             
+                                </tr>
+                                <tr>
+                                  <td class="d-flex">
+                                    <h3 class="col-3 text-left">Tipe Sewa</h3>
+                                    <h3 class="col-1"> : </h3>
+                                    <h3 class="col-8 ">{{ $item->tipe_sewa }}</h3>
+                                  </td>                                           
+                                </tr>                                                                     
                                 <tr>
                                   <td class="d-flex">
                                     <h3 class="col-3 text-left">Nomer Telepon</h3>
@@ -200,26 +221,27 @@
                     </div>
                   </div>
               </div>
+              
           </div>
 
           <div class="my-lg-0 col-md-12 col-lg ml-0 text-left" style="border-left: 2px #d3ddcf solid;">
               <h3 class="mb-0 mt-2 pl-3">Tipe sewa: {{ $item->tipe_sewa }}</h3>
-              <select class="form-select ml-3 mt-3 w-100" style="max-width: 85%;">
+              <select class="form-select ml-3 mt-3 w-100" style="max-width: 85%;" onchange="document.getElementById('data_sp_id').value = this.value;">
                   <option selected value="">Menu Sopir</option>
                   @foreach ($data2 as $supir)
-                  @if($item->status == "Siap")
-                  <option value="{{ $supir->id }}">{{ $supir->nama }}</option>
-                  @endif
+                    @if($supir->status == "Siap")
+                    <option value="{{ $supir->id }}">{{ $supir->nama }}</option>
+                    @endif
                   @endforeach
               </select>
 
-              @if (empty($item->d_mobil_id))
+              {{-- @if (empty($item->d_mobil_id))
               <select class="form-select ml-3 mt-2 w-100" style="max-width: 85%;">
                   <option selected>Ada X Mobil yg sejenis</option>
                   <option value="1">One</option>
                   <option value="2">Two</option>
               </select>
-              @endif
+              @endif --}}
 
               <h3 class="mb-0 mt-2 pl-3">Pembayaran</h3>
               <p class="mt-0 pl-3">{{ $item->tipe_bayar }}</p>
@@ -242,9 +264,10 @@
         </form>
         <form action="{{ route('OrderSetujui', $item->id) }}" class="col-auto w-50 text-right" method="POST">
           @csrf
-          <button class="btn btn-success text-white" >PROSES</button>
+          <input id="data_sp_id" type="hidden" name="data_supir_id" value="null">
+          <button class="btn btn-success text-white">PROSES</button>
         </form>
-    </div>
+      </div>
 
   </div>
 </div>

@@ -209,6 +209,8 @@
         }, time);
     }
 
+
+
 </script>
 
 @if (Session()->get('ClickM') ? true : false)

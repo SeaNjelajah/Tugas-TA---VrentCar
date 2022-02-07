@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\CombineController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AdminController;
+
 
 
 /*
@@ -24,34 +26,44 @@ function placeRp ($num) {
 }
 
 
+
+
 //Dashboard Start
 Route::view('/', 'welcome');
+Route::view('/Dashboard/test', 'welcome');
 //Route::redirect('/','/Dashboard');
-Route::view('/Dashboard', 'AdminPage.Combine')->name('Dashboard');
+
+Route::get('/Dashboard', [AdminController::class, 'Dashboard'])->name('admin.dashboard.show');
 //Dashboard end
 
 //Armada Mobil Start
-Route::get('/ArmadaMobil', [CombineController::class, 'showMobil'])->name('ArmadaMobil');
-Route::post('/ArmadaMobil/Create/',[CombineController::class, 'CreateMobil'])->name('AMCreate');
-Route::post('/ArmadaMobil/Delete/', [CombineController::class, 'deleteMobil'])->name('delMobil');
-Route::post('/ArmadaMobil/Update/', [CombineController::class, 'updateMobil'])->name('upMobil');
+Route::get('/ArmadaMobil', [CombineController::class, 'showMobil'])->name('admin.ArmadaMobil.show');
+Route::post('/ArmadaMobil/Create/',[CombineController::class, 'CreateMobil'])->name('admin.ArmadaMobil.create');
+Route::post('/ArmadaMobil/Delete/', [CombineController::class, 'deleteMobil'])->name('admin.ArmadaMobil.delete');
+Route::post('/ArmadaMobil/Update/', [CombineController::class, 'updateMobil'])->name('admin.ArmadaMobil.update');
 //Armada Mobil end
 
 //Persewaan Start
-Route::get('/Persewaan', [CombineController::class, 'PersewaanShow'])->name('Persewaan');
+Route::get('/Persewaan', [CombineController::class, 'PersewaanShow'])->name('admin.Persewaan.show');
 
 // Pesanan Order
 Route::post('/Persewaan/Setujui/{id}', [CombineController::class, 'OrderSetujui'])->name('OrderSetujui');
 Route::post('/Persewaan/Batalkan/{id}', [CombineController::class, 'OrderBatalkan'])->name('OrderBatalkan');
 // Pesanan Order end
 
+//carimobil
+Route::get('/CariMobil', [CombineController::class, 'CariMobilPersewaan'])->name('CariMobilPersewaan');
+Route::post('/CariMobil/add', [CombineController::class, 'addPesanan'])->name('TambahPersewaan');
+//carimobil end
+
 
 Route::post('/Persewaan/Calculate', [CombineController::class, 'HitungPesanan'])->name('HitungPesanan');
 Route::post('/Persewaan/Add', [CombineController::class, 'addPesanan'])->name('addPesanan');
+
 //Persewaan End
 
 //Transaksi Start
-Route::get('/TransaksiSelesai', [CombineController::class, 'TransaksiShow'])->name('Transaksi');
+Route::get('/TransaksiSelesai', [CombineController::class, 'TransaksiShow'])->name('admin.Transaksi.show');
 Route::post('/TransaksiSelesai', [CombineController::class, 'TransaksiTest'])->name('TransaksiTest');
 //Transaksi end
 
@@ -62,8 +74,8 @@ Route::post('/TagMange/Edit/Tag', [CombineController::class, 'TagManageEdit'])->
 Route::post('/TagManage/Delete/Tag', [CombineController::class, 'tagManageTagDel'])->name('TagManageDelTag');
 
 Route::post('/TagManage/Add/TagContain', [CombineController::class, 'tagContainAdd'])->name('addTagContain');
-Route::post('/TagManage/Delete/Contain', [CombineController::class, 'tagContainDel'])->name('tagContainDel');
-Route::post('/TagManage/Edit/Contain', [CombineController::class, 'tagContainEdit'])->name('tagContainEdit');
+Route::post('/TagManage/Delete/TagContain', [CombineController::class, 'tagContainDel'])->name('tagContainDel');
+Route::post('/TagManage/Edit/TagContain', [CombineController::class, 'tagContainEdit'])->name('tagContainEdit');
 //TagManage end
 
 //SopirManager Start

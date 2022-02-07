@@ -1,6 +1,18 @@
 <div class="container-fluid mt-1">
     <div class="container mt-3">
 
+        <div class="row mb-4 pl-3">
+
+            @foreach ($data1 as $list)
+            <a class="mx-2" href="#{{ $list->nama_tag }}">
+                <span class="font-weight-bold badge badge-pill badge-lg badge-success">
+                    {{ $list->nama_tag }}
+                </span>
+            </a>
+            @endforeach
+            
+        </div>
+
         <div class="row">
 
             <div class="col-lg-4">
@@ -74,7 +86,7 @@
             @foreach ($data1 as $list)
             <div class="col-lg-{{ (0 == $check++) ? "8" : "6" }} mx-auto">
 
-                <div class="card">
+                <div id="{{ $list->nama_tag }}" class="card">
                     <div class="card-header">
                         <div class="row">
 
@@ -243,6 +255,7 @@
 
                     </div>
                 </div>
+
             </div>
             @endforeach
             

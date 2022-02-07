@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
 
 class CreateTagListsTable extends Migration
 {
@@ -18,6 +19,21 @@ class CreateTagListsTable extends Migration
             $table->string('nama_tag');
             $table->timestamps();
         });
+
+        DB::table('tag_lists')->insert([
+            [
+                'nama_tag' => 'Merek'
+            ],
+            [
+                'nama_tag' => 'Supir'
+            ],
+            [
+                'nama_tag' => 'Transmission'
+            ],
+            [
+                'nama_tag' => 'Fuel'
+            ]
+        ]);
     }
 
     /**

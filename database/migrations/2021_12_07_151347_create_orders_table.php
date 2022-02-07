@@ -1,9 +1,11 @@
 <?php
 
+use App\Models\dataSupir;
 use App\Models\DMobil;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+
 
 class CreateOrdersTable extends Migration
 {
@@ -17,10 +19,11 @@ class CreateOrdersTable extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(DMobil::class)->nullable()->constrained()->onDelete('set null')->onUpdate('cascade');
+            $table->foreignIdFor(dataSupir::class)->nullable()->constrained()->onDelete('set null')->onUpdate('cascade');
             $table->string("nama");
             $table->string("No_tlp");
-            $table->date("mulai_sewa");
-            $table->date("akhir_sewa");
+            $table->dateTime("mulai_sewa");
+            $table->dateTime("akhir_sewa");
             $table->string("tipe_sewa");
             $table->string("address_home");
             $table->string("address_serah_terima")->nullable();
@@ -32,6 +35,8 @@ class CreateOrdersTable extends Migration
             $table->string('historical_date')->nullable();
             $table->timestamps();
         });
+
+
     }
 
     /**
@@ -42,5 +47,6 @@ class CreateOrdersTable extends Migration
     public function down()
     {
         Schema::dropIfExists('orders');
+        
     }
 }

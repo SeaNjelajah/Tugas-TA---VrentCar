@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\DB;
 use App\Models\dataSupir;
 use Illuminate\Http\Request;
 use App\Models\DMobil;
@@ -12,12 +13,9 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Validation\Rule;
-use Stringable;
 
-use function GuzzleHttp\Promise\all;
+
 
 class CombineController extends Controller
 {
@@ -25,14 +23,11 @@ class CombineController extends Controller
     // Own Func / non-related func Start
     private function dataManage($data = [])
     {
-        $name = Route::currentRouteName();
-        $find = ['.topnavbar', '.header', '.content'];
-        for ($a = 0; $a < count($find); $a++) {
-            if (View::exists('AdminPage.' . $name . $find[$a])) {
-                $data += [substr($find[$a], 1) => 'AdminPage.' . $name . $find[$a]];
-            }
-        }
-        return $data;
+        return [
+            'header' => 'AdminPage.ZTemplate.header',
+            'content' => 'AdminPage.ZTemplate.content', 
+            'topnavbar' => 'AdminPage.ZTemplate.topnavbar'
+        ];
     }
 
 
@@ -60,7 +55,14 @@ class CombineController extends Controller
         $data1 = $m->all();
         $data2 = tagList::all();
         $data3 = tagContain::all();
-        return view('AdminPage.Combine', compact('data1', 'data2', 'data3'), $this->dataManage());
+
+        $view = [
+            'header' => 'AdminPage.ArmadaMobil.header',
+            'content' => 'AdminPage.ArmadaMobil.content',
+            'topnavbar' => 'AdminPage.ArmadaMobil.topnavbar'
+        ];
+
+        return view('AdminPage.Combine', compact('data1', 'data2', 'data3'), $view);
     }
 
 
@@ -94,7 +96,7 @@ class CombineController extends Controller
             Proses
         */
         $req->session()->forget(['failed', 'ClickM']);
-        if (!empty($req->GMB) && $req->hasFile('GMB')) {
+        if ($req->hasFile('GMB')) {
             $imageName = explode(".", $req->file('GMB')->getFilename())[0] . "_" . time() . '.' . $req->GMB->extension();
             $req->GMB->move(public_path('assets/img/dataImg'), $imageName);
         } else {
@@ -114,18 +116,18 @@ class CombineController extends Controller
             'millage' => $req->Millage,
             'status' => $req->st_mb
         ]);
-        return redirect(Route("ArmadaMobil") . (($req->idForScroll != 'r0') ? '#' . $req->idForScroll : ''))->with('success', 'Your Data are saved!');
+        return redirect(Route("admin.ArmadaMobil.show") . (($req->idForScroll != 'r0') ? '#' . $req->idForScroll : ''))->with('success', 'Your Data are saved!');
     }
 
     public function deleteMobil(Request $r)
     {
         $picName = DMobil::find($r->itemId)->gmb_mb;
         $imagePath = public_path('assets/img/dataImg/' . $picName);
-        if (File::exists($imagePath) and $picName != 'NoImageA.jpg') {
+        if (File::exists($imagePath) and $picName != 'NoImageA.png') {
             File::delete($imagePath);
         }
         DMobil::find($r->itemId)->delete();
-        return redirect(Route('ArmadaMobil') . (($r->aftermath != 'r0') ? '#' . $r->aftermath : ''))->with('success', 'Your data has been deleted!');
+        return redirect(Route('admin.ArmadaMobil.show') . (($r->aftermath != 'r0') ? '#' . $r->aftermath : ''))->with('success', 'Your data has been deleted!');
     }
 
     public function updateMobil(Request $r)
@@ -183,10 +185,10 @@ class CombineController extends Controller
         $up->bagasi = $up->bagasi != $r->Bagasi ?  $r->Bagasi : $up->bagasi;
 
         if ($up->isClean()) {
-            return redirect(Route('ArmadaMobil') . "#" . $r->idForScroll)->with("failed", "Inputs aren't change! please edit something!")->with("ClickM", $r->modal)->withErrors(["NotEdited" => "Not detected a change on edit inputs"]);
+            return redirect(Route('admin.ArmadaMobil.show') . "#" . $r->idForScroll)->with("failed", "Inputs aren't change! please edit something!")->with("ClickM", $r->modal)->withErrors(["NotEdited" => "Not detected a change on edit inputs"]);
         } else {
             $up->save();
-            return redirect(Route('ArmadaMobil') . "#" . $r->idForScroll)->with("success", "Your data has been edited!");
+            return redirect(Route('admin.ArmadaMobil.show') . "#" . $r->idForScroll)->with("success", "Your data has been edited!");
         }
     }
     //Armada Mobil Section end
@@ -199,85 +201,114 @@ class CombineController extends Controller
             'header' => 'AdminPage.Persewaan.header',
             'content' => 'AdminPage.Persewaan.content',
             'topnavbar' => 'AdminPage.Persewaan.topnavbar',
-            'OtherContent' => ((empty($r->f)) ? false : 'AdminPage.Persewaan.Pesanan' . $r->f)
         ];
         
-        $data1 = DMobil::all(); $data2 = dataSupir::all(); $data3 = order::all();
-        return view('AdminPage.Combine', compact('data1', 'data2', 'data3'), array_merge($content, ["formRoute" => route('addPesanan')]));
+        $data1 = DMobil::all(); $data2 = dataSupir::all(); $data3 = order::all(); 
+        return view('AdminPage.Combine', compact('data1', 'data2', 'data3'), $content);
+    
     }
 
-    public function HitungPesanan (Request $r) {
+    public function CariMobilPersewaan (Request $r) {
+
+        if (!Route::is('CariMobilPersewaan')) return;
         
-        $r->session()->flash('failed','Some fields are empty!');
-        $r->session()->flash('ClickM',$r->ClickM);
-        $r->validate([
-            'nama_customer' => ['required'],
-            'nomer' => ['required','numeric'],
-            'tgl_sewa' => ['date', 'required'],
-            'tgl_pgmbl' => ['date', 'required'],
-            'alamat_rm' => ['required'],
-        ]);
-        $r->session()->forget(['failed', 'ClickM']);
+        //find data in json
+        if ($r->dengan_supir == "true") {
+            $data = DB::table('d_mobils')->where('tag_mb->Supir', 'Dengan Supir')->get();
         
+        } else if ($r->dengan_supir == "false") {
+            $data = DB::table('d_mobils')->where('tag_mb->Supir', 'Tanpa Supir')->get();
+        }
+
         
-        $hariSewa = Carbon::create($r->tgl_sewa)->diff(Carbon::create($r->tgl_pgmbl), false);
-        $HitungPesanan = [
-            'hari_sewa' => $hariSewa->d,
-            'harga_hari' => $r->hargaMB,
-            'harga_total' => ($hariSewa->d*$r->hargaMB),
-            'plusDriver' => (($r->tp_sewa == 'Mobil Dengan Pengemudi') ? true : false),
-            'pesananADD' => true
+        //$data = DMobil::whereRaw('json_contains(destinations, \'["' . "Dengan Supir" . '"]\')')->get();
+        
+        $view = [
+            'header' => 'AdminPage.Persewaan.TemukanMobilHeader',
+            'content' => 'AdminPage.Persewaan.TemukanMobilContent',
+            'topnavbar' => 'AdminPage.Persewaan.topnavbar'
         ];
-        return redirect()->back()->with($HitungPesanan)->with('ClickM', $r->ClickM)->withInput();
+        return view('AdminPage.Combine', compact('data') ,$view);
     }
 
     public function addPesanan (Request $r) {
+        
         $r->session()->flash('failed', 'Some input are empty!');
+        
         $r->validate([
-            "nama_customer" => ['required'],
-            "nomer" => ['required'],
-            "tgl_sewa" => ['required', 'date'],
-            "tgl_pgmbl" => ['required', 'date'],
-            "tp_sewa" => ['required'],
-            "alamat_rm" => ['required'],
-            "TotalTagihan" => ['required'],
+            "nama" => ['required'],
+            "No_tlp" => ['required'],
+            "address_home" => ['required'],
+            "total" => ['required'],
             "tipe_bayar" => ['required']
         ]);
+
         $r->session()->forget('failed');
 
 
         if($r->hasFile('GMB_Bukti') && $r->GMB_Bukti != "NoImageA.png") {
-            $filename = explode(".", $r->file('GMB_Bukti')->getFilename())[0] . "_" . time() . '.' . $r->GMB_Bukti->extension();
-            Storage::put('ImgBuktiBayar/' . $filename, $r->file('GMB_Bukti'));
+            $filename = explode(".", $r->file('GMB_Bukti')->getClientOriginalName())[0] . "_" . time() . '.' . $r->GMB_Bukti->extension();
+            $r->file('GMB_Bukti')->move(public_path('assets/img/dataimg/buktibayar'), $filename);
         } else {
             $filename = null;
         }
 
-        order::create([
-            "d_mobil_id" => $r->NoMb,
-            "nama" => $r->nama_customer,
-            "No_tlp" => $r->nomer,
-            "mulai_sewa" => $r->tgl_sewa,
-            "akhir_sewa" => $r->tgl_pgmbl,
-            "tipe_sewa" => $r->tp_sewa,
-            "address_home" => $r->alamat_rm,
-            "address_serah_terima" => $r->alamat_st,
-            "tipe_bayar" => $r->tipe_bayar,
-            "total" => $r->TotalTagihan,
-            "bukti_bayar" => $filename,
-            "status" => "Baru",
-            "status_proses" => "Dalam Antrian"
-        ]);
 
-        $mobil = DMobil::find($r->NoMb);
+        if ($r->dengan_supir == "true") {
+            
+            $tanggal = Carbon::create (
+                $r->tanggal_penjemputan . "T" .
+                $r->jam_pejemputan . ":" .
+                $r->menit_jam_penjemputan
+            );
+
+            order::create([
+                "d_mobil_id" => $r->d_mobil_id,
+                "nama" => $r->nama,
+                "No_tlp" => $r->No_tlp,
+                "mulai_sewa" => ($tanggal->toDateTimeLocalString()),
+                "akhir_sewa" => ($tanggal->add('day', $r->durasi_sewa)->toDateTimeLocalString()),
+                "tipe_sewa" => "Dengan Supir",
+                "address_home" => $r->address_home,
+                "address_serah_terima" => $r->address_serah_terima,
+                "tipe_bayar" => $r->tipe_bayar,
+                "total" => $r->total,
+                "bukti_bayar" => $filename,
+                "status" => "Baru",
+                "status_proses" => "Dalam Antrian"
+            ]);
+
+        } else if ($r->dengan_supir == "false") {
+
+            // order::create([
+            //     "d_mobil_id" => $r->d_mobil_id,
+            //     "nama" => $r->nama,
+            //     "No_tlp" => $r->No_tlp,
+            //     "mulai_sewa" => $tanggal->toDateTimeLocalString(),
+            //     "akhir_sewa" => $tanggal->add('day', $r->durasi_sewa)->toDateTimeLocalString(),
+            //     "tipe_sewa" => $r->tipe_sewa,
+            //     "address_home" => $r->address_home,
+            //     "address_serah_terima" => $r->address_serah_terima,
+            //     "tipe_bayar" => $r->tipe_bayar,
+            //     "total" => $r->total,
+            //     "bukti_bayar" => $filename,
+            //     "status" => "Baru",
+            //     "status_proses" => "Dalam Antrian"
+            // ]);
+
+        }
+
+        $mobil = DMobil::find($r->d_mobil_id);
         $mobil->status = "Dalam Sewa";
-        $mobil->save(); 
+        $mobil->save();
 
-        return redirect(route('Persewaan'))->with('success', 'Pesanan berhasil ditambahkan');
+        return redirect(route('admin.Persewaan.show'))->with('success', 'Pesanan berhasil ditambahkan');
     }
 
 
-    public function OrderSetujui ($id) {
+    public function OrderSetujui (Request $r, $id) {
+        dd($r,  $id);
+
         $data = order::find($id);
 
         $data->status = "Dalam Persewaan";
@@ -311,7 +342,13 @@ class CombineController extends Controller
     //Transaksi Section start
     public function TransaksiShow()
     {
-        return view('AdminPage.Combine', $this->dataManage());
+        $view = [
+            'header' => 'AdminPage.Transaksi.header',
+            'content' => 'AdminPage.Transaksi.content',
+            'topnavbar' => 'AdminPage.ZTemplate.topnavbar'
+        ];
+
+        return view('AdminPage.Combine', $view);
     }
 
     public function TransaksiTest(Request $r)
@@ -322,11 +359,17 @@ class CombineController extends Controller
 
     //TagManage Section Start
 
-    public function tagManageShow(tagList $m, tagContain $mr)
+    public function tagManageShow()
     {
-        $data1 = $m->all();
-        $data2 = $mr->all();
-        return view('AdminPage.Combine', compact('data1', 'data2'), $this->dataManage());
+        $data1 = tagList::all();
+        $data2 = tagContain::all();
+
+        $view = [
+            'header' => 'AdminPage.TagManage.header',
+            'content' => 'AdminPage.TagManage.content'
+        ];
+
+        return view('AdminPage.Combine', compact('data1', 'data2'), $view);
     }
 
     public function TagManageEdit(Request $r)
@@ -412,7 +455,12 @@ class CombineController extends Controller
     public function SupirShow()
     {
         $data = dataSupir::all();
-        return view('AdminPage.Combine', compact('data'), $this->dataManage());
+        $view = [
+            'header' => 'AdminPage.SupirManager.header',
+            'content' => 'AdminPage.SupirManager.content'
+        ];
+
+        return view('AdminPage.Combine', compact('data'), $view);
     }
 
     public function SupirAdd(Request $r)
@@ -425,12 +473,12 @@ class CombineController extends Controller
             'nm_sp' => ['required'],
             'al_r' => ['required'],
             'n_hp' => ['required', 'numeric'],
-            'gaji' => ['required']
+            //'gaji' => ['required']
         ], [
             'nm_sp.required' => 'Input Nama perlu di isi!',
             'al_r.required' => 'Input Alamat Rumah perlu di isi!',
             'n_hp.required' => 'Input Nomor HP perlu di isi!',
-            'gaji.required' => 'Input Pendapatan Driver / Aksi harus di isi!'
+            //'gaji.required' => 'Input Pendapatan Driver / Aksi harus di isi!'
         ]);
 
         $r->session()->forget(['failed', 'ClickM']);
@@ -447,7 +495,8 @@ class CombineController extends Controller
             'gmb_sp' => $image,
             'al_sp' => $r->al_r,
             'no_tlp' => $r->n_hp,
-            'gj_sp' => $r->gaji,
+            //'gj_sp' => $r->gaji,
+            'gj_sp' => '150000',
             'status' => $r->st_sp
         ]);
 
@@ -469,7 +518,8 @@ class CombineController extends Controller
         $up->al_sp = ($r->al_r == $up->al_sp) ? $up->al_sp : $r->al_r;
         $up->status = ($r->st_sp == $up->status) ? $up->status : $r->st_sp;
         $up->no_tlp = ($r->n_hp == $up->no_tlp) ? $up->no_tlp : $r->n_hp;
-        $up->gj_sp = ($r->gaji == $up->gj_sp) ? $up->gj_sp : $r->gaji;
+        //$up->gj_sp = ($r->gaji == $up->gj_sp) ? $up->gj_sp : $r->gaji;
+        $up->gj_sp = '150000';
 
         if ($up->isClean()) {
             return redirect(Route('SupirManager') . "#" . $r->idForScroll)->with("failed", "Inputs aren't change! please edit something!")->with("ClickM", $r->modal)->withErrors(["NotEdited" => "Not detected a change on edit inputs"]);

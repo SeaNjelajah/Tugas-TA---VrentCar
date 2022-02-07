@@ -48,6 +48,7 @@
 		            	<span>Easy steps for renting a car</span>
 	            	</div>
 	            </a> --}}
+              
             </div>
           </div>
         </div>
@@ -147,7 +148,7 @@
 		    					<div class="text">
 		    						<h2 class="mb-0"><a href="#">{{ $item->nama_mb }}</a></h2>
 		    						<div class="d-flex mb-3">
-			    						@if (!empty($tag)) <span class="cat">{{ $tag['Merek'] }}</span> @endif
+			    						@if (!empty($tag['merek'])) <span class="cat">{{ $tag['Merek'] }}</span> @endif
 			    						<p class="price ml-auto">Rp {{ placeRp($item->harga_mb) }},- <span>/day</span></p>
 		    						</div>
 		    						<p class="d-flex mb-0 d-block">

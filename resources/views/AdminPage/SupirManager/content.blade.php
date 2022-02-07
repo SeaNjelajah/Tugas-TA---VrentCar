@@ -3,13 +3,14 @@
 
     <div class="card-body p-0">
       <div class="table-responsive">
-        <table class="table table-striped table-hover">
+        <table class="table table-striped table-hover ">
           @if (empty($data->all()))
-          <thead>
-            <tr>
-                <th class="text-center text-muted fs-4">table is empty</th>
-            </tr>
-          </thead> 
+         
+          <div class="container m-0 p-0">
+            <div class="text-center position-absolute pt-6 w-100 h-100%" style="background-color: #d3d3d3; opacity: 0,5; height: 600px;">
+              <span class="font-weight-bolder text-muted" style="font-size: 60px; font-variant: all-small-caps;">Tabel Empty</span>
+            </div>
+          </div>
 
           @else
 

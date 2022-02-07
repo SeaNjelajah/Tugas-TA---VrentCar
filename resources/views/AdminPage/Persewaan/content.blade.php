@@ -1,23 +1,22 @@
 <div class="container-fluid mt-1">
-
     <!-- /.TabBar -->
     <div class="card text-center">
         <div class="card-header">
           <ul class="nav nav-tabs card-header-tabs">
             <li class="nav-item mx-auto">
-              <a class="nav-link {{ (empty($OtherContent)) ? 'active' : '' }}" href="{{ Route('Persewaan') }}">Semua Pesanan</a>
+              <a class="nav-link {{ (empty($OtherContent)) ? 'active' : '' }}" href="{{ Route('admin.Persewaan.show') }}">Semua Pesanan</a>
             </li>
             <li class="nav-item mx-auto">
-              <a class="nav-link {{ (!empty($_GET['f'])) ? (($_GET['f'] === 'Baru') ? 'active' : '') : '' }}" href="{{ Route('Persewaan', ['f' => 'Baru']) }}">Pesanan Baru</a>
+              <a class="nav-link {{ (!empty($_GET['v'])) ? (($_GET['v'] === 'Baru') ? 'active' : '') : '' }}" href="{{ Route('admin.Persewaan.show', ['v' => 'Baru']) }}">Pesanan Baru</a>
             </li>
             <li class="nav-item mx-auto">
-              <a class="nav-link {{ (!empty($_GET['f'])) ? (($_GET['f'] === 'DalamPersewaan') ? 'active' : '') : '' }}" href="{{ Route('Persewaan', ['f' => 'DalamPersewaan']) }}">Dalam Persewaan</a>
+              <a class="nav-link {{ (!empty($_GET['v'])) ? (($_GET['v'] === 'DalamPersewaan') ? 'active' : '') : '' }}" href="{{ Route('admin.Persewaan.show', ['v' => 'DalamPersewaan']) }}">Dalam Persewaan</a>
             </li>
             <li class="nav-item mx-auto">
-              <a class="nav-link {{ (!empty($_GET['f'])) ? (($_GET['f'] === 'Selesai') ? 'active' : '') : '' }}" href="{{ Route('Persewaan', ['f' => 'Selesai']) }}">Pesanan Selesai</a>
+              <a class="nav-link {{ (!empty($_GET['v'])) ? (($_GET['v'] === 'Selesai') ? 'active' : '') : '' }}" href="{{ Route('admin.Persewaan.show', ['v' => 'Selesai']) }}">Pesanan Selesai</a>
             </li>
             <li class="nav-item mx-auto">
-              <a class="nav-link {{ (!empty($_GET['f'])) ? (($_GET['f'] === 'Dibatalkan') ? 'active' : '') : '' }}" href="{{ Route('Persewaan', ['f' => 'Dibatalkan']) }}">Pesanan Dibatalkan</a>
+              <a class="nav-link {{ (!empty($_GET['v'])) ? (($_GET['v'] === 'Dibatalkan') ? 'active' : '') : '' }}" href="{{ Route('admin.Persewaan.show', ['v' => 'Dibatalkan']) }}">Pesanan Dibatalkan</a>
             </li>
           </ul>
         </div>

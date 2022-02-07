@@ -97,7 +97,7 @@
                                 <div class="col">
 
 
-                                  <div class="form-group">
+                                  {{-- <div class="form-group">
                                     <label class="form-control-label" for="gaji">Pendapatan Driver / Aksi</label>
                                     <div class="input-group">
                                       <div class="input-group-prepend">
@@ -110,7 +110,7 @@
                                         {{ $message }}
                                     </div>
                                     @enderror
-                                  </div>
+                                  </div> --}}
 
                                     <div class="form-group">
                                         <label class="form-control-label" for="st_sp">Set Status</label>

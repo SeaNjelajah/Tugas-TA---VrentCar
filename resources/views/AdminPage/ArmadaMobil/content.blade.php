@@ -1,7 +1,15 @@
+@if (count($data1) == 0)
+              
+<div class="text-center position-absolute pt-6 w-100 h-100%" style="background-color: #d3d3d3; opacity: 0,5; height: 600px;">
+  <span class="font-weight-bolder text-muted" style="font-size: 60px; font-variant: all-small-caps;">Tabel Empty</span>
+</div>
+              
+@endif
+
 <div class="container-fluid mt-1">
 
     <!-- core-of-contents -->
-    
+
     <div class="container">
      
         <div class="row">
@@ -37,7 +45,7 @@
                       <div class="p-1 p-lg-0"><a id="detailBtn{{ $item->id }}" class="btn btn-primary w-100 active" data-toggle="modal" data-target="#detailModal{{ $item->id }}">Detail</a></div>                                                   
                       <div class="p-1 p-lg-0 my-2"><a id="editBtn{{ $item->id }}" class="btn btn-warning w-100 active" data-toggle="modal" data-target="#updateMobil{{ $item->id }}" >Edit</a></div>                        
                       
-                      <form action="{{ Route('delMobil') }}" class="p-1 p-lg-0" method="POST">
+                      <form action="{{ Route('admin.ArmadaMobil.delete') }}" class="p-1 p-lg-0" method="POST">
                         @csrf      
                         <button id="delId{{ $item->id }}" type="submit" style="display: none;"></button>
                         <input type="hidden" name="itemId" value="{{ $item->id }}">
@@ -157,7 +165,7 @@
                       <!-- /Detail-Modal -->
                       
                       <!-- Edit Modal -->
-                      <form action="{{ Route('upMobil') }}" method="POST" enctype="multipart/form-data">
+                      <form action="{{ Route('admin.ArmadaMobil.update') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <input type="hidden" name="idForScroll" value="{{ "r" . $num }}">
                         <input type="hidden" name="modal" value="editBtn{{ $item->id }}">
@@ -321,7 +329,7 @@
                                   </div>
 
                                   <hr class="my-4">
-                                  <!-- Address -->
+                                 
                                   <h6 class="heading-small text-muted mb-4">Other</h6>
                                   
                                   <div class="pl-lg-4">                          
@@ -416,15 +424,6 @@
               <!-- space-block -->
               @if (count($data1) == 1)
               <div class="row" style="opacity: 0;height: 30%; width: 100%;"></div>
-              @elseif (count($data1) == 0)
-              <div class="row mt-2">
-                <div class="card mx-auto mt-2 text-center border" style="width: 40%;background-color: #e3e3e3">
-                  <div class="card-body" style="box-shadow: 1px 1px 14px -3px red;">
-                    <div class="card-title my-auto"><h1 class="text-gray">Not Found</h1></div>
-                    <a href="" class="btn btn-info text-center mb-0">Refresh</a>
-                  </div>
-                </div>
-              </div>
               @endif
               <!-- /space-block -->
               

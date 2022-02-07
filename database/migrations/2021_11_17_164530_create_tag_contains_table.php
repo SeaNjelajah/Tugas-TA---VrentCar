@@ -4,6 +4,7 @@ use App\Models\tagList;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
 
 class CreateTagContainsTable extends Migration
 {
@@ -20,6 +21,17 @@ class CreateTagContainsTable extends Migration
             $table->string('contain');
             $table->timestamps();
         });
+
+        DB::table('tag_contains')->insert([
+            [
+                'tag_list_id' => 2,
+                'contain' => 'Dengan Supir'
+            ],
+            [
+                'tag_list_id' => 2,
+                'contain' => 'Tanpa Supir'
+            ]
+        ]);
     }
 
     /**
