@@ -43,7 +43,7 @@
                     <div class="col-lg-2 my-auto p-lg-0 p-md-3 p-sm-3">
 
                       <div class="p-1 p-lg-0"><a id="detailBtn{{ $item->id }}" class="btn btn-primary w-100 active" data-toggle="modal" data-target="#detailModal{{ $item->id }}">Detail</a></div>                                                   
-                      <div class="p-1 p-lg-0 my-2"><a id="editBtn{{ $item->id }}" class="btn btn-warning w-100 active" data-toggle="modal" data-target="#updateMobil{{ $item->id }}" >Edit</a></div>                        
+                      <div class="p-1 p-lg-0 my-2"><a id="editBtn{{ $item->id }}" class="btn btn-light w-100 active" data-toggle="modal" data-target="#updateMobil{{ $item->id }}" >Edit</a></div>                        
                       
                       <form action="{{ Route('admin.ArmadaMobil.delete') }}" class="p-1 p-lg-0" method="POST">
                         @csrf      
