@@ -214,7 +214,7 @@
 </script>
 
 @if (Session()->get('ClickM') ? true : false)
-<script defer>
+<script>
     ClickWho ("{{ Session()->get('ClickM') }}");
 </script>
 @endif

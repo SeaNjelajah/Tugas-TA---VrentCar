@@ -1,4 +1,4 @@
-<div class="header bg-primary pb-6">
+<div class="header pb-6" style="background-color: #01d28e;">
 
   <div class="container-fluid">
       <div class="header-body">

@@ -28,7 +28,7 @@
 
       <div class="row d-inline-flex">
           
-          <div class="mx-sm-auto col-md-12 col-lg text-center d-block mt-1" >
+          <div class="mx-sm-auto col-md-12 col-lg text-center d-block mt-1 border border-top-0 border-bottom-0" style="border-color: #d3ddcf;" >
               <img src="assets/img/dataImg/{{ $mobil->gmb_mb }}" alt="Gambar Mobil Pesanan" class="align-self-center m-2 img-fluid rounded-start img-thumbnail">
               <div class="row text-center">
                   <h2 class="col-6 text-center text-info">{{ $mobil->nama_mb }}</h2>
@@ -37,10 +37,12 @@
           </div>
           
       
-          <div class="my-lg-0 col-md-12 col-lg mr-1 text-left" style="border-left: 2px #d3ddcf solid;">
+          <div class="my-lg-0 col-md-12 col-lg text-left border border-top-0 border-bottom-0" style="border-color: #d3ddcf;">
               <h2 class="mt-3">Alamat Serah Terima</h2>
               <p class="text-left text-justify-center">{{ (!empty($item->address_serah_terima)) ? $item->address_serah_terima : "Alamat Rumah: <br>" . $item->address_home }}</p>
-              <button type="button" class="float-right btn btn-info mt-auto" data-toggle="modal" data-target="#infoOrder{{ $item->id }}">More Info</button>
+              <div class="row h-50 px-2 align-content-end">
+                <button type="button" class="btn btn-info ml-auto" data-toggle="modal" data-target="#infoOrder{{ $item->id }}">More Info</button>
+              </div>
 
               <!-- Modal info -->
               <div class="modal fade" id="infoOrder{{ $item->id }}" tabindex="-1" role="dialog" aria-hidden="true">
@@ -224,9 +226,10 @@
               
           </div>
 
-          <div class="my-lg-0 col-md-12 col-lg ml-0 text-left" style="border-left: 2px #d3ddcf solid;">
-              <h3 class="mb-0 mt-2 pl-3">Tipe sewa: {{ $item->tipe_sewa }}</h3>
-              <select class="form-select ml-3 mt-3 w-100" style="max-width: 85%;" onchange="document.getElementById('data_sp_id').value = this.value;">
+          <div class="my-lg-0 col-md-12 col-lg text-left my-3 border border-top-0 border-bottom-0" style="border-color: #d3ddcf;">
+              <h3 class="mb-0 mt-2">Tipe sewa: {{ $item->tipe_sewa }}</h3>
+              @if (strcmp($item->tipe_sewa, "Dengan Supir") == 0)
+              <select class="form-select ml-3 mt-3 w-100" style="max-width: 85%;" onchange="document.getElementById('data_sp_id{{ $item->id }}').value = this.value;">
                   <option selected value="">Menu Sopir</option>
                   @foreach ($data2 as $supir)
                     @if($supir->status == "Siap")
@@ -234,6 +237,7 @@
                     @endif
                   @endforeach
               </select>
+              @endif
 
               {{-- @if (empty($item->d_mobil_id))
               <select class="form-select ml-3 mt-2 w-100" style="max-width: 85%;">
@@ -243,8 +247,8 @@
               </select>
               @endif --}}
 
-              <h3 class="mb-0 mt-2 pl-3">Pembayaran</h3>
-              <p class="mt-0 pl-3">{{ $item->tipe_bayar }}</p>
+              <h3 class="mb-0 mt-2">Pembayaran</h3>
+              <p class="mt-0">{{ $item->tipe_bayar }}</p>
           </div>
 
       </div>
@@ -264,7 +268,9 @@
         </form>
         <form action="{{ route('OrderSetujui', $item->id) }}" class="col-auto w-50 text-right" method="POST">
           @csrf
-          <input id="data_sp_id" type="hidden" name="data_supir_id" value="null">
+          @if (strcmp($item->tipe_sewa, "Dengan Supir") == 0)
+          <input id="data_sp_id{{ $item->id }}" type="hidden" name="data_supir_id">
+          @endif
           <button class="btn btn-success text-white">PROSES</button>
         </form>
       </div>

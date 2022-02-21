@@ -4,7 +4,7 @@
         <div class="card-header">
           <ul class="nav nav-tabs card-header-tabs">
             <li class="nav-item mx-auto">
-              <a class="nav-link {{ (empty($OtherContent)) ? 'active' : '' }}" href="{{ Route('admin.Persewaan.show') }}">Semua Pesanan</a>
+              <a class="nav-link {{ (empty($_GET['v'])) ? 'active' : '' }}" href="{{ Route('admin.Persewaan.show') }}">Semua Pesanan</a>
             </li>
             <li class="nav-item mx-auto">
               <a class="nav-link {{ (!empty($_GET['v'])) ? (($_GET['v'] === 'Baru') ? 'active' : '') : '' }}" href="{{ Route('admin.Persewaan.show', ['v' => 'Baru']) }}">Pesanan Baru</a>
@@ -40,23 +40,26 @@
     @foreach ($data3 as $item)
     @php foreach ($data1 as $v) if ($item->d_mobil_id == $v->id) {$mobil = $v; break;} @endphp
     <!-- Semua Pesanan -->
-    @if (empty($OtherContent))
-
-      @if ($item->status == "Baru")
-        @include('AdminPage.Persewaan.PesananBaru')
-      @elseif ($item->status == "Dalam Persewaan")
+      @if (Request::get('v') == "Baru")
+         @include('AdminPage.Persewaan.PesananBaru')
+      @elseif(Request::get('v') == "DalamPersewaan")
         @include('AdminPage.Persewaan.PesananDalamPersewaan')
-      @elseif ($item->status == "Selesai")
+      @elseif(Request::get('v') == "Selesai")
         @include('AdminPage.Persewaan.PesananSelesai')
-      @elseif ($item->status == "Dibatalkan")
+      @elseif(Request::get('v') == "Dibatalkan")
         @include('AdminPage.Persewaan.PesananDibatalkan')
+      @else
+        @if ($item->status == "Baru")
+          @include('AdminPage.Persewaan.PesananBaru')
+        @elseif ($item->status == "Dalam Persewaan")
+          @include('AdminPage.Persewaan.PesananDalamPersewaan')
+        @elseif ($item->status == "Selesai")
+          @include('AdminPage.Persewaan.PesananSelesai')
+        @elseif ($item->status == "Dibatalkan")
+          @include('AdminPage.Persewaan.PesananDibatalkan')
+        @endif
       @endif
-
-    @else
-    
-    @include($OtherContent)
-
-    @endif
+      
 
     @endforeach
     <!-- /.CarContent -->

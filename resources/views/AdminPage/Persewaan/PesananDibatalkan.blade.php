@@ -13,11 +13,11 @@
 
           <div class="col-11 text-center">
 
-              <div class="row d-lg-inline-block d-block mx-auto float-md-left">
+              <div class="row d-block mx-auto my-1">
                   Dibatalkan | {{ json_decode($item->historical_date, 1)['Dibatalkan'] }} 
               </div>
       
-              <div class="row d-lg-inline-block d-block mx-auto float-md-right">
+              <div class="row d-block mx-auto mb-1">
                   Mulai Sewa | {{ $item->mulai_sewa }} --- Akhir Sewa | {{ $item->akhir_sewa }} || {{ Carbon\Carbon::create($item->mulai_sewa)->diff(Carbon\Carbon::create($item->akhir_sewa), false)->d }} Hari Sewa
               </div>
 
@@ -37,44 +37,36 @@
           </div>
           
       
-          <div class="my-lg-0 col-md-12 col-lg mr-1 text-left" style="border-left: 2px #d3ddcf solid;">
+          <div class="my-lg-0 col-md-12 col-lg mr-1 text-left">
               
 
-            <div class="table-responsive mx-auto">
-              <table class="mt-3 table w-100 align-items-center text-center">
-                  <thead class="thead-light">
-                      <tr>
-                          <th>{{  (empty($item->address_serah_terima)) ? 'Alamat Rumah' : 'Alamat Serah Terima'}}</th>
-                          <th>Tipe Sewa</th>
-                      </tr>
-                  </thead>
-                  
-                  <tbody class="list">
-                      <tr>
-                          <td>{{ (empty($item->address_serah_terima)) ? $item->address_home : $item->address_serah_terima }}</td>
-                          <td>{{ $item->tipe_sewa }}</td>
-                      </tr>
-                  </tbody>
-                  
-              </table> 
+            <div class="table-responsive mx-auto my-3">
+              <table class="table table-hover table-bordered shadow">
+                <tbody class="text-center font-size-2">
 
-              <table class="mt-5 table w-100 align-items-center text-center">
-                  <thead class="thead-light">
-                      <tr>
-                          <th>Supir</th>
-                          <th>Jenis Pembayaran</th>
-                      </tr>
-                  </thead>
+                  <tr>
+                      <td class="col-1 font-poppins-400">{{ (empty($item->address_serah_terima)) ? 'Alamat Rumah' : 'Alamat Serah Terima' }}</th>
+                      <td class="col font-poppins-400">{{ (empty($item->address_serah_terima)) ? $item->address_home : $item->address_serah_terima  }}</td>
+                  </tr>
                   
-                  <tbody class="list">
-                      <tr>
-                          <td>XXXXX</td>
-                          <td>{{ $item->tipe_bayar }}</td>
-                      </tr>
-                  </tbody>
+                  <tr>
+                      <td class="col-1 font-poppins-400">Tipe Sewa</th>
+                      <td class="col font-poppins-400">{{ $item->tipe_sewa }}</td>
+                  </tr>
+
+                  <tr>
+                      <td class="col-1 font-poppins-400">Supir</td>
+                      <td class="col font-poppins-400">xxxxx</td>
+                  </tr>
+
+                  <tr>
+                      <td class="col-1 font-poppins-400">Jenis Pembayaran</td>
+                      <td class="col font-poppins-400">{{ $item->tipe_bayar }}</td>
+                  </tr>
                   
-              </table> 
-            </div>
+                </tbody>
+              </table>
+          </div>
 
 
               <button type="button" class="float-right btn btn-info mt-auto mb-3" data-toggle="modal" data-target="#infoOrder{{ $item->id }}">More Info</button>

@@ -13,8 +13,18 @@
                         </ol>
                     </nav>
                 </div>
+
                 <div class="col-lg-6 col-5 text-right">
-                    <a href="#" id="kembali" class="btn btn-sm btn-neutral">Back</a>
+                    @php
+                        $addUrl = '';
+                        foreach (Request::all() as $key => $value):
+                        $addUrl .= $key.'='.$value.'&';
+                        endforeach;
+
+                        $addUrl = substr($addUrl,0, count(str_split($addUrl)) - 1);
+
+                    @endphp
+                    <a href="{{ route('admin.Persewaan.show') . '?' . $addUrl }} " id="kembali" class="btn btn-sm btn-neutral">Back</a>
                     <a href="#" class="btn btn-sm btn-neutral">Filters</a>
                 </div>
             </div>

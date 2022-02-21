@@ -215,9 +215,10 @@ class CombineController extends Controller
         //find data in json
         if ($r->dengan_supir == "true") {
             $data = DB::table('d_mobils')->where('tag_mb->Supir', 'Dengan Supir')->get();
-        
         } else if ($r->dengan_supir == "false") {
             $data = DB::table('d_mobils')->where('tag_mb->Supir', 'Tanpa Supir')->get();
+        } else {
+            return redirect()->back()->withInput()->with("failed", "Something wrong! Try again.");
         }
 
         
@@ -255,7 +256,7 @@ class CombineController extends Controller
 
 
         if ($r->dengan_supir == "true") {
-            
+
             $tanggal = Carbon::create (
                 $r->tanggal_penjemputan . "T" .
                 $r->jam_pejemputan . ":" .
@@ -279,22 +280,26 @@ class CombineController extends Controller
             ]);
 
         } else if ($r->dengan_supir == "false") {
+        
 
-            // order::create([
-            //     "d_mobil_id" => $r->d_mobil_id,
-            //     "nama" => $r->nama,
-            //     "No_tlp" => $r->No_tlp,
-            //     "mulai_sewa" => $tanggal->toDateTimeLocalString(),
-            //     "akhir_sewa" => $tanggal->add('day', $r->durasi_sewa)->toDateTimeLocalString(),
-            //     "tipe_sewa" => $r->tipe_sewa,
-            //     "address_home" => $r->address_home,
-            //     "address_serah_terima" => $r->address_serah_terima,
-            //     "tipe_bayar" => $r->tipe_bayar,
-            //     "total" => $r->total,
-            //     "bukti_bayar" => $filename,
-            //     "status" => "Baru",
-            //     "status_proses" => "Dalam Antrian"
-            // ]);
+            $tanggal_pengambilan = $r->tanggal_pengambilan."T".$r->jam_pengambilan.":".$r->menit_jam_pengambilan;
+            $tanggal_pengembalian = $r->tanggal_pengembalian."T".$r->jam_pengembalian.":".$r->menit_jam_pengembalian;
+
+            order::create([
+                "d_mobil_id" => $r->d_mobil_id,
+                "nama" => $r->nama,
+                "No_tlp" => $r->No_tlp,
+                "mulai_sewa" => Carbon::create($tanggal_pengambilan)->toDateTimeLocalString(),
+                "akhir_sewa" => Carbon::create($tanggal_pengembalian)->toDateTimeLocalString(),
+                "tipe_sewa" => "Tanpa Supir",
+                "address_home" => $r->address_home,
+                "address_serah_terima" => $r->address_serah_terima,
+                "tipe_bayar" => $r->tipe_bayar,
+                "total" => $r->total,
+                "bukti_bayar" => $filename,
+                "status" => "Baru",
+                "status_proses" => "Dalam Antrian"
+            ]);
 
         }
 
@@ -307,10 +312,19 @@ class CombineController extends Controller
 
 
     public function OrderSetujui (Request $r, $id) {
-        dd($r,  $id);
-
+        
         $data = order::find($id);
 
+        if (strcmp($data->tipe_sewa , "Dengan Supir") == 0) {
+            if (empty($r->data_supir_id) || !is_numeric($r->data_supir_id)) return redirect()->back()->with('failed', 'Please select Driver first!');
+            $data->data_supir_id = $r->data_supir_id;
+
+            $supir = dataSupir::find($r->data_supir_id);
+            $supir->status = "Dalam Tugas";
+            $supir->save();
+        }
+
+        
         $data->status = "Dalam Persewaan";
         $data->status_proses = "Disetujui";
         $data->historical_date = json_encode(array_merge(json_decode((empty($data->historical_date)) ? "[]" : $data->historical_date, 1), ['Disetujui' => Carbon::now()->toDateTimeString()]));
@@ -332,7 +346,11 @@ class CombineController extends Controller
         $mobil->status = "Tersedia";
         $mobil->save();
 
-
+        if (strcmp($data->tipe_sewa , "Dengan Supir") == 0) {
+            $supir = dataSupir::find($data->data_supir_id);
+            $supir->status = "Dalam Tugas";
+            $supir->save();
+        }
 
         return redirect()->back()->with('success', 'The order has canceled');
     }
@@ -473,7 +491,7 @@ class CombineController extends Controller
             'nm_sp' => ['required'],
             'al_r' => ['required'],
             'n_hp' => ['required', 'numeric'],
-            //'gaji' => ['required']
+            'gaji' => ['required']
         ], [
             'nm_sp.required' => 'Input Nama perlu di isi!',
             'al_r.required' => 'Input Alamat Rumah perlu di isi!',
@@ -495,8 +513,7 @@ class CombineController extends Controller
             'gmb_sp' => $image,
             'al_sp' => $r->al_r,
             'no_tlp' => $r->n_hp,
-            //'gj_sp' => $r->gaji,
-            'gj_sp' => '150000',
+            'gj_sp' => $r->gaji,
             'status' => $r->st_sp
         ]);
 

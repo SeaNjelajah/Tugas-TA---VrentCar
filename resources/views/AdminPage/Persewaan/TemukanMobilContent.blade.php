@@ -115,7 +115,7 @@
                             </div>
                             <div class="col-auto">
                                 <i class="fas fa-car font-size-2 pr-3"></i>
-                                <span class="font-poppins-400 text-muted">2015 atau setelahnya</span>
+                                <span class="font-poppins-400 text-muted">{{ $item->t_mb }} atau setelahnya</span>
                             </div>
         
                         </div>
@@ -285,7 +285,7 @@
                                 <hr>
                                 <label for="catatan" class="col-form-label">Upload Bukti Pembayaran Anda (Struk/Screenshot Bukti Pembayaran)</label>
                                 <input class="form-control" type="file" name="GMB_Bukti" onchange="preview(this, '#buktibayar')">
-                                <div class="container-fluid mt-3">
+                                <div class="container-fluid mt-3 text-center">
                                     <img alt="Bukti Bayar" src="assets/img/dataImg/NoImageA.png" id="buktibayar" class="img-fluid img-thumbnail">
                                 </div>
                                   
@@ -312,13 +312,14 @@
     </div>
     @elseif ($getData['dengan_supir'] == 'false')
 
+
     @php
         $tanggal_pengambilan = Carbon\Carbon::create($getData['tanggal_pengambilan']."T".$getData['jam_pengambilan'].":".$getData['menit_jam_pengambilan']);
         $tanggal_pengembalian = Carbon\Carbon::create($getData['tanggal_pengembalian']."T".$getData['jam_pengembalian'].":".$getData['menit_jam_pengembalian']);
     @endphp
 
 
-    <div class="modal fade" id="modal{{ $item->id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="modal{{ $item->id }}" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
           <div class="modal-content">
             <div class="modal-header">
@@ -352,7 +353,7 @@
                             </div>
                             <div class="col-auto">
                                 <i class="fas fa-car font-size-2 pr-3"></i>
-                                <span class="font-poppins-400 text-muted">2015 atau setelahnya</span>
+                                <span class="font-poppins-400 text-muted">{{ $item->t_mb }} atau setelahnya</span>
                             </div>
         
                         </div>
@@ -394,28 +395,20 @@
             
                                             <div class="row">
                                                 <div class="col d-flex">
-                                                    <p>Total Harga sewa ( {{ $durasi = $tanggal_pengembalian->diff($tanggal_pengambilan)->d; }}  Hari)</p>
+                                                    <p>Total Harga sewa ({{ $durasi = $tanggal_pengembalian->diff($tanggal_pengambilan)->d }}  Hari)</p>
                                                 </div>
                                                 <div class="col">
                                                     <p>Rp  {{ placeRp($total = $durasi * $item->harga_mb) }}</p>
                                                 </div>
                                             </div>
                                               
-                                            <div id="hargaSopirP" class="row">
-                                                <div class="col">
-                                                    <p>Biaya Sopir</p>
-                                                </div>
-                                                <div id="hargaSopirC" class="col">
-                                                    <p>Rp 150.000</p>
-                                                </div>
-                                            </div>
                                               
                                             <div class="row">
                                                 <div class="col">
                                                     <p style="color: #01d28e">Total Tagihan</p>
                                                 </div>
                                                 <div class="col">
-                                                    <p style="color: orangered">Rp {{  placeRp($total += 150000) }}  </p>
+                                                    <p style="color: orangered">Rp {{  placeRp($total) }}  </p>
                                                     <input type="hidden" name="total" value="{{ $total }}">
                                                 </div>
                                             </div>
@@ -483,21 +476,14 @@
                                                 </div>
                                             </div>
                                               
-                                            <div id="hargaSopirP" class="row">
-                                                <div class="col">
-                                                    <p>Biaya Sopir</p>
-                                                </div>
-                                                <div id="hargaSopirC" class="col">
-                                                    <p>Rp 150.000</p>
-                                                </div>
-                                            </div>
+                                            
                                               
                                             <div class="row">
                                                 <div class="col">
                                                     <p style="color: #01d28e">Total Tagihan</p>
                                                 </div>
                                                 <div class="col">
-                                                    <p style="color: orangered">Rp {{  placeRp($total += 150000) }}  </p>
+                                                    <p style="color: orangered">Rp {{  placeRp($total) }}  </p>
                                                     <input type="hidden" name="total" value="{{ $total }}">
                                                 </div>
                                             </div>
@@ -523,7 +509,7 @@
                                 <hr>
                                 <label for="catatan" class="col-form-label">Upload Bukti Pembayaran Anda (Struk/Screenshot Bukti Pembayaran)</label>
                                 <input class="form-control" type="file" name="GMB_Bukti" onchange="preview(this, '#buktibayar')">
-                                <div class="container-fluid mt-3">
+                                <div class="container-fluid mt-3 text-center">
                                     <img alt="Bukti Bayar" src="assets/img/dataImg/NoImageA.png" id="buktibayar" class="img-fluid img-thumbnail">
                                 </div>
                                   
@@ -539,6 +525,7 @@
                           
             
                     </form>
+                    
                 </div>
 
 

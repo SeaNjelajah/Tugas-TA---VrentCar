@@ -1,4 +1,4 @@
-<div class="header bg-primary pb-1">
+<div class="header pb-1" style="background-color: #01d28e;">
  
   
     <div class="container-fluid">
@@ -97,20 +97,20 @@
                                 <div class="col">
 
 
-                                  {{-- <div class="form-group">
+                                  <div class="form-group">
                                     <label class="form-control-label" for="gaji">Pendapatan Driver / Aksi</label>
                                     <div class="input-group">
                                       <div class="input-group-prepend">
                                         <span class="input-group-text"  @error('gaji') style="border: 1px solid #fb6340;" @enderror>Rp.</span>
                                       </div>
-                                      <input type="number" name="gaji" id="gaji" class="form-control @error('gaji') is-invalid @enderror" placeholder="..." value="">                                
+                                      <input type="number" name="gaji" id="gaji" class="form-control @error('gaji') is-invalid @enderror" placeholder="..." value="150000">                                
                                     </div>
                                     @error('gaji')
                                     <div class="invalid-feedback">
                                         {{ $message }}
                                     </div>
                                     @enderror
-                                  </div> --}}
+                                  </div>
 
                                     <div class="form-group">
                                         <label class="form-control-label" for="st_sp">Set Status</label>

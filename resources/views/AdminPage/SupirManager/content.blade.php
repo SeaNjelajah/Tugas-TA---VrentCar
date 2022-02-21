@@ -27,6 +27,7 @@
               <th style="width: 110px;">Action</th>
             </tr>
           </thead>
+          
           <tbody>
            
               @php $num = 1; @endphp
