@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
+<nav class="navbar navbar-expand-sm navbar-light bg-light ftco-navbar-dark" id="ftco-navbar">
     <div class="container">
         <a class="navbar-brand" href="{{ route('Home') }}">Vrent<span>Car</span></a>
         <button class="navbar-toggler ml-auto" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
@@ -6,7 +6,7 @@
         </button>
 
         @if (Auth::check())
-        <ul class="navbar-nav align-items-center ml-3  d-lg-none">
+        <ul class="navbar-nav align-items-center ml-3 d-sm-none">
             <li class="nav-item dropdown">
                 <a class="nav-link pr-0" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <div class="media align-items-center">
@@ -47,7 +47,7 @@
             </li>
         </ul>
         @endif
-
+        
         <div class="collapse navbar-collapse" id="ftco-nav">
             <ul class="navbar-nav ml-auto">
 
@@ -64,7 +64,7 @@
                 @endif
             </ul>
             @if (Auth::check())
-            <ul class="navbar-nav align-items-center ml-auto ml-md-0 d-none d-lg-block">
+            <ul class="navbar-nav align-items-center  ml-auto ml-md-0 d-none d-sm-block ">
                 <li class="nav-item dropdown">
                     <a class="nav-link pr-0" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <div class="media align-items-center">

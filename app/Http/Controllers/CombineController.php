@@ -26,7 +26,6 @@ class CombineController extends Controller
         return [
             'header' => 'AdminPage.ZTemplate.header',
             'content' => 'AdminPage.ZTemplate.content', 
-            'topnavbar' => 'AdminPage.ZTemplate.topnavbar'
         ];
     }
 
@@ -50,147 +49,7 @@ class CombineController extends Controller
 
     //Armada Mobil Section start
 
-    public function showMobil(DMobil $m)
-    {
-        $data1 = $m->all();
-        $data2 = tagList::all();
-        $data3 = tagContain::all();
-
-        $view = [
-            'header' => 'AdminPage.ArmadaMobil.header',
-            'content' => 'AdminPage.ArmadaMobil.content',
-            'topnavbar' => 'AdminPage.ArmadaMobil.topnavbar'
-        ];
-
-        return view('AdminPage.Combine', compact('data1', 'data2', 'data3'), $view);
-    }
-
-
-    public function createMobil(Request $req)
-    {
-        $req->session()->flash('failed', "unsuccessful! Please fill all inputs!");
-        $req->session()->flash('ClickM', $req->modal);
-        $req->validate([
-            'nm_mb' => ['required'],
-            'jtd' => ['required', 'numeric'],
-            'thn_m' => ['required', 'numeric'],
-            'pl_mb' => ['required'],
-            'desc_mb' => ['required'],
-            'hs_ph' => ['required'],
-            'Bagasi' => ['required', 'numeric'],
-            'Millage' => ['required', 'numeric'],
-        ], [
-            'nm_mb.required' => 'Nama Perlu diisi',
-            'jtd.required' => 'Jumlah Kursi Perlu Di isi!',
-            'jtd.numeric' => 'Jumlah Kursi Harus Angka!',
-            'thn_m.required' => 'Tahun Mobil Perlu Di isi!',
-            'thn_m.numeric' => 'Tahun Mobil Harus Angka!',
-            'pl_mb.required' => 'Pelat Mobil Perlu Di isi!',
-            'desc_mb.required' => 'Deskripsi Mobil Perlu Di isi!',
-            'Bagasi.required' => 'Bagasi Mobil Perlu Di isi!',
-            'Bagasi.numeric' => 'Bagasi Mobil Harus Angka!',
-            'Millage.required' => 'Millage Mobil Perlu Di isi!',
-            'Millage.numeric' => 'Millage Mobil Harus Angka!',
-        ]);
-        /*
-            Proses
-        */
-        $req->session()->forget(['failed', 'ClickM']);
-        if ($req->hasFile('GMB')) {
-            $imageName = explode(".", $req->file('GMB')->getFilename())[0] . "_" . time() . '.' . $req->GMB->extension();
-            $req->GMB->move(public_path('assets/img/dataImg'), $imageName);
-        } else {
-            $imageName = 'noImageA.png';
-        }
-
-        DMobil::create([
-            'nama_mb' => $req->nm_mb,
-            'jml_tp_d' => $req->jtd,
-            't_mb' => $req->thn_m,
-            'gmb_mb' => $imageName,
-            'plat_mb' => $req->pl_mb,
-            'tag_mb' => $this->Tag_loader($req),
-            'desc_mb' => $req->desc_mb,
-            'harga_mb' => $req->hs_ph,
-            'bagasi' => $req->Bagasi,
-            'millage' => $req->Millage,
-            'status' => $req->st_mb
-        ]);
-        return redirect(Route("admin.ArmadaMobil.show") . (($req->idForScroll != 'r0') ? '#' . $req->idForScroll : ''))->with('success', 'Your Data are saved!');
-    }
-
-    public function deleteMobil(Request $r)
-    {
-        $picName = DMobil::find($r->itemId)->gmb_mb;
-        $imagePath = public_path('assets/img/dataImg/' . $picName);
-        if (File::exists($imagePath) and $picName != 'NoImageA.png') {
-            File::delete($imagePath);
-        }
-        DMobil::find($r->itemId)->delete();
-        return redirect(Route('admin.ArmadaMobil.show') . (($r->aftermath != 'r0') ? '#' . $r->aftermath : ''))->with('success', 'Your data has been deleted!');
-    }
-
-    public function updateMobil(Request $r)
-    {
-        $r->session()->flash("failed", "Something Wrong! Please fix it!");
-        $r->session()->flash('ClickM', $r->modal);
-        $prevUrl = $r->session()->previousUrl(); $r->session()->setPreviousUrl($r->session()->previousUrl() . "/#Card$r->editid");
-        $r->validateWithBag('editf' . $r->editid, [
-            'nm_mb' => ['required'],
-            'jtd' => ['required', 'numeric'],
-            'thn_m' => ['required', 'numeric'],
-            'pl_mb' => ['required'],
-            'desc_mb' => ['required'],
-            'hs_ph' => ['required'],
-            'Bagasi' => ['required', 'numeric'],
-            'Millage' => ['required', 'numeric'],
-        ],[
-            'nm_mb.required' => 'Nama Perlu diisi',
-            'jtd.required' => 'Jumlah Kursi Perlu Di isi!',
-            'jtd.numeric' => 'Jumlah Kursi Harus Angka!',
-            'thn_m.required' => 'Tahun Mobil Perlu Di isi!',
-            'thn_m.numeric' => 'Tahun Mobil Harus Angka!',
-            'pl_mb.required' => 'Pelat Mobil Perlu Di isi!',
-            'desc_mb.required' => 'Deskripsi Mobil Perlu Di isi!',
-            'Bagasi.required' => 'Bagasi Mobil Perlu Di isi!',
-            'Bagasi.numeric' => 'Bagasi Mobil Harus Angka!',
-            'Millage.required' => 'Millage Mobil Perlu Di isi!',
-            'Millage.numeric' => 'Millage Mobil Harus Angka!',
-        ]);
-
-        $r->session()->forget(['failed', 'ClickM']);
-        $r->session()->setPreviousUrl($prevUrl);
-        
-        $up = DMobil::find($r->editid);
-        if (!empty($r->GMB) && $r->hasFile('GMB')) {
-            $imageName = explode(".", $r->file('GMB')->getFilename())[0] . "_" . time() . '.' . $r->GMB->extension();
-            $r->GMB->move(public_path('assets/img/dataImg'), $imageName);
-            if ($up->gmb_mb != 'NoImage.jpg') {
-                File::delete(public_path('assets/img/dataImg/' . $up->gmb_mb));
-            }
-        } else {
-            $imageName = $up->gmb_mb;
-        }
-
-        $up->gmb_mb = $up->gmb_mb != $imageName ? $imageName : $up->gmb_mb;
-        $up->nama_mb = $up->nama_mb != $r->nm_mb ? $r->nm_mb : $up->nama_mb;
-        $up->jml_tp_d = $up->jml_tp_d != $r->jtd ? $r->jtd : $up->jml_tp_d;
-        $up->t_mb = $up->t_mb != $r->thn_m ? $r->thn_m : $up->t_mb;
-        $up->plat_mb = $up->plat_mb != $r->pl_mb ? $r->pl_mb : $up->plat_mb;
-        $up->tag_mb = $up->tag_mb != $this->Tag_loader($r) ? $this->Tag_loader($r) : $up->tag_mb;
-        $up->desc_mb = $up->desc_mb != $r->desc_mb ? $r->desc_mb : $up->desc_mb;
-        $up->status = $up->status != $r->st_mb ? $r->st_mb : $up->status;
-        $up->harga_mb = $up->harga_mb != $r->hs_ph ?  $r->hs_ph : $up->harga_mb;
-        $up->millage = $up->millage != $r->Millage ?  $r->Millage : $up->millage;
-        $up->bagasi = $up->bagasi != $r->Bagasi ?  $r->Bagasi : $up->bagasi;
-
-        if ($up->isClean()) {
-            return redirect(Route('admin.ArmadaMobil.show') . "#" . $r->idForScroll)->with("failed", "Inputs aren't change! please edit something!")->with("ClickM", $r->modal)->withErrors(["NotEdited" => "Not detected a change on edit inputs"]);
-        } else {
-            $up->save();
-            return redirect(Route('admin.ArmadaMobil.show') . "#" . $r->idForScroll)->with("success", "Your data has been edited!");
-        }
-    }
+    
     //Armada Mobil Section end
 
     //Persewaan Section start
@@ -200,7 +59,7 @@ class CombineController extends Controller
         $content = [
             'header' => 'AdminPage.Persewaan.header',
             'content' => 'AdminPage.Persewaan.content',
-            'topnavbar' => 'AdminPage.Persewaan.topnavbar',
+           
         ];
         
         $data1 = DMobil::all(); $data2 = dataSupir::all(); $data3 = order::all(); 
@@ -227,7 +86,7 @@ class CombineController extends Controller
         $view = [
             'header' => 'AdminPage.Persewaan.TemukanMobilHeader',
             'content' => 'AdminPage.Persewaan.TemukanMobilContent',
-            'topnavbar' => 'AdminPage.Persewaan.topnavbar'
+            
         ];
         return view('AdminPage.Combine', compact('data') ,$view);
     }
@@ -363,7 +222,7 @@ class CombineController extends Controller
         $view = [
             'header' => 'AdminPage.Transaksi.header',
             'content' => 'AdminPage.Transaksi.content',
-            'topnavbar' => 'AdminPage.ZTemplate.topnavbar'
+           
         ];
 
         return view('AdminPage.Combine', $view);
@@ -498,7 +357,6 @@ class CombineController extends Controller
             'n_hp.required' => 'Input Nomor HP perlu di isi!',
             //'gaji.required' => 'Input Pendapatan Driver / Aksi harus di isi!'
         ]);
-
         $r->session()->forget(['failed', 'ClickM']);
 
         if ($r->hasFile('GMB')) {
@@ -559,14 +417,6 @@ class CombineController extends Controller
 
     //Supir Manager end
 
-
-
-
-
-
-
-
-
     //Landing Start
 
     //Home Start
@@ -580,9 +430,14 @@ class CombineController extends Controller
 
     //CarList Start
 
-    public function CarListPage()
+    public function CarListPage(Request $r)
     {
-        $data = DMobil::all();
+        $data = DB::table('d_mobils')->where('tag_mb->Supir', 'Dengan Supir')->get();
+        
+        if ($r->DenganSupir == "false") {
+            $data = DB::table('d_mobils')->where('tag_mb->Supir', 'Tanpa Supir')->get();
+        }
+
         return view('LandingPage.CarPage.CarList', compact('data'));
     }
 
@@ -590,13 +445,18 @@ class CombineController extends Controller
 
     //Carlist Single Start
 
-    public function CarSingle(Request $r)
-    {
-        $data = DMobil::find($r->Id);
+    public function CarSingle(Request $r) {
+        $data = DMobil::find($r->id);
         return view('LandingPage.CarPage.CarSingle', compact('data'));
     }
 
     //Carlist Single Start
 
+    //
+    public function BookCar (Request $r) {
+        
+        $data = DMobil::find($r->id);
+        return view ('LandingPage.ZTemplate.formOrder', compact('data'));
+    }
     //Landing End
 }

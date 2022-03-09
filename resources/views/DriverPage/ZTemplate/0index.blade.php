@@ -17,7 +17,7 @@
     <!-- Page plugins -->
     <!-- Argon CSS -->
     <link rel="stylesheet" href="{{ asset('assets/css/argon.css?v=1.2.0') }}" type="text/css">
-    
+    <!-- sweetAlert2 -->
     <link rel="stylesheet" href="{{ asset('assets/ownplug/css/ownStyle.css') }}" type="text/css">
 
     <style type="text/css">

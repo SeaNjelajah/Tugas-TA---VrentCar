@@ -19,32 +19,13 @@
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link {{ (Route::is('admin.dashboard.show')) ? 'active' : '' }}" href="{{ Route('admin.dashboard.show') }}">
+                            <a class="nav-link active" href="#">
                                 <i class="ni ni-tv-2 text-primary"></i>
-                                <span class="nav-link-text">Dashboard</span>
+                                <span class="nav-link-text">Profil</span>
                             </a>
                         </li>
 
-                        <li class="nav-item">
-                            <a class="nav-link {{ (Route::is('admin.ArmadaMobil.show')) ? 'active' : '' }}" href="{{ Route('admin.ArmadaMobil.show') }}">
-                                <i class="fa fa-car text-red"></i>
-                                <span class="nav-link-text">Armada Mobil</span>
-                            </a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link {{ (Route::is('admin.Persewaan.show')) ? 'active' : '' }}" href="{{ Route('admin.Persewaan.show') }}">
-                                <i class="ni ni-chart-bar-32 text-purple"></i>
-                                <span class="nav-link-text">Persewaan</span>
-                            </a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link {{ (Route::is('admin.Transaksi.show')) ? 'active' : '' }}" href="{{ Route('admin.Transaksi.show') }}">
-                                <i class="fa fa-hammer text-yellow"></i>
-                                <span class="nav-link-text">Build</span>
-                            </a>
-                        </li>
+                        
 
 
 
@@ -60,19 +41,7 @@
                     <!-- Navigation -->
                     <ul class="navbar-nav mb-md-3">
 
-                        <li class="nav-item ">
-                            <a class="nav-link {{ (Route::is('TagManage')) ? 'active' : '' }}" href="{{ Route('TagManage') }}">
-                                <i class="ni ni-tag"></i>
-                                <span class="nav-link-text">Tag Manager</span>
-                            </a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link {{ (Route::is('SupirManager')) ? 'active' : '' }}" href="{{ Route('SupirManager') }}">
-                                <i class=" ni ni-circle-08 text-green"></i>
-                                <span class="nav-link-text">Sopir Manager</span>
-                            </a>
-                        </li>
+                        
 
                     </ul>
                 </div>

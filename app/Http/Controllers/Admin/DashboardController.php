@@ -1,16 +1,17 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+
 use App\Models\tagContain;
 use App\Models\tagList;
 use App\Models\DMobil;
 use Illuminate\Support\Facades\Route;
 
-class AdminController extends Controller {
-    
-    // data definition shortcut
+class DashboardController extends Controller
+{
     private function ds (
         $header = 'AdminPage.ZTemplate.header',
         $content = 'AdminPage.ZTemplate.content', 
@@ -33,7 +34,6 @@ class AdminController extends Controller {
         $this->ds(
             'AdminPage.Dashboard.header',
             'AdminPage.Dashboard.content',
-            'AdminPage.Dashboard.topnavbar'
             )
         );
     }
@@ -123,9 +123,4 @@ class AdminController extends Controller {
 
         return view('AdminPage.Combine', compact('data'), $view);
     }
-
-
-    
 }
-
-?>

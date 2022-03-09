@@ -1,23 +1,28 @@
 <?php
 
-namespace App\Http\Controllers;
-
+namespace App\Http\Controllers\Global;
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class RegisterController extends Controller
 {
-    public function RegistrationView()
+    public function RegisterView()
     {
-        return view('AdminPage.ZTemplate.Register');
+      if (Auth::check())
+        return redirect()->back();
+      else
+        return view('GlobalPage.Register');
     }
       
     public function Registration(Request $request)
     {  
         $request->validate([
             'username' => 'required',
-            'email' => 'required|email|unique:users',
+            'email' => 'required|email|unique:users,name',
             'password' => 'required|min:6',
         ]);
            

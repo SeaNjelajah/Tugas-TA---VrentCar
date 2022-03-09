@@ -2,39 +2,48 @@
 <html>
 
   <head>
+    <title>VrentCar - Persewaan mobil terbaik anda</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="Start your development with a Dashboard for Bootstrap 4.">
-    <meta name="author" content="Creative Tim">
-    <title>Argon Dashboard - Free Dashboard for Bootstrap 4</title>
-    <!-- Favicon -->
-    <link rel="icon" href="assets/img/brand/favicon.png" type="image/png">
-    <!-- Fonts -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700">
-    <!-- Icons -->
-    <link rel="stylesheet" href="assets/vendor/nucleo/css/nucleo.css" type="text/css">
-    <link rel="stylesheet" href="assets/vendor/@fortawesome/fontawesome-free/css/all.min.css" type="text/css">
-    <!-- Page plugins -->
-    <!-- Argon CSS -->
-    <link rel="stylesheet" href="assets/css/argon.css?v=1.2.0" type="text/css">
-    <!-- sweetAlert2 -->
-    <link rel="stylesheet" href="assets/ownplug/css/ownStyle.css" type="text/css">
+    
+    @include('LandingPage.Style')
+    
   </head>
 
   <body>
-    <div id="allScreen" class="clear-fix w-100 h-100 bg-dark position-absolute bg-transparent d-none" style="z-index: 100;"></div>
+
+    @include('LandingPage.ZTemplate.navbar')
+    
+    <section class="hero-wrap hero-wrap-2 js-fullheight" style="background-image: url(&quot;images/bg_3.jpg&quot;); height: 695px; background-position: 50% 0px;" data-stellar-background-ratio="0.5">
+      <div class="overlay"></div>
+      <div class="container">
+          <div class="row no-gutters slider-text js-fullheight align-items-end justify-content-start" style="height: 695px;">
+              <div class="col-md-9 ftco-animate pb-5 fadeInUp ftco-animated">
+                  <p class="breadcrumbs"><span class="mr-2">
+                      <a href="index.html">
+                          Home <i class="ion-ios-arrow-forward"></i>
+                      </a></span>
+                      <span>Log in <i class="ion-ios-arrow-forward"></i></span>
+                  </p>
+                  <h1 class="mb-3 bread">Log in</h1>
+              </div>
+          </div>
+      </div>
+    </section>
+    
     
     <div class="container-fluid pt-3">
 
       <div class="card border-0 mb-0">
         
         <div class="card-body px-lg-5 py-lg-5">
+
           <div class="text-center text-muted mb-4">
-            <span class="font-size-3 font-poppins-400">Register</span>
+            <span class="font-size-3 font-poppins-400">Login</span>
           </div>
 
-          <form role="form">
-
+          <form role="form" action="{{ route('Login') }}" method="POST">
+            @csrf
             <div class="form-group mb-3">
               <div class="input-group input-group-merge input-group-alternative">
                 <div class="input-group-prepend">
@@ -74,41 +83,32 @@
               </div>
 
               <div class="col text-right">
-                <a class="btn btn-link" href="{{ route('LoginView') }}">Already have a account? Log in then.</a>
+                <a class="btn btn-link" href="{{ route('RegisterView') }}">Don't have a account?</a>
               </div>
-
             </div>
+            
 
             <div class="text-center">
-              <button type="button" class="btn btn-primary my-4 w-100">Log In</button>
+              <button type="submit" class="btn btn-primary my-4 w-100">Log In</button>
             </div>
 
           </form>
 
+          
         </div>
       </div>
       
     </div>
 
+    @include('LandingPage.ZTemplate.footer')
 
-
-    <script src="assets/vendor/jquery/dist/jquery.min.js"></script>
-    <script src="assets/vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="assets/vendor/js-cookie/js.cookie.js"></script>
-    <script src="assets/vendor/jquery.scrollbar/jquery.scrollbar.min.js"></script>
-    <script src="assets/vendor/jquery-scroll-lock/dist/jquery-scrollLock.min.js"></script>
-    <!-- Optional JS -->
-    <script src="assets/vendor/chart.js/dist/Chart.min.js"></script>
-    <script src="assets/vendor/chart.js/dist/Chart.extension.js"></script>
-    <!-- Argon JS -->
-    <script src="assets/js/argon.js?v=1.2.0"></script>
-    <!-- SweetAlert2 -->
-    <script src="assets/ownplug/sweetalert2/SweetAlert2.js"></script>
-    <!-- DatePicker-->
-    <script src="assets/ownplug/js/bootstrap-datepicker.min.js"></script>
+    @include('LandingPage.Script')
 
 
   </body>
 
-</html>  
-         
+</html>
+
+
+
+

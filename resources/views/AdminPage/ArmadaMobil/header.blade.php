@@ -61,7 +61,7 @@
                         <div class="mx-auto col-md-12 col-lg-6">
                             <div class="form-group">
                                 <figure class="figure">
-                                    <img src="assets/img/dataImg/NoImageA.png" class="figure-img img-fluid rounded border" alt="Gambar Mobil" id="previewGambarMobil">
+                                    <img src="/assets/img/dataImg/NoImageA.png" class="figure-img img-fluid rounded border" alt="Gambar Mobil" id="previewGambarMobil">
                                     <input class="form-control" name="GMB" type="file" onchange="preview(this, '#previewGambarMobil')">
                                 </figure>
                             </div>

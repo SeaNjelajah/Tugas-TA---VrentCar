@@ -37,7 +37,7 @@
                     </div>
                   <div class="row text-center">
                     <div class="col-lg-4">                      
-                      <img class="img-thumbnail rounded" src="assets/img/dataImg/{{ $item->gmb_mb }}" alt="...">                                                   
+                      <img class="img-thumbnail rounded" src="/assets/img/dataImg/{{ $item->gmb_mb }}" alt="...">                                                   
                     </div>
 
                     <div class="col-lg-2 my-auto p-lg-0 p-md-3 p-sm-3">
@@ -53,7 +53,7 @@
                         <button type="button" class="btn btn-danger active w-100" onclick="SDel(this, 1)">Delete</button>
                       </form>
                     
-                      <!-- Detail-Modal -->                                                                  
+                      <!-- Detail-Modal -->                                                               
                       <div style="scroll-behavior: smooth;" class="modal fade" id="detailModal{{ $item->id }}" tabindex="-1" role="dialog"  aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                           <div class="modal-content">
@@ -68,7 +68,7 @@
                               <div class="row">
                                 <a href="#text-detail{{ $item->id }}" type="button" class="btn btn-outline-primary ml-auto mr-3 mb-2"><i class="fas fa-arrow-down"></i><strong>GO-TO text</strong></a>
                                 <div class="col-12 mx-auto">
-                                  <img src="assets/img/dataImg/{{ $item->gmb_mb }}" alt="...." class="img-thumbnail mb-4 align-self-center">
+                                  <img src="/assets/img/dataImg/{{ $item->gmb_mb }}" alt="...." class="img-thumbnail mb-4 align-self-center">
                                 </div>
                                 <div class="col-12 mx-auto" id="text-detail{{ $item->id }}">
                                   
@@ -165,7 +165,7 @@
                       <!-- /Detail-Modal -->
                       
                       <!-- Edit Modal -->
-                      <form action="{{ Route('admin.ArmadaMobil.update') }}" method="POST" enctype="multipart/form-data">
+                      <form action="{{ Route('admin.ArmadaMobil.edit') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <input type="hidden" name="idForScroll" value="{{ "r" . $num }}">
                         <input type="hidden" name="modal" value="editBtn{{ $item->id }}">
@@ -190,7 +190,7 @@
                                     <div class="mx-auto col-md-12 col-lg-6">
                                       <div class="form-group">
                                         <figure class="figure">
-                                          <img src="assets/img/dataImg/{{ $item->gmb_mb }}" class="figure-img img-fluid rounded border" alt="Gambar Mobil" id="PreviewGMBUpdate">                                        
+                                          <img src="/assets/img/dataImg/{{ $item->gmb_mb }}" class="figure-img img-fluid rounded border" alt="Gambar Mobil" id="PreviewGMBUpdate">                                        
                                           <input class="form-control" value="" name="GMB" type="file" onchange="preview(this, '#PreviewGMBUpdate')">                                                            
                                         </figure>
                                       </div>
