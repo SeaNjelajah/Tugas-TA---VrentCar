@@ -103,9 +103,9 @@
     <script src="{{ asset('assets/ownplug/sweetalert2/SweetAlert2.js') }}"></script>
     <!-- DatePicker-->
     <script src="{{ asset('assets/ownplug/js/bootstrap-datepicker.min.js') }}"></script>
+    <script src="{{ asset('js-vrcar/script.js') }}" ></script>
 
-
-    @yield('script')
+    @yield('alert')
 
 </body>
 

@@ -4,19 +4,19 @@
         <div class="card-header">
           <ul class="nav nav-tabs card-header-tabs">
             <li class="nav-item mx-auto">
-              <a class="nav-link {{ (empty($_GET['v'])) ? 'active' : '' }}" href="{{ Route('admin.Persewaan.show') }}">Semua Pesanan</a>
+              <a class="nav-link {{ (empty(Request::get('v'))) ? 'active' : '' }}" href="{{ Route('admin.Persewaan.show') }}">Semua Pesanan</a>
             </li>
             <li class="nav-item mx-auto">
-              <a class="nav-link {{ (!empty($_GET['v'])) ? (($_GET['v'] === 'Baru') ? 'active' : '') : '' }}" href="{{ Route('admin.Persewaan.show', ['v' => 'Baru']) }}">Pesanan Baru</a>
+              <a class="nav-link {{ (!empty(Request::get('v')) and Request::get('v') == 'Baru') ? 'active' : '' }}" href="{{ Route('admin.Persewaan.show', ['v' => 'Baru']) }}">Pesanan Baru</a>
             </li>
             <li class="nav-item mx-auto">
-              <a class="nav-link {{ (!empty($_GET['v'])) ? (($_GET['v'] === 'DalamPersewaan') ? 'active' : '') : '' }}" href="{{ Route('admin.Persewaan.show', ['v' => 'DalamPersewaan']) }}">Dalam Persewaan</a>
+              <a class="nav-link {{ (!empty(Request::get('v')) and Request::get('v') == 'DalamPersewaan') ? 'active' : '' }}" href="{{ Route('admin.Persewaan.show', ['v' => 'DalamPersewaan']) }}">Dalam Persewaan</a>
             </li>
             <li class="nav-item mx-auto">
-              <a class="nav-link {{ (!empty($_GET['v'])) ? (($_GET['v'] === 'Selesai') ? 'active' : '') : '' }}" href="{{ Route('admin.Persewaan.show', ['v' => 'Selesai']) }}">Pesanan Selesai</a>
+              <a class="nav-link {{ (!empty(Request::get('v')) and Request::get('v') == 'Selesai') ? 'active' : '' }}" href="{{ Route('admin.Persewaan.show', ['v' => 'Selesai']) }}">Pesanan Selesai</a>
             </li>
             <li class="nav-item mx-auto">
-              <a class="nav-link {{ (!empty($_GET['v'])) ? (($_GET['v'] === 'Dibatalkan') ? 'active' : '') : '' }}" href="{{ Route('admin.Persewaan.show', ['v' => 'Dibatalkan']) }}">Pesanan Dibatalkan</a>
+              <a class="nav-link {{ (!empty(Request::get('v')) and Request::get('v') == 'Dibatalkan') ? 'active' : '' }}" href="{{ Route('admin.Persewaan.show', ['v' => 'Dibatalkan']) }}">Pesanan Dibatalkan</a>
             </li>
           </ul>
         </div>
@@ -35,7 +35,7 @@
         
     </div>
     <!-- /.TabBar -->
-
+    
     <!-- /.CarContent -->
     @foreach ($data3 as $item)
     @php foreach ($data1 as $v) if ($item->d_mobil_id == $v->id) {$mobil = $v; break;} @endphp

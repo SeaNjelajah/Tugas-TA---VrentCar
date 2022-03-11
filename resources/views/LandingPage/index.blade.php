@@ -134,11 +134,19 @@
 			    						<p class="price ml-auto">Rp {{ placeRp($item->harga_mb) }},- <span>/day</span></p>
 		    						</div>
 		    						<p class="d-flex mb-0 d-block">
-										<form action="{{ route('CarSinglePage', ['Id' => $item->id]) }}" class="m-0 p-0" method="POST">
-											@csrf
-											<a href="{{ route('FormOrder') }}" class="btn btn-primary py-2 mr-1">Book now</a>
-											<button class="btn btn-secondary py-2 ml-1" href="{{ route('CarSinglePage') }}">Details</button>
-										</form>
+                      <form  method="POST" action="{{ Route('FormOrder') }}">
+                        @csrf
+                        <input type="hidden" name="id" value="{{ $item->id }}">
+                        <button type="submit"  class="btn btn-primary py-2 mr-1 w-100 mb-2">Book now</button>
+                      </form>
+											
+											
+                      <form method="POST" action="{{ Route('CarSinglePage') }}">
+                        @csrf
+                        <input type="hidden" name="id" value="{{ $item->id }}">
+
+                        <button class="btn btn-secondary py-2 w-100" type="submit">Details</button>
+                      </form>
 										
 									</p>
 		    					</div>

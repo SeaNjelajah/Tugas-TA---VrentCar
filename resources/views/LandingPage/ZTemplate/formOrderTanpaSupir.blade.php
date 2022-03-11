@@ -262,12 +262,6 @@
 
                         </div>
 
-                        <hr class="pl-3 mb-2">
-                        <div class="row">
-                            <span id="tanggal-selesai-dengan-supir" class="text-muted  mx-auto font-poppins-400">Tanggal Selesai: XXX, X XXX XXXX</span>
-                        </div>
-                        <hr class="pl-3 mt-2">
-
                         
                         
                         <div class="form-group">
@@ -275,19 +269,69 @@
                         <textarea class="form-control" id="serah-terima" placeholder="Isi alamat lengkap serah terima mobil"></textarea>
                         </div>
                         <div class="form-group">
-                          <label for="catatan" class="col-form-label">Alamat Serah Terima Mobil:</label>
-                          <textarea
-                              class="form-control"
-                              id="catatan"
-                              placeholder="Jika sama dengan alamat tempat tinggal, boleh tidak di isi"
-                          ></textarea>
+                        <label for="catatan" class="col-form-label">Alamat Serah Terima Mobil:</label>
+                        <textarea
+                            class="form-control"
+                            id="catatan"
+                            placeholder="Jika sama dengan alamat tempat tinggal, boleh tidak di isi"
+                        ></textarea>
                         </div>
-                        
-                        
+                        <div class="form-group">
+                            {{-- <label for="catatan" class="mx-auto d-block"><span class="subheading" style="color: #01d28e">Ringkasan Order</span></label> --}}
+                            {{-- <div class="container">
+                                <div class="row">
+                                    <div class="col">
+                                        <img src="/images/car-2.jpg" alt="car" style="max-width: 300px" class="rounded mx-auto d-block">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <img src="/images/car-2.jpg" alt="car" style="max-width: 300px" class="rounded mx-auto d-block">
+                                    </div>
+                                </div>
+                            </div> --}}
+
+                            {{-- ini sebagai contoh cak, iki aku gk eroh dinamis no e --}}
+                            {{-- <div class="container content-center">
+                                <div class="row">
+                                    <div class="col">
+                                        <p>Total Harga sewa (4 Hari)</p>
+                                    </div>
+                                    <div class="col">
+                                        <p>Rp 1.000.000</p>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <p>Biaya Sopir</p>
+                                    </div>
+                                    <div class="col">
+                                        <p>Rp 150.000</p>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <p style="color: #01d28e">Total Tagihan</p>
+                                    </div>
+                                    <div class="col">
+                                        <p style="color: orangered">Rp 1.150.000</p>
+                                    </div>
+                                </div>
+                            </div> --}}
+                            
+                        </div>
+                        {{-- <div class="form-group">
+                            <label for="catatan" class="col-form-label">Lakukan Pembayaran Pada Salah Satu No.rekening dibawah:</label>
+                            <h3>Rekening BCA :</h3>
+                            <h5>0777562792898 (a/n Agus Wisnu)</h5>
+                            <h3>Link Aja :</h3>
+                            <h5>085784793034 (a/n Asfa Hani)</h5>  
+                        </div> --}}
 
                     </section>
                     <hr>
-                    
+                    {{-- <label for="catatan" class="col-form-label">Upload Bukti Pembayaran Anda (Struk/Screenshot Bukti Pembayaran)</label>
+                    <input type="file" name="" id=""> --}}
                 </div>
 
                 

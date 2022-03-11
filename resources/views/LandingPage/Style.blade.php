@@ -13,3 +13,4 @@
 <link rel="stylesheet" href="{{ asset('css/flaticon.css') }}">
 <link rel="stylesheet" href="{{ asset('css/icomoon.css') }}">
 <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/ownplug/css/ownStyle.css') }}" type="text/css">

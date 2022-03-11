@@ -32,15 +32,12 @@
     </section>
     
     
-    <div class="container-fluid pt-3">
+    <div class="container-fluid pt-3 mt-4">
 
       <div class="card border-0 mb-0">
         
         <div class="card-body px-lg-5 py-lg-5">
 
-          <div class="text-center text-muted mb-4">
-            <span class="font-size-3 font-poppins-400">Login</span>
-          </div>
 
           <form role="form" action="{{ route('Login') }}" method="POST">
             @csrf

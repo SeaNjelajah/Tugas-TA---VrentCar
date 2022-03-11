@@ -82,7 +82,7 @@
                         </div>
                         <a href="#!" class="dropdown-item">
                             <i class="ni ni-single-02"></i>
-                            <span>My profile</span>
+                            <span>My Dashboard</span>
                         </a>
                         <a href="#!" class="dropdown-item">
                             <i class="ni ni-settings-gear-65"></i>
