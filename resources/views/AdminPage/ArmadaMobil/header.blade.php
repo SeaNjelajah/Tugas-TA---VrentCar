@@ -17,10 +17,11 @@
                 </div>
 
                 <div class="col-lg-6 col-5 text-right">
+                     <!-- Modal Button -->
                     <a id="createMobilbtn" class="btn btn-sm btn-neutral text-primary" data-toggle="modal" data-target="#createMobil">New</a>
                     <a href="#" class="btn btn-sm btn-neutral">Filters</a>
 
-                    <!-- Modal -->
+                    <!-- Modal Button -->
 
 
 
@@ -45,6 +46,7 @@
             @csrf
             <input type="hidden" name="modal" value="createMobilbtn">
             <div class="modal-content">
+
                 <div class="modal-header">
                     <h2 class="modal-title">Tambah Mobil Baru</h2>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -61,8 +63,8 @@
                         <div class="mx-auto col-md-12 col-lg-6">
                             <div class="form-group">
                                 <figure class="figure">
-                                    <img src="/assets/img/dataImg/NoImageA.png" class="figure-img img-fluid rounded border" alt="Gambar Mobil" id="previewGambarMobil">
-                                    <input class="form-control" name="GMB" type="file" onchange="preview(this, '#previewGambarMobil')">
+                                    <img src="{{ asset('assets/img/cars/NoImageA.png')}}" class="figure-img img-fluid rounded border" alt="Gambar Mobil" id="previewGambarMobil">
+                                    <input class="form-control" name="gambar" type="file" onchange="preview(this, '#previewGambarMobil')">
                                 </figure>
                             </div>
                         </div>
@@ -70,9 +72,9 @@
                         <div class="col-md-12 col-lg-6 mt-n4">
 
                             <div class="form-group">
-                                <label class="form-control-label" for="nm_mb">Nama</label>
-                                <input type="text" name="nm_mb" id="nm_mb" class="form-control @error('nm_mb') is-invalid @enderror" placeholder="..." value="{{ old('nm_mb') }}">
-                                @error('nm_mb')
+                                <label class="form-control-label" for="nama">Nama</label>
+                                <input type="text" name="nama" id="nama" class="form-control @error('nama') is-invalid @enderror" placeholder="..." value="{{ old('nama') }}">
+                                @error('nama')
                                 <div class="invalid-feedback">
                                     {{ $message }}
                                 </div>
@@ -82,11 +84,12 @@
                             <div class="form-group">
                                 <label class="form-control-label" for="JumlahTD">Jumlah Tempat Duduk</label>
                                 <div class="input-group">
-                                    <input type="number" class="form-control @error('jtd') is-invalid @enderror" id="JumlahTD" name="jtd" value="{{ old('jtd') }}">
-                                    <div class="input-group-append">
-                                        <span class="input-group-text" @error('jtd') style="border: 1px solid #fb6340;" @enderror id="basic-addon2">Kursi</span>
+                                    <input type="number" class="form-control @error('jumlah_kursi') is-invalid @enderror" id="JumlahTD" name="jumlah_kursi" value="{{ old('jumlah_kursi') }}">
+                                    <div class="input-group-append" >
+                                        <span class="input-group-text" id="basic-addon2" @error('jumlah_kursi') style="border: 1px solid #fb6340;" @enderror>Kursi</span>
                                     </div>
-                                    @error('jtd')
+                                    
+                                    @error('jumlah_kursi')
                                     <div class="invalid-feedback">
                                         {{ $message }}
                                     </div>
@@ -98,10 +101,11 @@
                                 <label class="form-control-label" for="date1">Tahun Mobil</label>
                                 <div class="input-group">
                                     <div class="input-group-prepend">
-                                        <span class="input-group-text" @error('thn_m') style="border: 1px solid #fb6340;" @enderror><i class="ni ni-calendar-grid-58"></i></span>
+                                        <span class="input-group-text" @error('tahun') style="border: 1px solid #fb6340;" @enderror><i class="ni ni-calendar-grid-58"></i></span>
                                     </div>
-                                    <input name="thn_m" class="form-control datepicker-year-only @error('thn_m') is-invalid @enderror" placeholder="Select date" type="number" value="{{ old('thn_m') }}">
-                                    @error('thn_m')
+                                    <input name="tahun" class="form-control datepicker-year-only @error('tahun') is-invalid @enderror" placeholder="Select date" type="number" value="{{ old('tahun') }}">
+     
+                                    @error('tahun')
                                     <div class="invalid-feedback">
                                         {{ $message }}
                                     </div>
@@ -118,8 +122,8 @@
                         <div class="col-6">
                             <div class="form-group">
                                 <label class="form-control-label" for="pelatMb">Nomor Pelat</label>
-                                <input type="text" name="pl_mb" id="pelatMb" class="form-control @error('pl_mb') is-invalid @enderror" placeholder="..." value="{{ old('pl_mb') }}">
-                                @error('pl_mb')
+                                <input type="text" name="pelat" id="pelatMb" class="form-control @error('pelat') is-invalid @enderror" placeholder="..." value="{{ old('pelat') }}">
+                                @error('pelat')
                                 <div class="invalid-feedback">
                                     {{ $message }}
                                 </div>
@@ -129,9 +133,9 @@
 
                         <div class="col-6">
                             <div class="form-group">
-                                <label class="form-control-label" for="Millage">Millage</label>
-                                <input type="number" name="Millage" id="Millage" class="form-control @error('Millage') is-invalid @enderror" placeholder="..." value="{{ old('Millage') }}">
-                                @error('Millage')
+                                <label class="form-control-label" for="millage">Mill Age</label>
+                                <input type="number" name="millage" id="millage" class="form-control @error('millage') is-invalid @enderror" placeholder="..." value="{{ old('millage') }}">
+                                @error('millage')
                                 <div class="invalid-feedback">
                                     {{ $message }}
                                 </div>
@@ -141,9 +145,9 @@
 
                         <div class="col-6">
                             <div class="form-group">
-                                <label class="form-control-label" for="Bagasi">Bagasi</label>
-                                <input type="number" name="Bagasi" id="Bagasi" class="form-control @error('Bagasi') is-invalid @enderror" placeholder="..." value="{{ old('Bagasi') }}">
-                                @error('Bagasi')
+                                <label class="form-control-label" for="kapasitas_koper">Kapasitas Koper</label>
+                                <input type="number" name="kapasitas_koper" id="kapasitas_koper" class="form-control @error('kapasitas_koper') is-invalid @enderror" placeholder="..." value="{{ old('kapasitas_koper') }}">
+                                @error('kapasitas_koper')
                                 <div class="invalid-feedback">
                                     {{ $message }}
                                 </div>
@@ -160,26 +164,51 @@
 
                         <div class="col-md-12 col-lg-6">
                             <div class="form-group">
-                                <label class="form-control-label" for="st_mb">Set Status</label>
-                                <select class="form-control" name="st_mb">
-                                    <option>Tersedia</option>
-                                    <option>Tidak Tersedia</option>
+                                <label class="form-control-label" for="jenis_transmisi">Jenis Transmisi Mesin</label>
+                                <select class="form-control" name="jenis_transmisi">
+                                    @foreach ($transmisi as $v)
+                                        <option value="{{ $v->id }}" >{{ $v->nama_transmisi }}</option>
+                                    @endforeach
                                 </select>
                             </div>
                         </div>
+                        
+                        <div class="col-md-12 col-lg-6">
+                            <div class="form-group">
+                                <label class="form-control-label" for="tipe_sewa">Tipe Sewa</label>
+                                <select class="form-control" name="tipe_sewa">
+                                    @foreach ($tipe_sewa as $v)
+                                        <option value="{{ $v->id }}" >{{ $v->tipe_sewa }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        
 
+                        
+                        <div class="col-md-12 col-lg-6">
+                            <div class="form-group">
+                                <label class="form-control-label" for="jenis_mobil">Jenis Mobil</label>
+                                <select class="form-control" name="jenis_mobil">
+                                    @foreach ($jenis_mobil as $v)
+                                        <option value="{{ $v->id }}" >{{ $v->jenis_mobil }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        
 
                         <div class="col-md-12 col-lg-6">
 
                             <div class="form-group">
-                                <label class="form-control-label" for="hs_ph">Harga Sewa Per/Hari</label>
+                                <label class="form-control-label" for="harga">Harga Sewa Per/Hari</label>
                                 <div class="input-group">
                                     <div class="input-group-prepend">
-                                        <span class="input-group-text" @error('hs_ph') style="border: 1px solid #fb6340;" @enderror>Rp.</span>
+                                        <span class="input-group-text" @error('harga') style="border: 1px solid #fb6340;" @enderror>Rp.</span>
                                     </div>
-                                    <input type="number" name="hs_ph" id="hs_ph" class="form-control @error('hs_ph') is-invalid @enderror" placeholder="..." value="{{ old('hs_ph') }}">
+                                    <input type="number" name="harga" id="harga" class="form-control @error('harga') is-invalid @enderror" placeholder="..." value="{{ old('harga') }}">
                                 </div>
-                                @error('hs_ph')
+                                @error('harga')
                                 <div class="invalid-feedback">
                                     {{ $message }}
                                 </div>
@@ -188,12 +217,23 @@
 
                         </div>
 
+
+                        <div class="col-md-12 col-lg-6">
+                            <div class="form-group">
+                                <label class="form-control-label" for="status">Set Status</label>
+                                <select class="form-control" name="status">
+                                    <option>Tersedia</option>
+                                    <option>Tidak Tersedia</option>
+                                </select>
+                            </div>
+                        </div>
+
                     </div>
 
                     <hr class="my-4">
                     <h6 class="heading-small text-muted mb-4">Other</h6>
 
-                    @if ((count($data2) <= 0))
+                    @if (true)
                     <div class="pl-lg-4">
                         <div class="row">
                             <div class="col-8 mx-auto">
@@ -209,30 +249,6 @@
                         </div>
                     </div>
                     @endif
-
-                    <div class="row">
-
-                        @foreach ($data2 as $tag)
-                        <div class="col-lg-6 col-sm-12">
-
-                            <div class="form-group">
-                                <label class="form-control-label" for="{{ $tag->nama_tag . '_id' }}">{{ $tag->nama_tag }}</label>
-                                <select class="form-control @error($tag->nama_tag . '_tag') is-invalid @enderror" id="{{ $tag->nama_tag . '_id' }}" name="{{ $tag->nama_tag . '_tag' }}">
-                                    <option value="none">Unselected</option>
-                                    @foreach ($data3 as $list)
-                                    @if ($tag->id == $list->tag_list_id)
-                                    <option>{{ $list->contain }}</option>
-                                    @endif
-                                    @endforeach
-                                </select>
-
-                            </div>
-
-                        </div>
-                        @endforeach
-
-                    </div>
-
                 
 
                     <hr class="my-4">

@@ -45,7 +45,7 @@
                 <div class="input-group-prepend">
                   <span class="input-group-text"><i class="ni ni-single-02"></i></span>
                 </div>
-                <input class="form-control" name="username" placeholder="Username" type="text">
+                <input class="form-control" name="username" placeholder="Username" type="text" value="{{ old('username') }}">
               </div>
             </div>
 
@@ -54,7 +54,7 @@
                 <div class="input-group-prepend">
                   <span class="input-group-text"><i class="ni ni-email-83"></i></span>
                 </div>
-                <input class="form-control" name="email" placeholder="Email" type="email">
+                <input class="form-control" name="email" placeholder="Email" type="email" value="{{ old('email') }}">
               </div>
             </div>
 
@@ -63,7 +63,7 @@
                 <div class="input-group-prepend">
                   <span class="input-group-text"><i class="ni ni-lock-circle-open"></i></span>
                 </div>
-                <input class="form-control" name="password" placeholder="Password" type="password">
+                <input class="form-control" name="password" placeholder="Password" type="password" value="{{ old('password') }}">
               </div>
             </div>
 
@@ -71,7 +71,7 @@
 
               <div class="col text-left">
                 <div class="custom-control custom-control-alternative custom-checkbox">
-                  <input class="custom-control-input" id="Remember" type="checkbox" name="remember">
+                  <input class="custom-control-input" id="Remember" type="checkbox" name="remember" {{ old('remember') ? 'checked' : '' }}>
                   <label class="custom-control-label" for="Remember">
                     <span class="text-muted">Remember me</span>
                   </label>

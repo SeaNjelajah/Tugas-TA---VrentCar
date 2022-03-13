@@ -37,19 +37,17 @@
     </section>
 
     {{-- muncul mobil yang dipilih --}}
-    @php
-    $tag = json_decode ($data->tag_mb, 1);
-    @endphp
+    
 
     <section class="ftco-section ftco-car-details p-0">
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-md-12">
                     <div class="car-details">
-                        <div class="img rounded" style="background-image: url({{ asset('assets/img/dataImg/' . $data->gmb_mb) }});"></div>
+                        <div class="img rounded" style="background-image: url({{ asset('assets/img/cars/' . $mobil->gambar) }});"></div>
                         <div class="text text-center">
-                            @if (!empty($tag['Merek'])) <span class="subheading">{{ $tag['Merek'] }}</span> @endif
-                            <h2>{{ $data->nama_mb }}</h2>
+                            {{-- @if (!empty($tag['Merek'])) <span class="subheading">{{ $tag['Merek'] }}</span> @endif --}}
+                            <h2>{{ $mobil->nama }}</h2>
                         </div>
                     </div>
                 </div>
@@ -63,7 +61,7 @@
                         <div class="text">
                           <h3 class="heading mb-0 pl-3">
                               Mileage
-                              <span>{{ $data->millage }}</span>
+                              <span>{{ $mobil->millage }}</span>
                           </h3>
                       </div>
                   </div>
@@ -78,7 +76,7 @@
                         <div class="text">
                           <h3 class="heading mb-0 pl-3">
                               Transmission
-                              <span>Manual</span>
+                              <span>{{ $mobil->transmisi()->first()->nama_transmisi }}</span>
                           </h3>
                       </div>
                   </div>
@@ -93,7 +91,7 @@
                         <div class="text">
                           <h3 class="heading mb-0 pl-3">
                               Seats
-                              <span>{{ $data->jml_tp_d }} Adults</span>
+                              <span>{{ $mobil->jumlah_kursi }} Adults</span>
                           </h3>
                       </div>
                   </div>
@@ -108,7 +106,7 @@
                         <div class="text">
                           <h3 class="heading mb-0 pl-3">
                               Luggage
-                              <span>{{ $data->bagasi }} Bags</span>
+                              <span>{{ $mobil->kapasitas_koper }} Bags</span>
                           </h3>
                       </div>
                   </div>
@@ -135,7 +133,7 @@
                               
   
                               <div class="tab-pane fade show active" id="pills-manufacturer" role="tabpanel" aria-labelledby="pills-manufacturer-tab">
-                                <p>{{ $data->desc_mb }}</p>
+                                <p>{{ $mobil->desc_mb }}</p>
                                 
                               </div>
   
@@ -162,7 +160,7 @@
                                         <p>Harga sewa Perhari</p>
                                     </div>
                                     <div class="col">
-                                        <p style="color: orangered">Rp {{ placeRp($data->harga_mb) }}</p>
+                                        <p style="color: orangered">Rp {{ placeRp($mobil->harga) }}</p>
                                     </div>
                                 </div>
                                 <div class="row">
@@ -178,12 +176,13 @@
                             
                         </div>
                         <div class="form-group">
-                        <label for="nama-customer" class="col-form-label">Nama Lengkap:</label>
-                        <input type="text" class="form-control" id="nama-customer" />
+                        <label for="penyewa" class="col-form-label">Nama Lengkap:</label>
+                        <input name="penyewa" type="text" class="form-control" id="penyewa" />
                         </div>
+
                         <div class="form-group">
-                        <label for="nomer" class="col-form-label">Nomer Telepon / Whatsapp:</label>
-                        <input type="text" class="form-control" id="nomer" />
+                        <label for="No_tlp" class="col-form-label">Nomer Telepon / Whatsapp:</label>
+                        <input name="No_tlp" type="text" class="form-control" id="No_tlp" />
                         </div>
 
                         <div class="row w-100 pl-3">
@@ -271,16 +270,12 @@
                         
                         
                         <div class="form-group">
-                        <label for="serah-terima" class="col-form-label">Alamat Tempat Tinggal:</label>
-                        <textarea class="form-control" id="serah-terima" placeholder="Isi alamat lengkap serah terima mobil"></textarea>
+                        <label for="alamat_rumah" class="col-form-label">Alamat Tempat Tinggal:</label>
+                        <textarea name="alamat_rumah" class="form-control" id="alamat_rumah" placeholder="Isi alamat lengkap tempat tinggal Anda"></textarea>
                         </div>
                         <div class="form-group">
-                          <label for="catatan" class="col-form-label">Alamat Serah Terima Mobil:</label>
-                          <textarea
-                              class="form-control"
-                              id="catatan"
-                              placeholder="Jika sama dengan alamat tempat tinggal, boleh tidak di isi"
-                          ></textarea>
+                          <label for="alamat_temu" class="col-form-label">Alamat Penjemputan:</label>
+                          <textarea name="alamat_temu" class="form-control" id="alamat_temu" placeholder="Boleh sama dengan alamat tempat tinggal"></textarea>
                         </div>
                         
                         
@@ -293,7 +288,7 @@
                 
             </div>
             <section class="mt-3">
-            <a href="{{ route('RingkasanOrder') }}" type="button" class="btn btn-primary btn-lg btn-block" >Selanjutnya</a>
+            <a href="{{ route('RingkasanOrder') }}" type="button" id="cari-dengan-supir" class="btn btn-primary btn-lg btn-block" >Selanjutnya</a>
             </section>
         </div>
       </form>
@@ -304,6 +299,8 @@
 	{{-- akhir footer --}}
 
   @include('LandingPage.Script')
+
+  <script src="{{ asset('js-vrcar/FormOrder/script1.js') }}"></script>
     
   </body>
 </html>

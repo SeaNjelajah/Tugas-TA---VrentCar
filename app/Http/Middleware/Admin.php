@@ -18,11 +18,17 @@ class Admin
      */
     public function handle(Request $request, Closure $next)
     {
-        $id = Auth::user()->id;
-        $group = User::find($id)->group;
+        
 
-        if (Auth::check() and $group == 'admin') {
-            return $next($request);
+        if (Auth::check()) {
+
+            $id = Auth::user()->id;
+            $group = User::find($id)->group;
+
+            if ($group == 'admin')
+                return $next($request);
+            else
+                return redirect()->intended(route('Home'));
         }
 
         return redirect(route('LoginView'))->withInput();

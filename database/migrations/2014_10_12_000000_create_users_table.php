@@ -19,18 +19,17 @@ class CreateUsersTable extends Migration
             $table->id();
             $table->string('username');
             $table->string('email');
-            $table->enum('group', ['admin', 'member', 'karyawan']);
             $table->string('password');
+            $table->enum('group', ['admin', 'member', 'karyawan']);
             $table->rememberToken();
             $table->timestamps();
         });
 
         DB::table('users')->insert([
-            'id' => 1,
             'username' => 'admin',
             'email' => 'hani12alhayyan@gmail.com',
             'group' => 'admin',
-            'password' => Hash::make('456321hani')
+            'password' => Hash::make('456321hani'),
         ]);
     }
 

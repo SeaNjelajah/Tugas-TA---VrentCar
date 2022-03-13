@@ -37,18 +37,18 @@
     		<div class="row">
 
 
-				@foreach ($data as $item)
+				@foreach ($mobil as $item)
 				@if ($item->status == 'Tidak Tersedia') @continue @endif
-				@php $tag_decode = collect(json_decode($item->tag_mb, 1)); @endphp								
+				
     			<div class="col-md-4">
     				<div class="car-wrap rounded ftco-animate">
-    					<div class="img rounded d-flex align-items-end" style="background-image: url('/assets/img/dataImg/{{ $item->gmb_mb }}');">
+    					<div class="img rounded d-flex align-items-end" style="background-image: url('{{ asset('/assets/img/cars/' . $item->gambar) }}');">
     					</div>
     					<div class="text">
-    						<h2 class="mb-0"><a href="/car-single">{{ $item->nama_mb }}</a></h2>
+    						<h2 class="mb-0"><a href="/car-single">{{ $item->nama }}</a></h2>
     						<div class="d-flex mb-3">
-	    						@if(!empty($tag_decode['Merek'])) <span class="cat">{{ $tag_decode['Merek'] }}</span> @endif
-	    						<p class="price ml-auto">Rp. {{ placeRp ($item->harga_mb) }} <span>/day</span></p>
+	    						{{-- @if(!empty($tag_decode['Merek'])) <span class="cat">{{ $tag_decode['Merek'] }}</span> @endif --}}
+	    						<p class="price ml-auto">Rp. {{ placeRp ($item->harga) }} <span>/day</span></p>
     						</div>                
 
     						<form class="d-flex mb-0 d-block" method="POST" action="{{ Route('CarSinglePage') }}">

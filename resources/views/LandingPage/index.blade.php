@@ -121,31 +121,30 @@
     		<div class="row">
     			<div class="col-md-12">
     				<div class="carousel-car owl-carousel">
-						@foreach($data as $item)
-						@php $tag = json_decode($item->tag_mb, 1) @endphp
+						@foreach($mobil as $item)
     					<div class="item">
     						<div class="car-wrap rounded ftco-animate">
-		    					<div class="img rounded d-flex align-items-end" style="background-image: url(assets/img/dataImg/{{ $item->gmb_mb }});">
+		    					<div class="img rounded d-flex align-items-end" style="background-image: url({{ asset('assets/img/cars/' . $item->gambar) }});">
 		    					</div>
 		    					<div class="text">
-		    						<h2 class="mb-0"><a href="#">{{ $item->nama_mb }}</a></h2>
+		    						<h2 class="mb-0"><a href="#">{{ $item->nama }}</a></h2>
 		    						<div class="d-flex mb-3">
-			    						@if (!empty($tag['merek'])) <span class="cat">{{ $tag['Merek'] }}</span> @endif
-			    						<p class="price ml-auto">Rp {{ placeRp($item->harga_mb) }},- <span>/day</span></p>
+			    					  {{-- <span class="cat">{{ $tag['Merek'] }}</span> @endif --}}
+			    						<p class="price ml-auto">Rp {{ placeRp($item->harga) }},- <span>/day</span></p>
 		    						</div>
 		    						<p class="d-flex mb-0 d-block">
-                      <form  method="POST" action="{{ Route('FormOrder') }}">
-                        @csrf
-                        <input type="hidden" name="id" value="{{ $item->id }}">
-                        <button type="submit"  class="btn btn-primary py-2 mr-1 w-100 mb-2">Book now</button>
-                      </form>
-											
 											
                       <form method="POST" action="{{ Route('CarSinglePage') }}">
                         @csrf
                         <input type="hidden" name="id" value="{{ $item->id }}">
 
                         <button class="btn btn-secondary py-2 w-100" type="submit">Details</button>
+                      </form>
+
+                      <form  method="POST" action="{{ Route('FormOrder') }}">
+                        @csrf
+                        <input type="hidden" name="id" value="{{ $item->id }}">
+                        <button type="submit"  class="btn btn-primary py-2 mr-1 w-100 mb-2 mt-2">Book now</button>
                       </form>
 										
 									</p>

@@ -41,7 +41,7 @@
 
                 <div class="container">
 
-                    @include('AdminPage.Persewaan.CreatePesananForm')
+                    @include('AdminPage.Persewaan.PageOfContent.CreatePesananForm')
 
                 </div>
 

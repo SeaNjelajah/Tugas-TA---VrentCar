@@ -8,6 +8,8 @@ use App\Http\Controllers\Global\RegisterController as Register;
 
 use App\Http\Controllers\Admin\DashboardController as Dashboard;
 use App\Http\Controllers\Admin\ArmadaMobilController as Armada;
+use App\Http\Controllers\Admin\PersewaanController as Persewaan;
+use App\Http\Controllers\LandingPageController as Landing;
 
 
 /*
@@ -39,14 +41,11 @@ Route::post('/register/check', [Register::class, 'Login'])->name('register');
 
 Route::get('/logout', [Login::class,'signOut'])->name('Logout');
 
-Route::view('/Dashboard/test', 'welcome');
-//Route::redirect('/','/Dashboard');
-
 
 Route::prefix('Admin')->name('admin.')->middleware('Admin')->group( function () {
 
     Route::prefix('Dashboard')->name('dashboard.')->group( function () {
-      Route::get('/', [Dashboard::class, 'Dashboard'])->name('show')->middleware('Admin');
+      Route::get('/', [Dashboard::class, 'Dashboard'])->name('show');
     });
 
     Route::prefix('ArmadaMobil')->name('ArmadaMobil.')->group( function () {
@@ -55,6 +54,14 @@ Route::prefix('Admin')->name('admin.')->middleware('Admin')->group( function () 
       Route::post('/Delete', [Armada::class, 'delete'])->name('delete');
       Route::post('/Update', [Armada::class, 'edit'])->name('edit');
     });
+
+    Route::prefix('Persewaan')->name('Persewaan.')->group( function () {
+      Route::get('/', [Persewaan::class, 'index'])->name('show');
+      Route::post('/Setujui/{id}', [Persewaan::class, 'Setujui'])->name('setujui');
+      Route::post('/Batalkan/{id}', [Persewaan::class, 'Batalkan'])->name('batalkan');
+      Route::post('/CariMobil', [Persewaan::class, 'CariMobilPersewaan'])->name('cari');
+      Route::post('/CariMobil/add', [Persewaan::class, 'BuatPesanan'])->name('tambah');
+    } );
 
     
 
@@ -68,16 +75,14 @@ Route::prefix('Admin')->name('admin.')->middleware('Admin')->group( function () 
 //Armada Mobil end
 
 //Persewaan Start
-Route::get('/Persewaan', [CombineController::class, 'PersewaanShow'])->name('admin.Persewaan.show')->middleware('Admin');
+
 
 // Pesanan Order
-Route::post('/Persewaan/Setujui/{id}', [CombineController::class, 'OrderSetujui'])->name('OrderSetujui')->middleware('Admin');
-Route::post('/Persewaan/Batalkan/{id}', [CombineController::class, 'OrderBatalkan'])->name('OrderBatalkan')->middleware('Admin');
+
 // Pesanan Order end
 
 //carimobil
-Route::get('/CariMobil', [CombineController::class, 'CariMobilPersewaan'])->name('CariMobilPersewaan')->middleware('Admin');
-Route::post('/CariMobil/add', [CombineController::class, 'addPesanan'])->name('TambahPersewaan')->middleware('Admin');
+
 //carimobil end
 
 
@@ -113,11 +118,11 @@ Route::post('/SupirManager/Edit/', [CombineController::class, 'SupirEdit'])->nam
 
 
 //Landing Page Start
-Route::get('/LandingCars', [CombineController::class, 'CarListPage'])->name('CarListPage');
-Route::post('/SingleCar', [CombineController::class, 'CarSingle'])->name('CarSinglePage');
+Route::get('/LandingCars', [Landing::class, 'CarListPage'])->name('CarListPage');
+Route::post('/SingleCar', [Landing::class, 'CarSingle'])->name('CarSinglePage');
 
 
-Route::get('/Home', [CombineController::class, 'HomeShow'])->name('Home');
+Route::get('/Home', [Landing::class, 'Home'])->name('Home');
 
 Route::get('/About', function() {
 return view('LandingPage.ZTemplate.about');
@@ -143,7 +148,8 @@ Route::get('/Tips', function() {
   return view('LandingPage.ZTemplate.booking-tips');
 })->name('tips');
 
-Route::post('/FormOrder', [CombineController::class, 'BookCar'])->name('FormOrder');
+Route::post('/FormOrder', [Landing::class, 'BookCar'])->name('FormOrder');
+
 Route::view('/RingkasanOrder', 'LandingPage.ZTemplate.RingkasanOrder')->name('RingkasanOrder');
 
 //Landing Page end

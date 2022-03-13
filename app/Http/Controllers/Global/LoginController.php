@@ -6,10 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Session;
 
 use App\Models\User;
-use phpDocumentor\Reflection\PseudoTypes\LowercaseString;
 
 class LoginController extends Controller
 {
@@ -30,8 +28,10 @@ class LoginController extends Controller
         ]);
         
         $credentials = $request->only(['username', 'email', 'password']);
+        
+        $remember = $request->remember ? true : false;
 
-        if (Auth::attempt($credentials)) {
+        if (Auth::attempt($credentials, $remember)) {
 
             $request->session()->regenerate();
             
@@ -47,14 +47,19 @@ class LoginController extends Controller
             else if ($group == $MustEqual2)
                 return redirect()->intended(route('Home'))->with('success', 'Signed in');
         }
-  
-        return redirect(route("LoginView"))->withInput()->with('success', 'Login details are not valid');
+
+        return redirect(route("LoginView"))->withInput()->with('failed', 'Login details are not valid');
     }
 
     
-    public function signOut() {
-        Session::flush();
+    public function signOut(Request $request) {
+
+        $request->session()->flush();
         Auth::logout();
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        
         return Redirect(route('LoginView'))->with('success', 'Log out Success');
     }
 }

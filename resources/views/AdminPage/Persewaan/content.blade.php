@@ -37,26 +37,28 @@
     <!-- /.TabBar -->
     
     <!-- /.CarContent -->
-    @foreach ($data3 as $item)
-    @php foreach ($data1 as $v) if ($item->d_mobil_id == $v->id) {$mobil = $v; break;} @endphp
+    @foreach ($order as $item)
+    @php
+      $mobil = $item->mobil()->first();
+    @endphp
     <!-- Semua Pesanan -->
       @if (Request::get('v') == "Baru")
-         @include('AdminPage.Persewaan.PesananBaru')
+         @include('AdminPage.Persewaan.PageOfContent.PesananBaru')
       @elseif(Request::get('v') == "DalamPersewaan")
-        @include('AdminPage.Persewaan.PesananDalamPersewaan')
+        @include('AdminPage.Persewaan.PageOfContent.PesananDalamPersewaan')
       @elseif(Request::get('v') == "Selesai")
-        @include('AdminPage.Persewaan.PesananSelesai')
+        @include('AdminPage.Persewaan.PageOfContent.PesananSelesai')
       @elseif(Request::get('v') == "Dibatalkan")
-        @include('AdminPage.Persewaan.PesananDibatalkan')
+        @include('AdminPage.Persewaan.PageOfContent.PesananDibatalkan')
       @else
         @if ($item->status == "Baru")
-          @include('AdminPage.Persewaan.PesananBaru')
+          @include('AdminPage.Persewaan.PageOfContent.PesananBaru')
         @elseif ($item->status == "Dalam Persewaan")
-          @include('AdminPage.Persewaan.PesananDalamPersewaan')
+          @include('AdminPage.Persewaan.PageOfContent.PesananDalamPersewaan')
         @elseif ($item->status == "Selesai")
-          @include('AdminPage.Persewaan.PesananSelesai')
+          @include('AdminPage.Persewaan.PageOfContent.PesananSelesai')
         @elseif ($item->status == "Dibatalkan")
-          @include('AdminPage.Persewaan.PesananDibatalkan')
+          @include('AdminPage.Persewaan.PageOfContent.PesananDibatalkan')
         @endif
       @endif
       

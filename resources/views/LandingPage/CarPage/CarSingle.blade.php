@@ -14,8 +14,8 @@
 
     @include('LandingPage.ZTemplate.navbar')
     <!-- END nav -->
-    @php $tag_decode = json_decode($data->tag_mb, 1); @endphp
-    <section class="hero-wrap hero-wrap-2 js-fullheight" style="background-image: url('images/bg_3.jpg');" data-stellar-background-ratio="0.5">
+    
+    <section class="hero-wrap hero-wrap-2 js-fullheight" style="background-image: url('{{ asset('images/bg_3.jpg') }}');" data-stellar-background-ratio="0.5">
         <div class="overlay"></div>
         <div class="container">
             <div class="row no-gutters slider-text js-fullheight align-items-end justify-content-start">
@@ -39,12 +39,11 @@
             <div class="row justify-content-center">
                 <div class="col-md-12">
                     <div class="car-details">
-                        <div class="img rounded" style="background-image: url(assets/img/dataImg/{{ $data->gmb_mb }});">
+                        <div class="img rounded" style="background-image: url({{ asset('assets/img/cars/' . $mobil->gambar) }});">
                         </div>
                         <div class="text text-center">
-                            @if(!empty($tag_decode['Merek'])) <span class="subheading">{{ $tag_decode['Merek'] }}</span>
-                            @endif
-                            <h2>{{ $data->nama_mb }}</h2>
+                            {{-- @if(!empty($tag_decode['Merek'])) <span class="subheading">{{ $tag_decode['Merek'] }}</span>@endif --}}
+                            <h2>{{ $mobil->nama }}</h2>
                         </div>
                     </div>
                 </div>
@@ -60,7 +59,7 @@
                                         class="flaticon-dashboard"></span></div>
                                 <div class="text">
                                     <h3 class="heading mb-0 pl-3">
-                                        Mileage <span>{{ $data->millage }}</span>
+                                        Mileage <span>{{ $mobil->millage }}</span>
                                     </h3>
                                 </div>
                             </div>
@@ -68,7 +67,7 @@
                     </div>
                 </div>
 
-                @if (!empty($tag_decode['Transmission']))
+                
                 <div class="col-md d-flex align-self-stretch ftco-animate">
                     <div class="media block-6 services">
                         <div class="media-body py-md-4">
@@ -78,14 +77,14 @@
                                 <div class="text">
                                     <h3 class="heading mb-0 pl-3">
                                         Transmission
-                                        <span>{{ $tag_decode['Transmission'] }}</span>
+                                        <span>{{ $mobil->transmisi()->first()->nama_transmisi }}</span>
                                     </h3>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                @endif
+               
 
                 <div class="col-md d-flex align-self-stretch ftco-animate">
                     <div class="media block-6 services">
@@ -96,7 +95,7 @@
                                 <div class="text">
                                     <h3 class="heading mb-0 pl-3">
                                         Seats
-                                        <span>{{ $data->jml_tp_d }} Adults</span>
+                                        <span>{{ $mobil->jumlah_kursi }} Adults</span>
                                     </h3>
                                 </div>
                             </div>
@@ -113,7 +112,7 @@
                                 <div class="text">
                                     <h3 class="heading mb-0 pl-3">
                                         Luggage
-                                        <span>{{ $data->bagasi }} Bags</span>
+                                        <span>{{ $mobil->kapasitas_koper }} Bags</span>
                                     </h3>
                                 </div>
                             </div>
@@ -121,7 +120,7 @@
                     </div>
                 </div>
 
-                @if (!empty($tag_decode['Fuel']))
+                {{-- @if (!empty($tag_decode['Fuel']))
                 <div class="col-md d-flex align-self-stretch ftco-animate">
                     <div class="media block-6 services">
                         <div class="media-body py-md-4">
@@ -138,7 +137,7 @@
                         </div>
                     </div>
                 </div>
-                @endif
+                @endif --}}
 
             </div>
 
@@ -149,7 +148,7 @@
                         
                         <div class="d-flex justify-content-center">
                             <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
-								@if(!empty($data->desc_mb))
+								@if(!empty($mobil->desc_mb))
                                 <li class="nav-item">
                                     <a class="nav-link" id="pills-manufacturer-tab" data-toggle="pill"
                                         href="#pills-manufacturer" role="tab" aria-controls="pills-manufacturer"
@@ -165,10 +164,10 @@
 
                         <div class="tab-content" id="pills-tabContent">
 
-                            @if(!empty($data->desc_mb))
+                            @if(!empty($mobil->desc_mb))
                             <div class="tab-pane fade" id="pills-manufacturer" role="tabpanel"
                                 aria-labelledby="pills-manufacturer-tab">
-                                <p>{{ $data->desc_mb }}</p>
+                                <p>{{ $mobil->desc_mb }}</p>
                             </div>
                             @endif
                             <div class="tab-pane fade" id="pills-review" role="tabpanel" aria-labelledby="pills-review-tab">
@@ -330,7 +329,7 @@
                             style="background-image: url(images/car-1.jpg);">
                         </div>
                         <div class="text">
-                            <h2 class="mb-0"><a href="car-single.html">{{ $data->nama_mb }}</a></h2>
+                            <h2 class="mb-0"><a href="car-single.html">{{ $mobil->nama }}</a></h2>
                             <div class="d-flex mb-3">
                                 <span class="cat"></span>
                                 <p class="price ml-auto">$500 <span>/day</span></p>
