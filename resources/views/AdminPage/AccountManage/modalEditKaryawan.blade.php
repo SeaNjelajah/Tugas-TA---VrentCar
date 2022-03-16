@@ -117,6 +117,16 @@
               
 
                 <div class="col-md-6 mt-n4">
+
+                    <div class="form-group">
+                        <label class="form-control-label" for="nama_lengkap">Nama Lengkap</label>
+                        <input type="text" name="nama_lengkap" id="nama_lengkap" class="form-control @error('nama_lengkap') is-invalid @enderror" placeholder="Nama Lengkap" value="@if($karyawan){{ $karyawan->nama_lengkap }}@endif">
+                        @error('nama_lengkap')
+                        <div class="invalid-feedback">
+                            {{ $message }}
+                        </div>
+                        @enderror
+                    </div>
                                                                                                                     
                     <div class="form-group">
                     <label class="form-control-label" for="alamat_rumah">Alamat Rumah</label>

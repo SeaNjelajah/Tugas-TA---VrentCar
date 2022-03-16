@@ -51,7 +51,8 @@ class AccountManageController extends Controller
             'alamat_rumah' => 'required',
             'no_tlp' => 'required',
             'umur' => 'required|numeric',
-            'status' => 'required'
+            'status' => 'required',
+            'nama_lengkap' => 'required'
         ]);
 
         $user = User::find($r->id);
@@ -82,7 +83,7 @@ class AccountManageController extends Controller
         $user->update($data);
      
         
-        $karyawanData = $r->only('alamat_rumah', 'no_tlp', 'status', 'umur');
+        $karyawanData = $r->only('nama_lengkap' ,'alamat_rumah', 'no_tlp', 'status', 'umur');
         
         if ($r->hasFile('foto_diri')) {
 
