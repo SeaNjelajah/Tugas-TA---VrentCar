@@ -22,6 +22,7 @@ class User extends Authenticatable
         'email',
         'group',
         'password',
+        'foto_profil'
     ];
 
 
@@ -44,4 +45,20 @@ class User extends Authenticatable
     // protected $casts = [
     //     'email_verified_at' => 'datetime',
     // ];
+
+    public function order () {
+        return $this->hasMany(tbl_order::class, 'user_id');
+    }
+
+    public function admin () {
+        return $this->hasOne(tbl_admin::class, 'user_id');
+    }
+
+    public function member () {
+        return $this->hasOne(tbl_member::class, 'user_id');
+    }
+
+    public function karyawan () {
+        return $this->hasOne(tbl_supir::class, 'user_id');
+    }
 }

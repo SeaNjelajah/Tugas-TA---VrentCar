@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class tbl_order extends Model
 {
@@ -24,20 +23,30 @@ class tbl_order extends Model
         return $this->BelongsTo(User::class);
     }
 
-    public function denda () {
-        return $this->belongsToMany(tbl_denda::class, 'id_denda');
-    }
-
     public function tipe_bayar () {
         return $this->BelongsTo(tbl_tipe_bayar::class, 'id_tipe_bayar');
     }
 
-    public function status_order () {
-        return $this->belongsToMany(tbl_status_order::class, 'id_status_order');
+    public function tipe_sewa () {
+        return $this->belongsTo(tbl_tipe_sewa::class, 'id_tipe_sewa');
     }
 
+    
+
     public function bukti_bayar () {
-        return $this->belongsToMany(tbl_buktibayar::class, 'id_bukti_bayar');
+        return $this->hasMany(tbl_buktibayar::class, 'id_order');
+    }
+
+    public function riwayat () {
+        return $this->hasMany(tbl_tgl_riwayat::class, 'id_order');
+    }
+
+    public function status_order () {
+        return $this->hasMany(tbl_status_order::class, 'id_order');
+    }
+
+    public function denda () {
+        return $this->hasMany(tbl_denda::class, 'id_order');
     }
 
 }

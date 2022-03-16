@@ -1,13 +1,61 @@
 @if ($item->status == "Dalam Persewaan")
-<div class="card mt-n3">
 
-    <div class="card-body mb--4 border">
+@php
+$status_order_last = $item->status_order()->orderBy('created_at', 'desc')->first();
+$status_order_disetujui = $item->status_order()->where('status', 'Disetujui')->first();
+$tipe_sewa = $mobil->tipe_sewa()->first()->tipe_sewa;
+$tipe_bayar = $item->tipe_bayar()->first() or false;
+$supir = $item->supir()->first();
+@endphp
 
-        <span class="Display-5">Status: </span>
-        <p>
-        </p>
+<div class="card mt pt-3">
+
+    <span class="text-black text-md font-weight-bold pl-3">Last status: </span>
+    <div class="row px-3">
+        <div class="col-12 col-md text-center">
+            <table class="table table-hover table-secondary">
+                <thead class="thead-dark">
+                    <tr>
+                        <th class="text-md text-white">Isi status</th>
+                        <th class="text-md text-white">Pada tanggal</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="bg-secondary">
+                        <td class="text-md">{{ $status_order_last->status }}</td>
+                        <td class="text-md">{{ $status_order_last->created_at }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        
+
+        <div class="col-12 col-md-auto mt-2 mt-md-0 align-self-center">
+            <button class="btn btn-info mb-1 w-100" data-toggle="modal" data-target="#HistoryOrder{{ $item->id }}">Histori Status Order </button> <br>
+            <form action="{{ route('admin.Persewaan.order.selesai') }}" method="POST">
+                @csrf
+                <input type="hidden" name="id" value="{{ $item->id }}">
+                <button class="btn btn-primary mt-1 w-100">Selesai</button>
+            </form>
+        </div>
 
     </div>
+
+    
+        <form action="{{ route('admin.Persewaan.status.order.update') }}" method="POST">
+            @csrf
+            <input type="hidden" name="id" value="{{ $item->id }}">
+            <div class="row px-3 m-0 mt-3">
+                <div class="form-group d-inline-flex w-100 m-0 p-0">
+                    <input type="text" name="status" class="form-control" placeholder="Update Status Order Hari ini">
+                    <button type="submit" class="btn btn-success">Update</button>
+                </div>
+            </div>
+        </form>
+    
+
+    
 
     <div class="card-body">
 
@@ -23,11 +71,11 @@
             <div class="col-11 text-center">
 
                 <div class="row d-block mx-auto my-1">
-                    Disetujui Pada | {{ json_decode($item->historical_date, 1)['Disetujui'] }}
+                    Disetujui Pada | {{ $status_order_disetujui->created_at }}
                 </div>
 
                 <div class="row d-block mx-auto mb-1">
-                    Mulai Sewa | {{ $item->mulai_sewa }} --- Akhir Sewa | {{ $item->akhir_sewa }} -- {{ Carbon\Carbon::create($item->mulai_sewa)->diff(Carbon\Carbon::create($item->akhir_sewa), false)->d }} Hari Sewa
+                    Mulai Sewa | {{ $item->tgl_mulai_sewa }} --- Akhir Sewa | {{ $item->tgl_akhir_sewa }} -- {{ $item->durasi_sewa }} Hari Sewa
                 </div>
 
             </div>
@@ -38,10 +86,10 @@
         <div class="row d-inline-flex">
 
             <div class="mx-sm-auto col-md-12 col-lg text-center d-block mt-1">
-                <img src="assets/img/dataImg/{{ $mobil->gmb_mb }}" alt="Gambar Mobil Pesanan" class="align-self-center m-2 img-fluid rounded-start img-thumbnail">
+                <img src="{{ asset('assets/img/cars/' . $mobil->gambar) }}" alt="Gambar Mobil Pesanan" class="align-self-center m-2 img-fluid rounded-start img-thumbnail">
                 <div class="row text-center">
-                    <h2 class="col-6 text-center text-info">{{ $mobil->nama_mb }}</h2>
-                    <h2 class="col-6 text-center font-weight-bolder">{{ $mobil->plat_mb }}</h2>
+                    <h2 class="col-6 text-center text-info">{{ $mobil->nama }}</h2>
+                    <h2 class="col-6 text-center font-weight-bolder">{{ $mobil->pelat }}</h2>
                 </div>
             </div>
 
@@ -50,206 +98,39 @@
 
                 <div class="table-responsive mx-auto my-3">
                     <table class="table table-hover table-bordered shadow">
-                        <tbody class="text-center font-size-2">
+                        <tbody class="text-center font-size-2 border">
 
                             <tr>
-                                <td class="col-1 font-poppins-400">{{ (empty($item->address_serah_terima)) ? 'Alamat Rumah' : 'Alamat Serah Terima' }}</th>
-                                <td class="col font-poppins-400">{{ (empty($item->address_serah_terima)) ? $item->address_home : $item->address_serah_terima  }}</td>
+                                <div class="p-2 text-black text-center">
+                                    @if ($tipe_sewa == "Dengan Supir")
+                                    <span class="mt-3 text-lg text-center">{{ (!empty($item->alamat_temu)) ? "Alamat Penjemputan" : "Alamat Rumah" }}</span>
+                                    <p class="text-md">{{ (!empty($item->alamat_temu)) ? $item->alamat_temu : $item->alamat_rumah }}</p>
+                                    @else
+                                    <span class="mt-3 text-lg text-center">{{ (!empty($item->alamat_temu)) ? "Alamat Serah Terima" : "Alamat Rumah" }}</span>
+                                    <p class="text-md">{{ (!empty($item->alamat_temu)) ? $item->alamat_temu : $item->alamat_rumah }}</p>
+                                    @endif
+                                </div>
                             </tr>
-                            
+
                             <tr>
                                 <td class="col-1 font-poppins-400">Tipe Sewa</th>
-                                <td class="col font-poppins-400">{{ $item->tipe_sewa }}</td>
+                                <td class="col font-poppins-400">{{ $tipe_sewa }}</td>
                             </tr>
 
                             <tr>
                                 <td class="col-1 font-poppins-400">Supir</td>
-                                <td class="col font-poppins-400">xxxxx</td>
+                                <td class="col font-poppins-400">{{ $supir->nama_lengkap }}</td>
                             </tr>
 
                             <tr>
                                 <td class="col-1 font-poppins-400">Jenis Pembayaran</td>
-                                <td class="col font-poppins-400">{{ $item->tipe_bayar }}</td>
+                                <td class="col font-poppins-400">{{ $tipe_bayar->deskripsi }}</td>
                             </tr>
-                            
+
                         </tbody>
                     </table>
                 </div>
-
-
-                <!-- Modal info -->
-                <div class="modal fade" id="infoOrder{{ $item->id }}" tabindex="-1" role="dialog" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-                        <div class="modal-content">
-
-                            <div class="modal-header">
-                                <h6 class="modal-title" id="modal-title-default">Info Order</h6>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">×</span>
-                                </button>
-                            </div>
-
-                            <div class="modal-body">
-                                <table class="table mx-auto table-hover text-center table-bordered shadow table mb-3">
-                                    <thead>
-                                        <tr>
-                                            <th class="display-3">
-                                                <h3>Alamat Rumah</h3>
-                                            </th>
-                                            @if (!empty($item->address_serah_terima))
-                                            <th class="display-3">
-                                                <h3>Alamat Serah Terima</h3>
-                                            </th>
-                                            @endif
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td class="display-3">
-                                                <h3>{{ $item->address_home }}</h3>
-                                            </td>
-                                            @if (!empty($item->address_serah_terima))
-                                            <td class="display-3">
-                                                <h3>{{ $item->address_serah_terima }}</h3>
-                                            </td>
-                                            @endif
-                                        </tr>
-                                    </tbody>
-                                </table>
-
-
-                                <table class="table mx-auto table-hover text-left table-bordered shadow table mb-3">
-                                    <tbody class="text-center">
-
-                                        <tr>
-                                            <td class="d-flex">
-                                                <h3 class="col-3 text-left">Nama Customer</h3>
-                                                <h3 class="col-1"> : </h3>
-                                                <h3 class="col-8 ">{{ $item->nama }}</h3>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="d-flex">
-                                                <h3 class="col-3 text-left">Nomer Telepon</h3>
-                                                <h3 class="col-1"> : </h3>
-                                                <h3 class="col-8 ">{{ $item->No_tlp }}</h3>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="d-flex">
-                                                <h3 class="col-3 text-left">Tanggal Mulai Sewa</h3>
-                                                <h3 class="col-1"> : </h3>
-                                                <h3 class="col-8 ">{{ $item->mulai_sewa }}</h3>
-                                            </td>
-                                        </tr>
-
-                                        <tr>
-                                            <td class="d-flex">
-                                                <h3 class="col-3 text-left">Tanggal Akhir Sewa</h3>
-                                                <h3 class="col-1"> : </h3>
-                                                <h3 class="col-8 ">{{ $item->akhir_sewa }}</h3>
-                                            </td>
-                                        </tr>
-
-                                        <tr>
-                                            <td class="d-flex">
-                                                <h3 class="col-3 text-left">Harga Sewa Perhari</h3>
-                                                <h3 class="col-1"> : </h3>
-                                                <h3 class="col-8 ">Rp. {{ placeRp ($mobil->harga_mb) }}</h3>
-                                            </td>
-                                        </tr>
-
-                                        <tr>
-                                            <td class="d-flex">
-                                                <h3 class="col-3 text-left">Total Harga</h3>
-                                                <h3 class="col-1"> : </h3>
-                                                <h3 class="col-8 ">Rp. {{ placeRp ($item->total) }}</h3>
-                                            </td>
-                                        </tr>
-
-                                    </tbody>
-                                </table>
-
-
-
-                                <table class="table mx-auto table-hover text-left table-bordered shadow table">
-                                    <tbody class="text-center">
-                                        <tr>
-                                            <td class="display-3">Data Mobil</td>
-                                        </tr>
-                                        <tr>
-                                            <td class="d-flex">
-                                                <h3 class="col-3 text-left">Nama</h3>
-                                                <h3 class="col-1"> : </h3>
-                                                <h3 class="col-8 ">{{ $mobil->nama_mb }}</h3>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="d-flex">
-                                                <h3 class="col-3 text-left">Nomer Pelat Mobil</h3>
-                                                <h3 class="col-1"> : </h3>
-                                                <h3 class="col-8 ">{{ $mobil->plat_mb }}</h3>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="d-flex">
-                                                <h3 class="col-3 text-left">Jumlah Kursi</h3>
-                                                <h3 class="col-1"> : </h3>
-                                                <h3 class="col-8 ">{{ $mobil->jml_tp_d }}</h3>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="d-flex">
-                                                <h3 class="col-3 text-left">Tahun Beli</h3>
-                                                <h3 class="col-1"> : </h3>
-                                                <h3 class="col-8 ">{{ $mobil->t_mb }}</h3>
-                                            </td>
-                                        </tr>
-
-                                        <tr>
-                                            <td class="d-flex">
-                                                <h3 class="col-3 text-left">Harga sewa Per-Hari</h3>
-                                                <h3 class="col-1"> : </h3>
-                                                <h3 class="col-8 ">Rp. {{ placeRp ($mobil->harga_mb) }}</h3>
-                                            </td>
-                                        </tr>
-
-                                    </tbody>
-                                </table>
-                                @php $tag_decode = json_decode($mobil->tag_mb, 1) @endphp
-                                @if (!empty($tag_decode))
-                                <table class="mx-auto mt-3 table-bordered shadow table table-hover text-left">
-                                    <tbody class="text-center">
-                                        <tr>
-                                            <td>
-                                                <h3>Other</h3>
-                                            </td>
-                                        </tr>
-                                        @foreach ($tag_decode as $k => $v)
-                                        <tr>
-                                            <td class="d-flex">
-                                                <h3 class="col-3 text-left">{{ $k }}</h3>
-                                                <h3 class="col-1"> : </h3>
-                                                <h3 class="col-8">{{ $v }}</h3>
-                                            </td>
-                                        </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                                @endif
-
-                                <strong class="display-5 d-block mx-auto pl-3">Gambar Mobil</strong>
-
-                                <div class="mx-auto mt-2 text-center">
-                                    <img src="assets/img/dataImg/{{ $mobil->gmb_mb }}" alt="...." class="img-thumbnail mb-4 align-self-center">
-                                </div>
-
-
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                
 
             </div>
 
@@ -265,12 +146,15 @@
             </div>
         </div>
         <div class="row mt-1 mx-1">
-            <form action="{{ route('OrderBatalkan', $item->id) }}" class="col-auto w-50 text-left" method="POST">
+            <form action="{{ route('admin.Persewaan.batalkan', $item->id) }}" class="col-auto w-50 text-left" method="POST">
                 @csrf
                 <button class="btn btn-danger text-white" type="submit">Cancel</button>
             </form>
 
             <div class="col-auto w-50 text-right">
+                <button type="button" class="btn btn-danger mr-auto text-right " data-toggle="modal" data-target="#BuktiBayarModal{{ $item->id }}">
+                    Bukti Bayar
+                  </button>
                 <button type="button" class="text-right btn btn-info" data-toggle="modal" data-target="#infoOrder1">More Info</button>
             </div>
         </div>

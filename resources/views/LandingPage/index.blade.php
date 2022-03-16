@@ -134,14 +134,14 @@
 		    						</div>
 		    						<p class="d-flex mb-0 d-block">
 											
-                      <form method="POST" action="{{ Route('CarSinglePage') }}">
+                      <form method="POST" action="{{ route('CarSinglePage') }}">
                         @csrf
                         <input type="hidden" name="id" value="{{ $item->id }}">
 
                         <button class="btn btn-secondary py-2 w-100" type="submit">Details</button>
                       </form>
 
-                      <form  method="POST" action="{{ Route('FormOrder') }}">
+                      <form  method="POST" action="{{ route('FormOrder') }}">
                         @csrf
                         <input type="hidden" name="id" value="{{ $item->id }}">
                         <button type="submit"  class="btn btn-primary py-2 mr-1 w-100 mb-2 mt-2">Book now</button>

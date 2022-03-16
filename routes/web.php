@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AccountManageController;
 use App\Http\Controllers\CombineController;
 use Illuminate\Support\Facades\Route;
 
@@ -9,7 +10,12 @@ use App\Http\Controllers\Global\RegisterController as Register;
 use App\Http\Controllers\Admin\DashboardController as Dashboard;
 use App\Http\Controllers\Admin\ArmadaMobilController as Armada;
 use App\Http\Controllers\Admin\PersewaanController as Persewaan;
+use App\Http\Controllers\Admin\AccountManageController as Account;
+use App\Http\Controllers\Karyawan\KaryawanController as Karyawan;
+
 use App\Http\Controllers\LandingPageController as Landing;
+use App\Http\Controllers\UserPageController as User;
+
 
 
 /*
@@ -44,6 +50,8 @@ Route::get('/logout', [Login::class,'signOut'])->name('Logout');
 
 Route::prefix('Admin')->name('admin.')->middleware('Admin')->group( function () {
 
+    Route::get('/GetFile/Bukti', [Persewaan::class, 'getBuktiBayar'])->name('GetBukti');
+
     Route::prefix('Dashboard')->name('dashboard.')->group( function () {
       Route::get('/', [Dashboard::class, 'Dashboard'])->name('show');
     });
@@ -61,9 +69,25 @@ Route::prefix('Admin')->name('admin.')->middleware('Admin')->group( function () 
       Route::post('/Batalkan/{id}', [Persewaan::class, 'Batalkan'])->name('batalkan');
       Route::post('/CariMobil', [Persewaan::class, 'CariMobilPersewaan'])->name('cari');
       Route::post('/CariMobil/add', [Persewaan::class, 'BuatPesanan'])->name('tambah');
-    } );
+      Route::post('/Verifikasi/Bukti', [Persewaan::class, 'VerifikasiBukti'])->name('verifikasi.bukti');
+      Route::post('/StatusOrder/update', [Persewaan::class, 'update_status_order'])->name('status.order.update');
+      Route::post('/Order/Selesai', [Persewaan::class, 'Selesai'])->name('order.selesai');
+    });
 
-    
+    Route::prefix('AccountManage')->name('AccountManage.')->group( function () {
+      Route::get('/', [Account::class, 'index'])->name('show');
+      Route::post('/Create', [Account::class, 'Create'])->name('create');
+      Route::post('/Update/Karyawan', [Account::class, 'Update_Karyawan'])->name('update.karyawan');
+    });
+
+});
+
+Route::prefix('Karyawan')->name('karyawan.')->middleware('Karyawan')->group( function () {
+
+  Route::prefix('Dashboard')->name('dashboard.')->group( function () {
+    Route::get('/', [Karyawan::class, 'index'])->name('show');
+    Route::post('/Update/StatusOrder', [Karyawan::class, 'update_status_order'])->name('update.status.order');
+  });
 
 });
 
@@ -79,7 +103,7 @@ Route::prefix('Admin')->name('admin.')->middleware('Admin')->group( function () 
 
 // Pesanan Order
 
-// Pesanan Order end
+// Pesanan Order end 
 
 //carimobil
 
@@ -148,10 +172,21 @@ Route::get('/Tips', function() {
   return view('LandingPage.ZTemplate.booking-tips');
 })->name('tips');
 
-Route::post('/FormOrder', [Landing::class, 'BookCar'])->name('FormOrder');
 
-Route::view('/RingkasanOrder', 'LandingPage.ZTemplate.RingkasanOrder')->name('RingkasanOrder');
+Route::get('/FormOrder', [Landing::class, 'BookCar'])->name('FormOrder');
+
+
+Route::post('/FormOrder/create', [Landing::class, 'Booking'])->name('FormOrder.create');
+
+
+
+Route::prefix('User')->name('user.')->group( function () {
+  Route::get('/Dashboard', [User::class, 'DashboardPage'])->name('dashboard');
+  Route::get('/BookingBerjalan', [User::class, 'BookingBerjalanPage'])->name('bookingBerjalan');
+  Route::post('/RingkasanOrder', [User::class, 'RingkasanOrder'])->name('RingkasanOrder');
+  Route::get('/RingkasanOrder', [User::class, 'RingkasanOrderGet'])->name('RingkasanOrder');
+  Route::post('/RingkasanOrder/BuktiBayar/Upload', [User::class, 'KirimBuktiBayar'])->name('BuktiBayar.upload');
+});
 
 //Landing Page end
-
 Route::redirect('/', 'Home');

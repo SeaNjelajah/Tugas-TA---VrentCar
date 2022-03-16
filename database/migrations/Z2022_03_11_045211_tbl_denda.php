@@ -1,11 +1,10 @@
 <?php
 
-use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class TblMember extends Migration
+class TblDenda extends Migration
 {
     /**
      * Run the migrations.
@@ -14,10 +13,11 @@ class TblMember extends Migration
      */
     public function up()
     {
-        Schema::create('tbl_member',  function (Blueprint $table) {
+        Schema::create('tbl_denda', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(User::class);
-            $table->string('gambar_ktp');
+            $table->foreignId('id_order')->nullable()->constrained('tbl_order')->cascadeOnUpdate()->nullOnDelete();
+            $table->bigInteger('denda');
+            $table->string('deskripsi');
             $table->timestamps();
         });
     }
@@ -29,6 +29,6 @@ class TblMember extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tbl_member');
+        Schema::dropIfExists('tbl_denda');
     }
 }

@@ -13,4 +13,5 @@
 <link rel="stylesheet" href="{{ asset('css/flaticon.css') }}">
 <link rel="stylesheet" href="{{ asset('css/icomoon.css') }}">
 <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/vendor/@fortawesome/fontawesome-free-6.0.0-web/css/all.min.css') }}" type="text/css">
 <link rel="stylesheet" href="{{ asset('assets/ownplug/css/ownStyle.css') }}" type="text/css">

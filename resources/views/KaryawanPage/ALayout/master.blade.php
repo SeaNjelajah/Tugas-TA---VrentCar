@@ -4,20 +4,20 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="Start your development with a Dashboard for Bootstrap 4.">
+    <meta name="description" content="Vrent Car, Tempat Rental Mobil, Sewa Mobil">
     <meta name="author" content="Creative Tim">
-    <title>Argon Dashboard - Free Dashboard for Bootstrap 4</title>
+    <title>Vrent Car</title>
     <!-- Favicon -->
     <link rel="icon" href="{{ asset('assets/img/brand/favicon.png') }}" type="image/png">
     <!-- Fonts -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700">
     <!-- Icons -->
     <link rel="stylesheet" href="{{ asset('assets/vendor/nucleo/css/nucleo.css') }}" type="text/css">
-    <link rel="stylesheet" href="{{ asset('assets/vendor/@fortawesome/fontawesome-free/css/all.min.css') }}" type="text/css">
+    <link rel="stylesheet" href="{{ asset('assets/vendor/@fortawesome/fontawesome-free-6.0.0-web/css/all.min.css') }}" type="text/css">
     <!-- Page plugins -->
     <!-- Argon CSS -->
     <link rel="stylesheet" href="{{ asset('assets/css/argon.css?v=1.2.0') }}" type="text/css">
-    <!-- sweetAlert2 -->
+    
     <link rel="stylesheet" href="{{ asset('assets/ownplug/css/ownStyle.css') }}" type="text/css">
 
     <style type="text/css">
@@ -66,18 +66,19 @@
             top: 0
         }
     </style>
+    
 </head>
+
 
 <body>
     <div id="allScreen" class="clear-fix w-100 h-100 bg-dark position-absolute bg-transparent d-none" style="z-index: 100;"></div>
-    <div class="car"></div>
     <!-- Sidenav -->
-    @yield('sidebar')
+    @include('KaryawanPage.ZTemplate.sidebar')
     <!-- /Sidenav -->
     <!-- Main content -->
     <div class="main-content" id="panel">
         <!-- Topnav -->
-        @yield('topnavbar')
+        @include('KaryawanPage.ZTemplate.navbar')
         <!-- /Topnav -->
         <!-- Header -->
         @yield('header')
@@ -98,15 +99,16 @@
     <script src="{{ asset('assets/vendor/chart.js/dist/Chart.extension.js') }}"></script>
     <!-- Argon JS -->
     <script src="{{ asset('assets/js/argon.js?v=1.2.0') }}"></script>
-
     <!-- SweetAlert2 -->
     <script src="{{ asset('assets/ownplug/sweetalert2/SweetAlert2.js') }}"></script>
     <!-- DatePicker-->
     <script src="{{ asset('assets/ownplug/js/bootstrap-datepicker.min.js') }}"></script>
+    <script src="{{ asset('js-vrcar/script.js') }}" ></script>
+    
+    @yield('otherscript')
 
-
-    @yield('script')
-
+    @include('KaryawanPage.ALayout.ZAlert')
+    
 </body>
 
 </html>

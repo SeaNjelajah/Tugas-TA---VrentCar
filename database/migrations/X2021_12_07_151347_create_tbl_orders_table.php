@@ -20,17 +20,16 @@ class CreateTblOrdersTable extends Migration
             $table->foreignId('id_mobil')->nullable()->constrained('tbl_mobil')->onDelete('set null')->onUpdate('cascade');
             $table->foreignId('id_supir')->nullable()->constrained('tbl_supir')->onDelete('set null')->onUpdate('cascade');
             $table->foreignIdFor(User::class)->nullable()->constrained()->onDelete('set null')->onUpdate('cascade');
-            $table->foreignId('id_denda')->nullable()->constrained('tbl_denda')->onDelete('set null')->onUpdate('cascade');
             $table->foreignId('id_tipe_bayar')->nullable()->constrained('tbl_tipe_bayar')->onDelete('set null')->onUpdate('cascade');
-            $table->foreignId('id_status_order')->nullable()->constrained('tbl_status_order')->onDelete('set null')->onUpdate('cascade');
-            $table->foreignId('id_tgl_riwayat')->nullable()->constrained('tbl_tgl_riwayat')->onDelete('set null')->onUpdate('cascade');
-            $table->foreignId('id_bukti_bayar')->nullable()->constrained('tbl_bukti_bayar')->onDelete('set null')->onUpdate('cascade');
+            $table->foreignId('id_tipe_sewa')->nullable()->constrained('tbl_tipe_sewa')->onDelete('set null')->onUpdate('cascade');
+            
 
 
             $table->enum('status', ['Baru', 'Dalam Persewaan', 'Selesai', 'Dibatalkan']);
 
             $table->string("penyewa");
             $table->string("No_tlp");
+            $table->integer('durasi_sewa');
             $table->dateTime("tgl_mulai_sewa");
             $table->dateTime("tgl_akhir_sewa");
             $table->string("alamat_rumah");
@@ -40,6 +39,8 @@ class CreateTblOrdersTable extends Migration
             
             $table->timestamps();
         });
+
+        
 
 
     }

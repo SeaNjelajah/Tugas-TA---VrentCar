@@ -60,13 +60,7 @@ class CombineController extends Controller
     //Transaksi Section start
     public function TransaksiShow()
     {
-        $view = [
-            'header' => 'AdminPage.Transaksi.header',
-            'content' => 'AdminPage.Transaksi.content',
-           
-        ];
-
-        return view('AdminPage.Combine', $view);
+        return view('AdminPage.Transaksi.main');
     }
 
     public function TransaksiTest(Request $r)

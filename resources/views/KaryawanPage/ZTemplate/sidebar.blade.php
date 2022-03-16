@@ -3,9 +3,7 @@
         <div class="scrollbar-inner scroll-content scroll-scrolly_visible" style="height: auto; margin-bottom: 0px; margin-right: 0px; max-height: 647px;">
             <!-- Brand -->
             <div class="sidenav-header  align-items-center">
-                <a class="navbar-brand" href="javascript:void(0)">
-                    <img src="/assets/img/brand/blue.png" class="navbar-brand-img" alt="...">
-                </a>
+                <a class="navbar-brand" href="{{ route('Home') }}" style="font-family:'Poppins', Arial, sans-serif; font-size:26px; font-weight:800; padding-top:34px !important;">VRENT<span style="color: #01d28e">CAR</span></a>
             </div>
             <div class="navbar-inner">
                 <!-- Collapse -->
@@ -14,36 +12,20 @@
                     <ul class="navbar-nav">
                         <!-- SideBarMenu -->
 
-                        <li class="nav-item d-xl-none">
-                            <input type="button" value="Close" class="mx-auto d-block btn-danger btn sidenav-toggler sidenav-toggler-dark active" data-action="sidenav-pin" data-target="#sidenav-main" style="width: 85%">
-                        </li>
+                        
 
                         <li class="nav-item">
-                            <a class="nav-link active" href="#">
+                            <a class="nav-link {{ (Route::is('karyawan.dashboard.show')) ? 'active' : '' }}" href="{{ Route('karyawan.dashboard.show') }}">
                                 <i class="ni ni-tv-2 text-primary"></i>
-                                <span class="nav-link-text">Profil</span>
+                                <span class="nav-link-text">Dashboard</span>
                             </a>
                         </li>
 
                         
 
-
-
-                        <!-- /SideBarMenu -->
-
                     </ul>
-                    <!-- Divider -->
-                    <hr class="my-3">
-                    <!-- Heading -->
-                    <h6 class="navbar-heading p-0 text-muted">
-                        <span class="docs-normal">Other Tools</span>
-                    </h6>
-                    <!-- Navigation -->
-                    <ul class="navbar-nav mb-md-3">
-
-                        
-
-                    </ul>
+                    
+                    
                 </div>
             </div>
         </div>

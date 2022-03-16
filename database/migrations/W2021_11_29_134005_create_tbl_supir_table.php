@@ -15,12 +15,13 @@ class CreateTblSupirTable extends Migration
     {
         Schema::create('tbl_supir', function (Blueprint $table) {
             $table->id();
-            $table->string('nama');
+            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->string('nama_lengkap')->nullable();
             $table->string('foto_diri')->nullable();
+            $table->integer('umur')->nullable();
             $table->string('alamat_rumah')->nullable();
             $table->enum('status', ['Tidak Tersedia', 'Siap', 'Dalam Tugas']);
-            $table->string('no_tlp')->nullable();;
-            $table->bigInteger('gaji')->nullable();
+            $table->string('no_tlp')->nullable();;            
             $table->timestamps();
         });
     }

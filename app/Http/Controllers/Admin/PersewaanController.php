@@ -9,18 +9,21 @@ use App\Models\tbl_order as order;
 use App\Models\tbl_supir as supir;
 use App\Models\tbl_tipe_bayar as tipe_bayar;
 use App\Models\tbl_tipe_sewa as tipe_sewa;
+use App\Models\User;
 use Carbon\Carbon;
-
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redis;
+use Illuminate\Support\Facades\Storage;
 
 class PersewaanController extends Controller
 {
     public function index(Request $r)
     {
         
-        $supir = supir::all();
-        $order = order::all(); 
+        $karyawan = User::has('karyawan')->get();
+        $order = order::all();
 
-        return view('AdminPage.Persewaan.main', compact('supir', 'order'));
+        return view('AdminPage.Persewaan.main', compact('karyawan', 'order'));
     }
 
     public function CariMobilPersewaan (Request $r) {
@@ -33,7 +36,6 @@ class PersewaanController extends Controller
             return redirect()->back()->withInput()->with("failed", "Something wrong! Try again.");
         }
         
-        //$data = mobil::whereRaw('json_contains(destinations, \'["' . "Dengan Supir" . '"]\')')->get();
         $tipe_bayar = tipe_bayar::all();
 
         return view('AdminPage.Persewaan.PageBuatOrder.main2', compact('mobil', 'tipe_bayar'));
@@ -70,9 +72,8 @@ class PersewaanController extends Controller
                 $r->menit_jam_penjemputan
             );
 
-            order::create([
-                "d_mobil_id" => $r->d_mobil_id,
-                "nama" => $r->nama,
+            $order = order::create([
+                "penyewa" => $r->nama,
                 "No_tlp" => $r->No_tlp,
                 "mulai_sewa" => ($tanggal->toDateTimeLocalString()),
                 "akhir_sewa" => ($tanggal->add('day', $r->durasi_sewa)->toDateTimeLocalString()),
@@ -85,6 +86,12 @@ class PersewaanController extends Controller
                 "status" => "Baru",
                 "status_proses" => "Dalam Antrian"
             ]);
+
+            $mobil = mobil::find($r->d_mobil_id);
+            $order->mobil()->associate($mobil);
+
+
+            $order->save();
 
         } else if ($r->dengan_supir == "false") {
         
@@ -119,47 +126,127 @@ class PersewaanController extends Controller
 
 
     public function Setujui (Request $r, $id) {
+        $order = order::find($id);
         
-        $data = order::find($id);
+        $bukti_bayar = $order->bukti_bayar()->first();
 
-        if (strcmp($data->tipe_sewa , "Dengan Supir") == 0) {
+        if (empty($bukti_bayar->terverifikasi)) {
+            return redirect()->back()->with('failed', 'Bukti Bayar harus terverifikasi');
+        }
+
+        if (strcmp($order->tipe_sewa()->first()->tipe_sewa , "Dengan Supir") == 0) {
             if (empty($r->data_supir_id) || !is_numeric($r->data_supir_id)) return redirect()->back()->with('failed', 'Please select Driver first!');
-            $data->data_supir_id = $r->data_supir_id;
+            
+            $user = User::find($r->data_supir_id);
+            $karyawan = $user->karyawan()->first();
+            $karyawan->status = 'Dalam Tugas';
 
-            $supir = supir::find($r->data_supir_id);
-            $supir->status = "Dalam Tugas";
-            $supir->save();
+            $order->supir()->associate($karyawan);
+            $order->user()->associate($user);
         }
 
         
-        $data->status = "Dalam Persewaan";
-        $data->status_proses = "Disetujui";
-        $data->historical_date = json_encode(array_merge(json_decode((empty($data->historical_date)) ? "[]" : $data->historical_date, 1), ['Disetujui' => Carbon::now()->toDateTimeString()]));
-        $data->save();
+        $order->status = "Dalam Persewaan";
+        
+        $order->status_order()->create([
+            'id_order' => $order->id,
+            'status' => "Disetujui",
+            'created_at' => now()->toDateTimeLocalString()
+        ]);
+        
+        $karyawan->save();
+        $order->save();
         
         return redirect()->back()->with('success', 'The order has processed');
     }
 
+    public function VerifikasiBukti (Request $r) {
+        $bukti_bayar = order::find($r->id)->bukti_bayar()->first() or false;
+        if ($bukti_bayar) {
+            $bukti_bayar->terverifikasi = 1;
+            $bukti_bayar->save();
+
+            return redirect()->back()->with('success', 'Verifikasi Berhasil');
+        }
+        return redirect()->back()->with('failed', 'Verifikasi Gagal');
+    }
+
     public function Batalkan ($id) {
         
+        $order = order::find($id);
+        $order->status = "Dibatalkan";
+       
 
-        $data = order::find($id);
-
-        $data->status = "Dibatalkan";
-        $data->save();
-
-        $mobil = mobil::find($data->d_mobil_id);
+        $mobil = $order->mobil()->first();
         $mobil->status = "Tersedia";
-        $mobil->save();
+        
 
-        if (strcmp($data->tipe_sewa , "Dengan Supir") == 0) {
-            $supir = supir::find($data->data_supir_id);
-            $supir->status = "Dalam Tugas";
-            $supir->save();
+        $tipe_sewa = $mobil->tipe_sewa()->first()->tipe_sewa;
+
+        if ($tipe_sewa == "Dengan Supir") {
+            $supir = $order->supir()->first();
+            $supir->status = "Siap";
         }
+
+        $order->status_order()->create([
+            'status' => 'Dibatalkan',
+            'created_at' => now()->toDateTimeLocalString()
+        ]);
+
+        $order->save();
+        $mobil->save();
+        $supir->save();
 
         return redirect()->back()->with('success', 'The order has canceled');
     }
+
+    public function update_status_order (Request $r) {
+        $order = order::find($r->id);
+
+        $order->status_order()->create([
+            'status' => $r->status,
+            'created_at' => now()->toDateTimeLocalString()
+        ]);
+
+        return redirect()->back()->with('success', 'status order updated!');
+    }
+
+    public function Selesai (Request $r) {
+
+        $order = order::find($r->id);
+
+        $mobil = $order->mobil()->first();
+
+        $user = $order->user()->first();
+        $supir = $user->karyawan()->first();
+
+        $mobil->status = "Tersedia";
+        $supir->status = "Siap";
+        $order->status = "Selesai";
+
+        $mobil->save();
+        $supir->save();
+        $order->save();
+
+        $order->status_order()->create([
+            'status' => 'Selesai',
+            'created_at' => now()->toDateTimeLocalString()
+        ]);
+        
+        return redirect()->back()->with('success', 'Order telah diselesaikan!');
+    }
+
+    public function getBuktiBayar (Request $r) {
+        if (Auth::check() and Auth::user()->group == "admin") {
+            if (Storage::file_exists ('/Bukti_Bayar/' . $r->nama)) {
+                response()->file(Storage::get('/Bukti_Bayar/' . $r->nama));
+            } 
+        }
+
+        return response('failed');
+    }
+
+    
 
     
 }

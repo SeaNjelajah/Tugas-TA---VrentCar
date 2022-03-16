@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class TblDenda extends Migration
+class CreateTblBuktibayarTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,11 @@ class TblDenda extends Migration
      */
     public function up()
     {
-        Schema::create('tbl_denda', function (Blueprint $table) {
-            $table->unsignedBigInteger('id')->primary();
-            $table->string('deskripsi');
-            $table->bigInteger('denda');
+        Schema::create('tbl_bukti_bayar', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('id_order')->nullable()->constrained('tbl_order')->cascadeOnUpdate()->nullOnDelete();
+            $table->string('gambar_bukti');
+            $table->boolean('terverifikasi');
             $table->timestamps();
         });
     }
@@ -28,6 +29,6 @@ class TblDenda extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tbl_denda');
+        Schema::dropIfExists('tbl_bukti_bayar');
     }
 }

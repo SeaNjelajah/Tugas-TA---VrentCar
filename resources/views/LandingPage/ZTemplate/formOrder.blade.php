@@ -146,7 +146,9 @@
       </section>
       {{-- akhir data mobil --}}
     
-      <form class="mb-5">
+      <form class="mb-5" method="POST" action="{{ route('FormOrder.create') }}">
+        @csrf
+        <input type="hidden" name="id" value="{{ $mobil->id }}">
         <div class="container">
             <div class="card">
                 <div class="card-body">
@@ -177,19 +179,19 @@
                         </div>
                         <div class="form-group">
                         <label for="penyewa" class="col-form-label">Nama Lengkap:</label>
-                        <input name="penyewa" type="text" class="form-control" id="penyewa" />
+                        <input name="penyewa" type="text" class="form-control" id="penyewa" value="{{ old('penyewa') }}">
                         </div>
 
                         <div class="form-group">
                         <label for="No_tlp" class="col-form-label">Nomer Telepon / Whatsapp:</label>
-                        <input name="No_tlp" type="text" class="form-control" id="No_tlp" />
+                        <input name="No_tlp" type="text" class="form-control" id="No_tlp">
                         </div>
 
                         <div class="row w-100 pl-3">
 
                           <div class="form-group w-75 pr-3">
                             <label for="tanggal_penjemputan" class="col-form-label">Tanggal Penjemputan:</label>
-                            <input type="date" name="tanggal_penjemputan" class="form-control" id="tanggal-penjemputan-dengan-supir" />
+                            <input type="date" name="tanggal_penjemputan" value="{{ old('tanggal_penjemputan') }}" class="form-control" id="tanggal-penjemputan-dengan-supir">
                           </div>
 
                           <div class="form-group w-25">
@@ -197,7 +199,7 @@
                             <label for="durasi_sewa" class="col-form-label">Durasi Sewa:</label>
   
                             <div class="input-group">
-                              <input type="number" name="durasi_sewa" class="form-control" id="durasi-sewa-dengan-supir" />
+                              <input type="number" name="durasi_sewa" value="{{ old('durasi_sewa') }}" class="form-control" id="durasi-sewa-dengan-supir">
                               <div class="input-group-append">
                                 <span class="input-group-text font-poppins-400">Hari</span>
                               </div>
@@ -271,11 +273,11 @@
                         
                         <div class="form-group">
                         <label for="alamat_rumah" class="col-form-label">Alamat Tempat Tinggal:</label>
-                        <textarea name="alamat_rumah" class="form-control" id="alamat_rumah" placeholder="Isi alamat lengkap tempat tinggal Anda"></textarea>
+                        <textarea name="alamat_rumah" class="form-control" id="alamat_rumah" placeholder="Isi alamat lengkap tempat tinggal Anda">{{ old('alamat_rumah') }}</textarea>
                         </div>
                         <div class="form-group">
                           <label for="alamat_temu" class="col-form-label">Alamat Penjemputan:</label>
-                          <textarea name="alamat_temu" class="form-control" id="alamat_temu" placeholder="Boleh sama dengan alamat tempat tinggal"></textarea>
+                          <textarea name="alamat_temu" class="form-control" id="alamat_temu" placeholder="Boleh sama dengan alamat tempat tinggal">{{ old('alamat_temu') }}</textarea>
                         </div>
                         
                         
@@ -288,7 +290,7 @@
                 
             </div>
             <section class="mt-3">
-            <a href="{{ route('RingkasanOrder') }}" type="button" id="cari-dengan-supir" class="btn btn-primary btn-lg btn-block" >Selanjutnya</a>
+            <button type="submit" class="btn btn-primary btn-lg btn-block" >Selanjutnya</button>
             </section>
         </div>
       </form>

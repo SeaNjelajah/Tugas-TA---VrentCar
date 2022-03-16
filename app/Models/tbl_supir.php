@@ -10,4 +10,8 @@ class tbl_supir extends Model
     use HasFactory;
     protected $table = 'tbl_supir';
     protected $guarded = ['id', 'created_at', 'updated_at'];
+
+    public function user () {
+        $this->belongsTo(User::class, 'user_id');
+    }
 }

@@ -44,6 +44,12 @@
             </div>
             @endif
 
+            @if (session('Created'))
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    Your account successfull to Created!
+                </div>
+            @endif
+
             <div class="card-body px-lg-5 py-lg-5">
 
 

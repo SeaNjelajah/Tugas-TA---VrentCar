@@ -11,10 +11,10 @@
                 <a class="nav-link pr-0" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <div class="media align-items-center">
                         <span class="avatar avatar-sm rounded-circle">
-                            <img alt="Image placeholder" src="/assets/img/theme/team-4.jpg">
+                            <img alt="Image placeholder" src="{{ asset('assets/img/users/' . ((empty(Auth::user()->foto_profil)) ? 'NoUserPic.png' : Auth::user()->foto_profil)) }}">
                         </span>
                         <div class="media-body  ml-2 d-none d-lg-block">
-                            <span class="mb-0 text-sm font-weight-bold">{{ Auth::user()->name }}</span>
+                            <span class="mb-0 text-sm font-weight-bold">{{ Auth::user()->username }}</span>
                         </div>
                     </div>
                 </a>
@@ -22,21 +22,17 @@
                     <div class="dropdown-header">
                         <h6 class="m-0">Welcome!</h6>
                     </div>
-                    <a href="#!" class="dropdown-item">
+                    <a href="{{ route('user.dashboard') }}" class="dropdown-item">
                         <i class="ni ni-single-02"></i>
-                        <span>My profile</span>
+                        <span>My Profile</span>
                     </a>
-                    <a href="#!" class="dropdown-item">
+                    <a href="{{ route('user.bookingBerjalan') }}" class="dropdown-item">
                         <i class="ni ni-settings-gear-65"></i>
-                        <span>Settings</span>
+                        <span>Booking Yang Berjalan</span>
                     </a>
                     <a href="#!" class="dropdown-item">
                         <i class="ni ni-calendar-grid-58"></i>
-                        <span>Activity</span>
-                    </a>
-                    <a href="#!" class="dropdown-item">
-                        <i class="ni ni-support-16"></i>
-                        <span>Support</span>
+                        <span>Riwayat Booking</span>
                     </a>
                     <div class="dropdown-divider"></div>
                     <a href="{{ route('Logout') }}" class="dropdown-item">
@@ -69,10 +65,10 @@
                     <a class="nav-link pr-0" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <div class="media align-items-center">
                             <span class="avatar avatar-sm rounded-circle">
-                                <img alt="Image placeholder" src="/assets/img/theme/team-4.jpg">
+                                <img alt="Image placeholder" src="{{ asset('assets/img/users/' . ((empty(Auth::user()->foto_profil)) ? 'NoUserPic.png' : Auth::user()->foto_profil)) }}">
                             </span>
                             <div class="media-body  ml-2  d-none d-lg-block">
-                                <span class="mb-0 text-sm  font-weight-bold">{{ Auth::user()->name }}</span>
+                                <span class="mb-0 text-sm  font-weight-bold">{{ Auth::user()->username }}</span>
                             </div>
                         </div>
                     </a>
@@ -80,21 +76,17 @@
                         <div class="dropdown-header">
                             <h6 class="m-0">Welcome!</h6>
                         </div>
-                        <a href="#!" class="dropdown-item">
+                        <a href="{{ route('user.dashboard') }}" class="dropdown-item">
                             <i class="ni ni-single-02"></i>
-                            <span>My Dashboard</span>
+                            <span>My Profile</span>
                         </a>
-                        <a href="#!" class="dropdown-item">
+                        <a href="{{ route('user.bookingBerjalan') }}" class="dropdown-item">
                             <i class="ni ni-settings-gear-65"></i>
-                            <span>Settings</span>
+                            <span>Booking Yang Berjalan</span>
                         </a>
                         <a href="#!" class="dropdown-item">
                             <i class="ni ni-calendar-grid-58"></i>
-                            <span>Activity</span>
-                        </a>
-                        <a href="#!" class="dropdown-item">
-                            <i class="ni ni-support-16"></i>
-                            <span>Support</span>
+                            <span>Riwayat Booking</span>
                         </a>
                         <div class="dropdown-divider"></div>
                         <a href="{{ route('Logout') }}" class="dropdown-item">

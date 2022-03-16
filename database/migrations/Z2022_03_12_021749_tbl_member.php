@@ -1,10 +1,11 @@
 <?php
 
+use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTblBuktibayarTable extends Migration
+class TblMember extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +14,10 @@ class CreateTblBuktibayarTable extends Migration
      */
     public function up()
     {
-        Schema::create('tbl_bukti_bayar', function (Blueprint $table) {
-            $table->unsignedBigInteger('id')->primary();
-            $table->string('gambar_bukti');
-            $table->boolean('terverifikasi');
+        Schema::create('tbl_member',  function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete()->cascadeOnUpdate();
+            $table->string('gambar_ktp')->nullable();
             $table->timestamps();
         });
     }
@@ -28,6 +29,6 @@ class CreateTblBuktibayarTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tbl_bukti_bayar');
+        Schema::dropIfExists('tbl_member');
     }
 }

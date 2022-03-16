@@ -33,13 +33,14 @@
         
     } 
 
-
-
     $('.ImgPopOver[rel=popover]').popover({
         html: true,
         trigger: 'click',
         placement: 'right',
-        content: () => { return '<img class="img-thumbnail" src="'+$(this).data('img') + '" />'; }
+        content: () => {
+            console.log($(this));
+            return '<img class="img-thumbnail" src="'+ $(this).data('img') + '" />';
+        }
     });
 
 

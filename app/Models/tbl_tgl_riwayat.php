@@ -8,4 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class tbl_tgl_riwayat extends Model
 {
     use HasFactory;
+    protected $table = 'tbl_tgl_riwayat';
+    
 }

@@ -17,23 +17,29 @@ class Controller extends BaseController
 
     protected $NoImage = 'NoImageA.png';
 
-    protected function SaveFile (Request $request, $key, $publicPath = 'assets/img/cars') {
+    protected function SaveFile (Request $request, $key, $publicPath = 'assets/img/cars', $NoImage = '') {
 
         if ($request->hasFile($key)) {
 
             $imageName = uniqid() . "_" .  $request->file($key)->getClientOriginalName();
             $request->file($key)->move(public_path($publicPath), $imageName);
-
+            
         } else {
-            $imageName = $this->NoImage;
+            if (empty($NoImage))
+                $imageName = $this->NoImage;
+            else
+                $imageName = $NoImage;
         }
 
         return $imageName;
     }
 
-    protected function DeleteFile ($ImageName, $publicPath = 'assets/img/cars/') {
+    protected function DeleteFile ($ImageName, $publicPath = 'assets/img/cars/', $NoImage = '') {
+
+        if (empty($NoImage)) $NoImage = $this->NoImage;
+
         $imagePath = public_path ($publicPath . $ImageName);
-        if (File::exists($imagePath) and $ImageName != $this->NoImage) {
+        if (File::exists($imagePath) and $ImageName != $NoImage) {
             File::delete($imagePath);
         }
     }

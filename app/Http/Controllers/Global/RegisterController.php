@@ -27,17 +27,19 @@ class RegisterController extends Controller
         ]);
            
         $data = $request->all();
-        $check = $this->create($data);
-         
-        return redirect("admin.dashboard.show")->withSuccess('You have signed-in');
+
+        $this->create($data);
+        
+        return redirect(route('LoginView'))->with('Created', 'Your account Success to Created');
     }
 
     public function create(array $data)
     {
       return User::create([
-        'name' => $data['username'],
+        'username' => $data['username'],
         'email' => $data['email'],
-        'password' => Hash::make($data['password'])
+        'password' => Hash::make($data['password']),
+        'group' => 'member'
       ]);
 
     }    

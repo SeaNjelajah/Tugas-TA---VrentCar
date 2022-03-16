@@ -38,14 +38,12 @@ class LoginController extends Controller
             $id = Auth::user()->id;
             $group = strtolower(User::find($id)->group);
 
-            $MustEqual1 = "admin";
-            $MustEqual2 = "member";
-
-            if ($group == $MustEqual1) 
-                return redirect()->intended(route('admin.dashboard.show'))->with('success', 'Signed in');
+            if ($group == "admin") return redirect()->intended(route('admin.dashboard.show'))->with('success', 'Signed in');
             
-            else if ($group == $MustEqual2)
-                return redirect()->intended(route('Home'))->with('success', 'Signed in');
+            else if ($group == "member") return redirect()->intended(route('Home'))->with('success', 'Signed in');
+
+            else if ($group == "karyawan") return redirect()->intended(route('karyawan.dashboard.show'))->with('success', 'Signed in');
+        
         }
 
         return redirect(route("LoginView"))->withInput()->with('failed', 'Login details are not valid');

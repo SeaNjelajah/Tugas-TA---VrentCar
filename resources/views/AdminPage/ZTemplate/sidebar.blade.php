@@ -56,19 +56,26 @@
                     <!-- Navigation -->
                     <ul class="navbar-nav mb-md-3">
 
-                        <li class="nav-item ">
+                        {{-- <li class="nav-item ">
                             <a class="nav-link {{ (Route::is('TagManage')) ? 'active' : '' }}" href="{{ Route('TagManage') }}">
                                 <i class="ni ni-tag"></i>
                                 <span class="nav-link-text">Tag Manager</span>
                             </a>
-                        </li>
+                        </li> --}}
 
                         <li class="nav-item">
-                            <a class="nav-link {{ (Route::is('SupirManager')) ? 'active' : '' }}" href="{{ Route('SupirManager') }}">
+                            <a class="nav-link {{ (Route::is('admin.AccountManage.show')) ? 'active' : '' }}" href="{{ Route('admin.AccountManage.show') }}">
                                 <i class=" ni ni-circle-08 text-green"></i>
-                                <span class="nav-link-text">Sopir Manager</span>
+                                <span class="nav-link-text">Account Manager</span>
                             </a>
                         </li>
+
+                        {{-- <li class="nav-item">
+                            <a class="nav-link {{ (Route::is('karyawan.dashboard.show')) ? 'active' : '' }}" href="{{ Route('karyawan.dashboard.show') }}">
+                                <i class=" ni ni-circle-08 text-green"></i>
+                                <span class="nav-link-text">Karyawan Test</span>
+                            </a>
+                        </li> --}}
 
                         <li class="nav-item d-xl-none">
                             <input type="button" value="Close" class="mx-auto d-block btn-danger btn sidenav-toggler sidenav-toggler-dark active" data-action="sidenav-pin" data-target="#sidenav-main" style="width: 85%">

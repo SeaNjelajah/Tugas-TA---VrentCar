@@ -59,8 +59,8 @@
 
                 </form>
 
-                <form class="d-flex mb-0 d-block" method="POST" action="{{ Route('FormOrder') }}">
-                  @csrf
+                <form class="d-flex mb-0 d-block" method="GET" action="{{ Route('FormOrder') }}">
+                  {{-- @csrf --}}
                   <input type="hidden" name="id" value="{{ $item->id }}">
                   <input type="submit" class="btn btn-primary w-100" value="Book now">
                 </form>

@@ -82,7 +82,7 @@ class ArmadaMobilController extends Controller
         // id_jenis_mobil
 
         $data = $req->except(['gambar','_token','modal','jenis_transmisi','tipe_sewa', 'jenis_mobil']);
-        $data += array_merge($data, ["gambar" => $imageName]);
+        $data = array_merge($data, ["gambar" => $imageName]);
 
 
         $mobil = mobil::create($data);

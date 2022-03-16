@@ -3893,6 +3893,45 @@ input[type="button"].btn-block {
   border-bottom-right-radius: calc(0.25rem - 1px);
   border-bottom-left-radius: calc(0.25rem - 1px); }
 
+  .card-profile-image img:hover
+  {
+      transform: translate(-50%, -50%) scale(1.03);
+  }
+  
+  .card-profile-stats
+  {
+      padding: 1rem 0;
+  }
+  .card-profile-stats > div
+  {
+      margin-right: 1rem;
+      padding: .875rem; 
+  
+      text-align: center;
+  }
+  .card-profile-stats > div:last-child
+  {
+      margin-right: 0;
+  }
+  .card-profile-stats > div .heading
+  {
+      font-size: 1.1rem;
+      font-weight: bold;
+  
+      display: block;
+  }
+  .card-profile-stats > div .description
+  {
+      font-size: .875rem;
+  
+      color: #adb5bd;
+  }
+  
+  .card-profile-actions
+  {
+      padding: .875rem;
+  }
+
 .card-deck {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -9382,6 +9421,18 @@ textarea.form-control {
 
 .heading-section.heading-section-white p {
   color: rgba(255, 255, 255, 0.9); }
+
+  .heading-small
+  {
+      font-size: .75rem;
+  
+      padding-top: .25rem;
+      padding-bottom: .25rem;
+  
+      letter-spacing: .04em; 
+      text-transform: uppercase;
+  }
+
 
 .img,
 .blog-img,

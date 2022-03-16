@@ -8,5 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class tbl_buktibayar extends Model
 {
     use HasFactory;
-    protected $table = 'tbl_buktibayar';
+    protected $table = 'tbl_bukti_bayar';
+    protected $guarded = ['created_at', 'updated_at'];
+
 }
