@@ -147,8 +147,10 @@
         </div>
     </section>
     {{-- akhir data mobil --}}
-
-    <form class="mb-5">
+    
+    <form class="mb-5" method="POST" action="{{ route('FormOrder.create') }}">
+        @csrf
+        <input type="hidden" name="id" value="{{ $mobil->id }}">
         <div class="container">
             <div class="card">
                 <div class="card-body">
@@ -184,7 +186,7 @@
 
                         <div class="form-group">
                             <label for="No_tlp" class="col-form-label">Nomer Telepon / Whatsapp:</label>
-                            <input name="No_tlp" type="text" class="form-control" id="No_tlp" />
+                            <input name="No_tlp" type="number" class="form-control" id="No_tlp" />
                         </div>
 
 
@@ -272,8 +274,9 @@
                                     </div>
 
                                     <select name="menit_jam_pengembalian" id="waktu-menit-pengembalian-tanpa-supir" class="form-control" disabled="true">
-                                        @for ($i = 0; $i < 60; $i +=30) <option>{{ ($i == 0) ? '00' : $i }}</option>
-                                            @endfor
+                                        @for ($i = 0; $i < 60; $i += 30)
+                                        <option>{{ ($i == 0) ? '00' : $i }}</option>
+                                        @endfor
                                     </select>
 
                                 </div>
@@ -285,17 +288,18 @@
                         <div class="row">
                             <span id="tanggal-selesai-tanpa-supir" class="text-muted  mx-auto font-poppins-400">XXX, X XXX XXXX Sampai XXX, X XXX XXXX</span>
                         </div>
+
                         <hr class="pl-3 mt-2">
-
-
 
                         <div class="form-group">
                             <label for="alamat_rumah" class="col-form-label">Alamat Tempat Tinggal:</label>
                             <textarea name="alamat_rumah" class="form-control" id="alamat_rumah" placeholder="Isi alamat lengkap tempat tinggal Anda"></textarea>
                         </div>
+
                         <div class="form-group">
                             <label for="alamat_temu" class="col-form-label">Alamat Serah Terima Mobil:</label>
-                            <textarea name="alamat_temu" class="form-control" id="alamat_temu" placeholder="Boleh sama dengan alamat tempat tinggal"></textarea>
+                            <textarea disabled name="alamat_temu" class="form-control" id="alamat_temu">Jalan Kalibokor 3C / No. 37 C Surabaya</textarea>
+                            <small class="font-weight-bolder text-dark">Note: Alamat serah terima mobil hanya bisa berada di alamat rental mobil</small>
                         </div>
 
 
@@ -307,7 +311,7 @@
 
             </div>
             <section class="mt-3">
-                <a href="{{ route('RingkasanOrder') }}" type="button" class="btn btn-primary btn-lg btn-block">Selanjutnya</a>
+                <button type="submit" class="btn btn-primary btn-lg btn-block">Selanjutnya</button>
             </section>
 
         </div>

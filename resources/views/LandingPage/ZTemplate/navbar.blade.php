@@ -30,10 +30,33 @@
                         <i class="ni ni-settings-gear-65"></i>
                         <span>Booking Yang Berjalan</span>
                     </a>
-                    <a href="#!" class="dropdown-item">
+                    <a href="{{ route('user.RiwayatBooking') }}" class="dropdown-item">
                         <i class="ni ni-calendar-grid-58"></i>
                         <span>Riwayat Booking</span>
                     </a>
+
+                    @if (Auth::user()->group == "admin")
+
+                        <div class="dropdown-divider"></div>
+
+                        <div class="dropdown-header">
+                            <h6 class="m-0">Admin Dashboard</h6>
+                        </div>
+                        <a href="{{ route('admin.dashboard.show') }}" class="dropdown-item">
+                            <i class="fas fa-desktop"></i>
+                            <span>Dashboard</span>
+                        </a>
+                        <a href="{{ route('admin.ArmadaMobil.show') }}" class="dropdown-item">
+                            <i class="fas fa-car"></i>
+                            <span>Armada Mobil</span>
+                        </a>
+                        <a href="{{ route('admin.Persewaan.show') }}" class="dropdown-item">
+                            <i class="ni ni-settings-gear-65"></i>
+                            <span>Persewaan</span>
+                        </a>
+
+                    @endif
+
                     <div class="dropdown-divider"></div>
                     <a href="{{ route('Logout') }}" class="dropdown-item">
                         <i class="ni ni-user-run"></i>
@@ -88,6 +111,27 @@
                             <i class="ni ni-calendar-grid-58"></i>
                             <span>Riwayat Booking</span>
                         </a>
+
+                        @if (Auth::user()->group == "admin")
+                        <div class="dropdown-divider"></div>
+
+                        <div class="dropdown-header">
+                            <h6 class="m-0">Admin Dashboard</h6>
+                        </div>
+                        <a href="{{ route('admin.dashboard.show') }}" class="dropdown-item">
+                            <i class="fas fa-desktop"></i>
+                            <span>Dashboard</span>
+                        </a>
+                        <a href="{{ route('admin.ArmadaMobil.show') }}" class="dropdown-item">
+                            <i class="fas fa-car"></i>
+                            <span>Armada Mobil</span>
+                        </a>
+                        <a href="{{ route('admin.Persewaan.show') }}" class="dropdown-item">
+                            <i class="ni ni-settings-gear-65"></i>
+                            <span>Persewaan</span>
+                        </a>
+
+                        @endif
                         <div class="dropdown-divider"></div>
                         <a href="{{ route('Logout') }}" class="dropdown-item">
                             <i class="ni ni-user-run"></i>

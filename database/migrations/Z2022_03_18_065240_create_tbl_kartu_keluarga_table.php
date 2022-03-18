@@ -1,11 +1,10 @@
 <?php
 
-use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class TblMember extends Migration
+class CreateTblKartuKeluargaTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,11 +13,11 @@ class TblMember extends Migration
      */
     public function up()
     {
-        Schema::create('tbl_member',  function (Blueprint $table) {
+        Schema::create('tbl_kartu_keluarga', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete()->cascadeOnUpdate();
-            $table->string('nama_lengkap')->nullable();
-            $table->string('alamat_rumah')->nullable();
+            $table->foreignId('member_id')->nullable()->constrained('tbl_member')->nullOnDelete()->cascadeOnUpdate();
+            $table->string('kartu_keluarga');
+            $table->enum('terverifikasi', ['Ditolak', 'Diterima'])->nullable();
             $table->timestamps();
         });
     }
@@ -30,6 +29,6 @@ class TblMember extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tbl_member');
+        Schema::dropIfExists('tbl_kartu_keluarga');
     }
 }

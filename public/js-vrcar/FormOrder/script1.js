@@ -64,4 +64,8 @@ document.getElementById('durasi-sewa-dengan-supir').addEventListener('change', c
 document.getElementById('jam-waktu-penjemputan-dengan-supir').addEventListener('change', checkDenganSupir);
 document.getElementById('menit-waktu-penjemputan-dengan-supir').addEventListener('change', checkDenganSupir);
 
+$(document).ready ( function () {
+    checkDenganSupir();
+});
+
 

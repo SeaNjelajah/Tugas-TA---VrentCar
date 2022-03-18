@@ -3,9 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\tbl_kartu_keluarga;
+use App\Models\tbl_kartu_ktp;
 use Illuminate\Http\Request;
 use App\Models\tbl_mobil as mobil;
 use App\Models\tbl_order as order;
+use App\Models\tbl_sim_a;
 use App\Models\tbl_supir as supir;
 use App\Models\tbl_tipe_bayar as tipe_bayar;
 use App\Models\tbl_tipe_sewa as tipe_sewa;
@@ -127,14 +130,50 @@ class PersewaanController extends Controller
 
     public function Setujui (Request $r, $id) {
         $order = order::find($id);
-        
-        $bukti_bayar = $order->bukti_bayar()->first();
+        $tipe_sewa = $order->tipe_sewa()->first()->tipe_sewa;
+        $bukti_bayar = $order->bukti_bayar()->first() or false;
 
-        if (empty($bukti_bayar->terverifikasi)) {
+        if ($bukti_bayar) {
+            if ($bukti_bayar->terverifikasi != "Diterima")
+                return redirect()->back()->with('failed', 'Bukti Bayar harus terverifikasi');
+        } else {
             return redirect()->back()->with('failed', 'Bukti Bayar harus terverifikasi');
         }
 
-        if (strcmp($order->tipe_sewa()->first()->tipe_sewa , "Dengan Supir") == 0) {
+        if ($tipe_sewa == "Tanpa Supir") {
+            $penyewa = $order->user()->first();
+            $data_member = $penyewa->member()->first();
+            
+            $ktp = $data_member->ktp()->first() or false;
+
+            if ($ktp) {
+                if ($ktp->terverifikasi != "Diterima")
+                    return redirect()->back()->with('failed', 'KTP Bayar harus terverifikasi');
+            } else {
+                return redirect()->back()->with('failed', 'KTP harus terverifikasi');
+            }
+
+            $kartu_keluarga = $data_member->kartu_keluarga()->first() or false;
+
+            if ($kartu_keluarga) {
+                if ($kartu_keluarga->terverifikasi != "Diterima")
+                    return redirect()->back()->with('failed', 'Kartu Keluarga harus terverifikasi');
+            } else {
+                return redirect()->back()->with('failed', 'Kartu Keluarga harus terverifikasi');
+            }
+
+            $sim_a = $data_member->sim_a()->first() or false;
+
+            if ($sim_a) {
+                if ($sim_a->terverifikasi != "Diterima")
+                    return redirect()->back()->with('failed', 'Bukti Bayar harus terverifikasi');
+            } else {
+                return redirect()->back()->with('failed', 'SIM A harus terverifikasi');
+            }
+
+        }
+
+        if ($tipe_sewa == "Dengan Supir") {
             if (empty($r->data_supir_id) || !is_numeric($r->data_supir_id)) return redirect()->back()->with('failed', 'Please select Driver first!');
             
             $user = User::find($r->data_supir_id);
@@ -142,7 +181,7 @@ class PersewaanController extends Controller
             $karyawan->status = 'Dalam Tugas';
 
             $order->supir()->associate($karyawan);
-            $order->user()->associate($user);
+            $karyawan->save();
         }
 
         
@@ -154,7 +193,6 @@ class PersewaanController extends Controller
             'created_at' => now()->toDateTimeLocalString()
         ]);
         
-        $karyawan->save();
         $order->save();
         
         return redirect()->back()->with('success', 'The order has processed');
@@ -163,13 +201,109 @@ class PersewaanController extends Controller
     public function VerifikasiBukti (Request $r) {
         $bukti_bayar = order::find($r->id)->bukti_bayar()->first() or false;
         if ($bukti_bayar) {
-            $bukti_bayar->terverifikasi = 1;
+
+            $bukti_bayar->terverifikasi = "Diterima";
             $bukti_bayar->save();
 
             return redirect()->back()->with('success', 'Verifikasi Berhasil');
         }
         return redirect()->back()->with('failed', 'Verifikasi Gagal');
     }
+
+    public function TolakBuktiBayar (Request $r) {
+        $bukti_bayar = order::find($r->id)->bukti_bayar()->first() or false;
+
+        if ($bukti_bayar) {
+
+            $bukti_bayar->terverifikasi = "Ditolak";
+            $bukti_bayar->save();
+
+            return redirect()->back()->with('success', 'Verifikasi Berhasil Ditolak');
+        }
+        return redirect()->back()->with('failed', 'Verifikasi Gagal');
+    }
+
+    public function VerifikasiKTP (Request $r) {
+        $ktp = tbl_kartu_ktp::find($r->ktp_id) or false;
+
+        if ($ktp) {
+
+            $ktp->terverifikasi = "Diterima";
+            $ktp->save();
+
+            return redirect()->back()->with('success', 'Verifikasi KTP Berhasil');
+        }
+        return redirect()->back()->with('failed', 'Verifikasi KTP Gagal');
+    }
+
+    public function TolakKTP (Request $r) {
+        $ktp = tbl_kartu_ktp::find($r->ktp_id) or false;
+
+        if ($ktp) {
+
+            $ktp->terverifikasi = "Ditolak";
+            $ktp->save();
+
+            return redirect()->back()->with('success', 'Verifikasi KTP Berhasil Ditolak');
+        }
+
+        return redirect()->back()->with('failed', 'Verifikasi Tolak KTP Gagal');
+    }
+
+    public function VerifikasiKartuKeluarga (Request $r) {
+        $kartu_keluarga = tbl_kartu_keluarga::find($r->kartu_keluarga_id) or false;
+
+        if ($kartu_keluarga) {
+
+            $kartu_keluarga->terverifikasi = "Diterima";
+            $kartu_keluarga->save();
+
+            return redirect()->back()->with('success', 'Verifikasi Kartu Keluarga Berhasil');
+        }
+        return redirect()->back()->with('failed', 'Verifikasi Kartu Keluarga Gagal');
+    }
+
+    public function TolakKartuKeluarga (Request $r) {
+        $kartu_keluarga = tbl_kartu_keluarga::find($r->kartu_keluarga_id) or false;
+
+        if ($kartu_keluarga) {
+
+            $kartu_keluarga->terverifikasi = "Ditolak";
+            $kartu_keluarga->save();
+
+            return redirect()->back()->with('success', 'Verifikasi Kartu Keluarga Berhasil Ditolak');
+        }
+
+        return redirect()->back()->with('failed', 'Verifikasi Tolak Kartu Keluarga Gagal');
+    }
+
+    public function VerifikasiSimA (Request $r) {
+        $sim_a = tbl_sim_a::find($r->sim_a_id) or false;
+
+        if ($sim_a) {
+
+            $sim_a->terverifikasi = "Diterima";
+            $sim_a->save();
+
+            return redirect()->back()->with('success', 'Verifikasi SIM A Berhasil');
+        }
+        return redirect()->back()->with('failed', 'Verifikasi SIM A Gagal');
+    }
+
+    public function TolakSimA (Request $r) {
+        $sim_a = tbl_sim_a::find($r->sim_a_id) or false;
+
+        if ($sim_a) {
+
+            $sim_a->terverifikasi = "Ditolak";
+            $sim_a->save();
+
+            return redirect()->back()->with('success', 'Verifikasi SIM A Berhasil Ditolak');
+        }
+
+        return redirect()->back()->with('failed', 'Verifikasi Tolak SIM A Gagal');
+    }
+
 
     public function Batalkan ($id) {
         
@@ -216,16 +350,21 @@ class PersewaanController extends Controller
         $order = order::find($r->id);
 
         $mobil = $order->mobil()->first();
-
         $user = $order->user()->first();
-        $supir = $user->karyawan()->first();
-
+        
+        
         $mobil->status = "Tersedia";
-        $supir->status = "Siap";
         $order->status = "Selesai";
 
+        $tipe_sewa = $order->tipe_sewa()->first()->tipe_sewa;
+        
+        if ($tipe_sewa == "Dengan Supir") {
+            $supir = $user->karyawan()->first();
+            $supir->status = "Siap";
+            $supir->save();
+        }
+
         $mobil->save();
-        $supir->save();
         $order->save();
 
         $order->status_order()->create([
@@ -244,6 +383,29 @@ class PersewaanController extends Controller
         }
 
         return response('failed');
+    }
+
+    public function TambahDenda (Request $r) {
+
+        $r->session()->flash('failed', 'Gagal menambahkan denda');
+
+        $r->validate([
+            'order_id' => 'required|numeric',
+            'denda' => 'required|numeric',
+            'deskripsi' => 'nullable',
+        ]);
+
+        $r->session()->forget('failed');
+
+        $order = order::find($r->order_id);
+        $inputData = $r->only('denda', 'deskripsi');
+
+        $order->total += $r->denda;
+        $order->denda()->create($inputData);
+
+        $order->save();
+
+        return redirect()->back()->with('success', 'berhasil menambahkan denda baru');
     }
 
     

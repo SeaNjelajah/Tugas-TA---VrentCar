@@ -26,7 +26,7 @@
 
     <div class="container my-5">
 
-        @if ($order->status == "Dalam Persewaan")
+        @if ($order->status == "Dalam Persewaan" || $order->status == "Selesai")
         <div class="alert alert-success">
             Pesanan anda telah sepenuhnya diterima <i class="float-right fas fa-check"></i>
         </div>
@@ -41,7 +41,7 @@
 
                 <div class="row px-4">
 
-                    <div class="col-6 text-black">
+                    <div class="col-12 col-lg-6 text-black">
                         <figure class="figure mx-auto mt-3">
                             <img src="{{ asset('assets/img/cars/' . $mobil->gambar) }}" class=" w-100 figure-img img-fluid rounded" alt="Car Picture">
                         </figure>
@@ -71,7 +71,7 @@
                     </div>
 
                     
-                    <div class="col-6">
+                    <div class="col-12 col-lg-6">
                         
                         <div class="border w-100 p-4 rounded mb-2 d-flex mt-3">
                             <div class="icon mr-3" style="color: blue;">
@@ -127,8 +127,10 @@
 
                 </div>
 
+                <hr class="pl-3">
+
                 <div class="row px-4">
-                    <div class="col">
+                    <div class="col-12 mx-auto col-lg">
 
                         <div class="border w-100 p-4 rounded mb-2 d-flex">
                             <div class="icon mr-3" style="color: blue;">
@@ -136,13 +138,29 @@
                             </div>
                             <p class="text-dark">
                               <span>Tanggal Mulai:</span><br>
-                              {{ $order->tgl_akhir_sewa }}
+                              {{ ConvertDateToTextDateToIndonesia($order->tgl_mulai_sewa) }}
                             </p>
                         </div>
 
                     </div>
 
-                    <div class="col">
+                    
+
+                    <div class="col-12 mx-auto col-lg">
+
+                        <div class="border w-100 p-4 rounded mb-2 d-flex">
+                            <div class="icon mr-3" style="color: blue;">
+                                <i class="fs-20 fas fa-calendar fa-outline"></i>
+                            </div>
+                            <p class="text-dark">
+                              <span>Tanggal Berakhir:</span><br>
+                              {{ ConvertDateToTextDateToIndonesia($order->tgl_akhir_sewa) }}
+                            </p>
+                        </div>
+
+                    </div>
+
+                    <div class="col-12">
 
                         <div class="border w-100 p-4 rounded mb-2 d-flex">
                             <div class="icon mr-3" style="color: blue;">
@@ -151,20 +169,6 @@
                             <p class="text-dark">
                               <span>Durasi Sewa:</span><br>
                               {{ $order->durasi_sewa }} Hari
-                            </p>
-                        </div>
-
-                    </div>
-
-                    <div class="col">
-
-                        <div class="border w-100 p-4 rounded mb-2 d-flex">
-                            <div class="icon mr-3" style="color: blue;">
-                                <i class="fs-20 fas fa-calendar fa-outline"></i>
-                            </div>
-                            <p class="text-dark">
-                              <span>Tanggal Berakhir:</span><br>
-                              {{ $order->tgl_akhir_sewa }}
                             </p>
                         </div>
 
@@ -199,11 +203,16 @@
                             </div>
 
                             <div class="row">
-                                <div class="col d-flex">
+                                <div class="col d-flex">                                    
                                     <p>Total Harga sewa ({{ $order->durasi_sewa }} Hari)</p>
                                 </div>
+
+                                @php
+                                    $HargaTanpaSupir = $mobil->harga * $order->durasi_sewa;
+                                @endphp
+
                                 <div class="col">
-                                    <p>Rp {{ placeRp($order->total) }}</p>
+                                    <p>Rp {{ placeRp($HargaTanpaSupir) }}</p>
                                 </div>
                             </div>
                             
@@ -238,35 +247,188 @@
 
         </div>
         
-        {{-- untuk rencana lain  --}}
-        {{-- <div class="card mt-3">
-            <div class="card-body">
+        @if ($tipe_sewa == "Tanpa Supir")
 
-                <div class="alert alert-danger">
-                    Anda belum mengupload KTP anda <i class="float-right fas fa-ban"></i><br>
-                    <form action="#" method="POST">
-                        <input type="file" name="input_ktp" id="input_ktp"><button type="submit" class="btn btn-info float-right">Kirim</button>
-                    </form>
+            @php
+                $user = Auth::user();
+
+                $punya_data_member = $user->member()->first() or false;
+            @endphp
+
+            <div class="card mt-3">
+
+                <div class="card-body">
+
+                    <span class="text-lg" style="color: orangered">Persyaratan yang Harus Dipenuhi!</span>
+                    <hr>
+                    
+                    @php
+
+                    if ($punya_data_member) {
+                        
+                        $member = $user->member()->first();
+                        $ktp = $member->ktp()->first();
+                        
+                    } else {
+                        $ktp = false;
+                    }
+
+                    
+                    @endphp
+                    @if (!$ktp || $ktp->terverifikasi == "Ditolak")
+
+                    @if ($ktp)
+                        @if($ktp->terverifikasi == "Ditolak")
+                        <div class="alert alert-danger">
+                            KTP Anda di Tolak Silakan ulangi Upload KTP Lagi
+                        </div>
+                        @endif
+                    @endif
+
+                    <div class="alert alert-danger">
+                        <form action="{{ route('user.ktp.upload') }}" method="POST" enctype="multipart/form-data">
+                            @csrf
+
+                            <div class="form-group">
+                                <label for="ktp" class="col-form-label">Upload KTP Anda (Screenshot Ktp)</label>
+                                <input class="form-control" type="file" name="ktp" >
+                            </div>
+
+                            <button class="btn btn-danger w-100">Kirim</button>
+
+                        </form>
+                    </div>
+                    @else
+                        @if ($ktp->terverifikasi == "Diterima")
+                        <div class="alert alert-success">
+                            Persyaratan untuk untuk KTP anda Selesai <i class="float-right fas fa-check"></i>
+                        </div>
+                        @else
+                        <div class="alert alert-warning">
+                            KTP anda sedang dalam proses vertifikasi <i class="float-right fas fa-gear"></i>
+                        </div>
+                        @endif
+                    @endif
+                                 
+    `              
+                    @php
+
+
+                    if ($punya_data_member) {
+                        
+                        $member = $user->member()->first();
+                        $kartu_keluarga = $member->kartu_keluarga()->first();
+
+                    } else {
+                        $kartu_keluarga = false;
+                    }
+                        
+                        
+                    @endphp
+
+                    @if (!$kartu_keluarga || $kartu_keluarga->terverifikasi == "Ditolak")
+
+                    @if ($kartu_keluarga)
+                        @if($kartu_keluarga->terverifikasi == "Ditolak")
+                        <div class="alert alert-danger">
+                            Kartu Keluarga Anda di Tolak Silakan ulangi Upload Kartu Keluarga Lagi
+                        </div>
+                        @endif
+                    @endif
+
+                    <div class="alert alert-danger">
+                        <form action="{{ route('user.kartu.keluarga.upload') }}" method="POST" enctype="multipart/form-data">
+                            @csrf
+
+                            <div class="form-group">
+                                <label for="kartu_keluarga" class="col-form-label">Upload Kartu Keluarga Anda (Screenshot Kartu Keluarga)</label>
+                                <input class="form-control" type="file" name="kartu_keluarga" >
+                            </div>
+
+                            <button class="btn btn-danger w-100">Kirim</button>
+
+                        </form>
+                    </div>
+                    @else
+
+                        @if (!empty($kartu_keluarga->terverifikasi) and $kartu_keluarga->terverifikasi == "Diterima")
+                        <div class="alert alert-success">
+                            Persyaratan untuk untuk Kartu Keluarga anda Selesai <i class="float-right fas fa-check"></i>
+                        </div>
+                        @else
+                        <div class="alert alert-warning">
+                            Kartu Keluarga anda sedang dalam proses vertifikasi <i class="float-right fas fa-gear"></i>
+                        </div>
+                        @endif
+
+                    @endif
+
+    `              
+                    @php
+
+                    if ($punya_data_member) {
+                        
+                        $member = $user->member()->first();
+                        
+                        $sim_a = $member->sim_a()->first();
+                        
+                    } else {
+                        $sim_a = false;
+                    }
+                        
+                        
+                    @endphp
+
+                    @if (!$sim_a || $ktp->terverifikasi == "Ditolak")
+                    
+                    @if ($sim_a)
+                        @if($sim_a->terverifikasi == "Ditolak")
+                        <div class="alert alert-danger">
+                            SIM A Anda di Tolak Silakan ulangi Upload SIM A Lagi
+                        </div>
+                        @endif
+                    @endif
+
+                    <div class="alert alert-danger">
+                        <form action="{{ route('user.simA.upload') }}" method="POST" enctype="multipart/form-data">
+                            @csrf
+
+                            <div class="form-group">
+                                <label for="sim_a" class="col-form-label">Upload SIM A Anda (Screenshot SIM A)</label>
+                                <input class="form-control" type="file" name="sim_a" >
+                            </div>
+
+                            <button class="btn btn-danger w-100">Kirim</button>
+
+                        </form>
+                    </div>
+                    @else
+
+                        @if (!empty($sim_a->terverifikasi) and $sim_a->terverifikasi == "Diterima")
+                        <div class="alert alert-success">
+                            Persyaratan untuk untuk SIM A anda Selesai <i class="float-right fas fa-check"></i>
+                        </div>
+                        @else
+                        <div class="alert alert-warning">
+                            SIM A anda sedang dalam proses vertifikasi <i class="float-right fas fa-gear"></i>
+                        </div>
+                        @endif
+
+                    @endif
+
+                    <hr>
+
                 </div>
-
-                <div class="alert alert-warning">
-                    KTP anda sedang dalam proses vertifikasi <i class="float-right fas fa-gear"></i>
-                </div>
-
-                <div class="alert alert-success">
-                    Persyaratan untuk KTP anda Selesai <i class="float-right fas fa-check"></i>
-                </div>
-
 
             </div>
 
-
-        </div> --}}
+        
+        @endif
 
         <div class="card mt-3">
             <div class="card-body">                
 
-                <hr>
+                
 `              
                 @php
 
@@ -278,18 +440,24 @@
                 
                 @endphp
 
-                @if (!$bukti_bayar)
+                @if (!$bukti_bayar || $bukti_bayar->terverifikasi == "Ditolak")
 
                 <div class="alert alert-warning">
                     Batas Pembayaran adalah {{ Carbon\Carbon::create($order->tgl_mulai_sewa)->add('hour', -8)->toDateTimeString(); }}, 8 Jam sebelum Waktu Mulai Sewa <i class="fas fa-exclamation float-right"></i>
                     <br>Setelah itu order dibatalkan secara Otomatis.
                 </div>
 
+                @if($bukti_bayar->terverifikasi == "Ditolak")
+                <div class="alert alert-danger">
+                    Bukti Anda di Tolak Silakan ulangi Upload Bukti Bayar Lagi
+                </div>
+                @endif
+
                 <div class="alert alert-danger">
                     <form action="{{ route('user.BuktiBayar.upload') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div class="form-group">
-                            <label for="tipe_bayar">Lakukan Pembayaran Pada Salah Satu No.rekening dibawah:</label>
+                            <label for="tipe_bayar">Lakukan Pembayaran Pada Salah Satu Cara pembayaran dibawah ini:</label>
                             <select class="form-control" name="tipe_bayar">
                                 @foreach ($tipe_bayar as $tipe)
                                 <option value="{{ $tipe->nama }}">{{ $tipe->deskripsi }}</option>
@@ -308,7 +476,8 @@
                     </form>
                 </div>
                 @else
-                    @if (!empty($bukti_bayar->terverifikasi))
+
+                    @if ($bukti_bayar->terverifikasi == "Diterima")
                     <div class="alert alert-success">
                         Persyaratan untuk Bukti Bayar anda Selesai <i class="float-right fas fa-check"></i>
                     </div>
@@ -317,13 +486,14 @@
                         Bukti bayar anda sedang dalam proses vertifikasi <i class="float-right fas fa-gear"></i>
                     </div>
                     @endif
+
                 @endif
 
             </div>
 
         </div>
 
-        @if ($order->status == "Dalam Persewaan")
+        @if ($order->status == "Dalam Persewaan" || $order->status == "Selesai")
         <div class="alert alert-success mt-3">
             Pesanan anda telah sepenuhnya diterima <i class="float-right fas fa-check"></i>
         </div>

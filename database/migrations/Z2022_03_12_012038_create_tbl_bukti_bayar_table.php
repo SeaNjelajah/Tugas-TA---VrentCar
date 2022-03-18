@@ -17,7 +17,7 @@ class CreateTblBuktibayarTable extends Migration
             $table->id();
             $table->foreignId('id_order')->nullable()->constrained('tbl_order')->cascadeOnUpdate()->nullOnDelete();
             $table->string('gambar_bukti');
-            $table->boolean('terverifikasi');
+            $table->enum('terverifikasi', ['Ditolak', 'Diterima'])->nullable();
             $table->timestamps();
         });
     }

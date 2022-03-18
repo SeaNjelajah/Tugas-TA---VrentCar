@@ -184,7 +184,7 @@
 
                         <div class="form-group">
                         <label for="No_tlp" class="col-form-label">Nomer Telepon / Whatsapp:</label>
-                        <input name="No_tlp" type="text" class="form-control" id="No_tlp">
+                        <input name="No_tlp" type="number" class="form-control" id="No_tlp">
                         </div>
 
                         <div class="row w-100 pl-3">

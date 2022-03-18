@@ -88,22 +88,7 @@
                   <p class="mt-0">{{ ($tipe_bayar) ? $tipe_bayar->nama : "Belum" }}</p>
                 
                 </div>
-                <div class="col-6 col-md-12">
-                  @if ($bukti_bayar)
-
-                  <button type="button" class="btn btn-danger mr-auto float-right mt-3 mb-0 mb-md-4" data-toggle="modal" data-target="#BuktiBayarModal{{ $item->id }}">
-                    Bukti Bayar
-                  </button>
-
-                    @if (empty($bukti_bayar->terverifikasi))
-                    <span ><i class="fas fa-circle-xmark text-red "></i> Belum terverifikasi</span>
-                    @else
-                    <span ><i class="fas fa-check text-green "></i> terverifikasi</span> 
-                    @endif
-
-                  @endif
-
-                </div>
+                
 
               </div>
               
@@ -122,12 +107,103 @@
           </div>
       </div>
       <div class="row mt-1 mx-1">
-        <form action="{{ route('admin.Persewaan.batalkan', $item->id) }}" class="col-auto w-50 text-left" method="POST">
+
+        <form action="{{ route('admin.Persewaan.batalkan', $item->id) }}" class="col-auto mr-auto text-left" method="POST">
           @csrf  
           <button class="btn btn-danger text-white" >Cancel</button>
         </form>
 
-        <form action="{{ route('admin.Persewaan.setujui', $item->id) }}" class="col-auto w-50 text-right" method="POST">
+        @if ($tipe_sewa == "Tanpa Supir")
+
+        @php
+        $user_penyewa = $item->user()->first();
+        $punya_data_member = $user_penyewa->member()->first() or false;
+
+        if ($punya_data_member) { 
+            $member = $user_penyewa->member()->first();
+            $ktp = $member->ktp()->first();
+            $kartu_keluarga = $member->kartu_keluarga()->first();
+            $sim_a = $member->sim_a()->first();
+        } else {
+            $ktp = false;
+            $kartu_keluarga = false;
+            $sim_a = false;
+        }
+        
+        @endphp
+        
+        @if ($sim_a)
+        <div class="col-auto">
+          <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#SimAModal{{ $item->id }}">
+            SIM A
+          </button>
+        </div>
+        @else
+        <div class="col-auto">
+          <button type="button" class="btn btn-dark" data-container="body" data-toggle="popover" data-placement="top" data-content="Gambar SIM A Belum dikirim">
+            SIM A
+          </button>          
+        </div>
+        @endif
+
+        @if($kartu_keluarga)
+        <div class="col-auto">
+          <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#KartuKeluargaModal{{ $item->id }}">
+            Kartu Keluarga
+          </button>
+        </div>
+        @else
+        <div class="col-auto">
+          <button type="button" class="btn btn-warning" data-container="body" data-toggle="popover" data-placement="top" data-content="Gambar Kartu Keluarga Belum dikirim">
+            Kartu Keluarga
+          </button>          
+        </div>
+        @endif
+
+        @if ($ktp)
+        <div class="col-auto">
+          <button type="button" class="btn btn-info" data-toggle="modal" data-target="#KTPModal{{ $item->id }}">
+            KTP
+          </button>
+        </div>
+        @else
+        <div class="col-auto">
+          <button type="button" class="btn btn-info" data-container="body" data-toggle="popover" data-placement="top" data-content="Gambar KTP Belum dikirim">
+            KTP
+          </button>          
+        </div>
+        @endif
+
+        @endif
+
+        @if ($bukti_bayar)
+          
+          <div class="col-auto">
+
+            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#BuktiBayarModal{{ $item->id }}">
+              Bukti Bayar
+            </button>
+
+            @if (empty($bukti_bayar->terverifikasi))
+            <span ><i class="fas fa-circle-xmark text-red align-middle"></i> Belum terverifikasi</span>
+            @elseif ($bukti_bayar->terverifikasi == "Ditolak")
+            <span ><i class="fas fa-circle-xmark text-red align-middle"></i> Ditolak</span> 
+            @else
+            <span ><i class="fas fa-check text-green align-middle"></i> terverifikasi</span> 
+            @endif
+
+          </div>
+        @else
+        <div class="col-auto">
+          <button type="button" class="btn btn-danger" data-container="body" data-toggle="popover" data-placement="top" data-content="Bukti Bayar Belum dikirim">
+            Bukti Bayar
+          </button>          
+        </div>
+        @endif
+
+        
+
+        <form action="{{ route('admin.Persewaan.setujui', $item->id) }}" class="col-auto text-right" method="POST">
           @csrf
           @if ($tipe_sewa == "Dengan Supir")
           <input id="data_sp_id{{ $item->id }}" type="hidden" name="data_supir_id">

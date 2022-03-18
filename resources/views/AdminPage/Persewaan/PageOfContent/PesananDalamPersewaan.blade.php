@@ -47,10 +47,25 @@ $supir = $item->supir()->first();
             @csrf
             <input type="hidden" name="id" value="{{ $item->id }}">
             <div class="row px-3 m-0 mt-3">
+                @if ($tipe_sewa == "Dengan Supir")
                 <div class="form-group d-inline-flex w-100 m-0 p-0">
                     <input type="text" name="status" class="form-control" placeholder="Update Status Order Hari ini">
                     <button type="submit" class="btn btn-success">Update</button>
                 </div>
+                @else
+
+                <div class="col m-0 p-0">
+                    <div class="form-group d-inline-flex w-100 m-0 p-0">
+                        <input type="text" name="status" class="form-control" placeholder="Update Status Order Hari ini">
+                        <button type="submit" class="btn btn-success">Update</button>
+                    </div>
+                </div>
+
+                <div class="col-auto m-0 pr-0">
+                    <button type="button" class="btn btn-danger h-100" data-toggle="modal" data-target="#DendaModal{{ $item->id }}">Denda</button>
+                </div>
+                
+                @endif
             </div>
         </form>
     
@@ -117,10 +132,12 @@ $supir = $item->supir()->first();
                                 <td class="col font-poppins-400">{{ $tipe_sewa }}</td>
                             </tr>
 
+                            @if ($tipe_sewa == "Dengan Supir")
                             <tr>
                                 <td class="col-1 font-poppins-400">Supir</td>
                                 <td class="col font-poppins-400">{{ $supir->nama_lengkap }}</td>
                             </tr>
+                            @endif
 
                             <tr>
                                 <td class="col-1 font-poppins-400">Jenis Pembayaran</td>
@@ -146,15 +163,81 @@ $supir = $item->supir()->first();
             </div>
         </div>
         <div class="row mt-1 mx-1">
-            <form action="{{ route('admin.Persewaan.batalkan', $item->id) }}" class="col-auto w-50 text-left" method="POST">
+            <form action="{{ route('admin.Persewaan.batalkan', $item->id) }}" class="col-auto mr-auto text-left" method="POST">
                 @csrf
                 <button class="btn btn-danger text-white" type="submit">Cancel</button>
             </form>
 
-            <div class="col-auto w-50 text-right">
+            @if ($tipe_sewa == "Tanpa Supir")
+
+            @php
+            $user_penyewa = $item->user()->first();
+            $punya_data_member = $user_penyewa->member()->first() or false;
+
+            if ($punya_data_member) { 
+                $member = $user_penyewa->member()->first();
+                $ktp = $member->ktp()->first();
+                $kartu_keluarga = $member->kartu_keluarga()->first();
+                $sim_a = $member->sim_a()->first();
+            } else {
+                $ktp = false;
+                $kartu_keluarga = false;
+                $sim_a = false;
+            }
+            
+            @endphp
+            
+            @if ($sim_a)
+            <div class="col-auto">
+            <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#SimAModal{{ $item->id }}">
+                SIM A
+            </button>
+            </div>
+            @else
+            <div class="col-auto">
+            <button type="button" class="btn btn-dark" data-container="body" data-toggle="popover" data-placement="top" data-content="Gambar SIM A Belum dikirim">
+                SIM A
+            </button>          
+            </div>
+            @endif
+
+            @if($kartu_keluarga)
+            <div class="col-auto">
+            <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#KartuKeluargaModal{{ $item->id }}">
+                Kartu Keluarga
+            </button>
+            </div>
+            @else
+            <div class="col-auto">
+            <button type="button" class="btn btn-warning" data-container="body" data-toggle="popover" data-placement="top" data-content="Gambar Kartu Keluarga Belum dikirim">
+                Kartu Keluarga
+            </button>          
+            </div>
+            @endif
+
+            @if ($ktp)
+            <div class="col-auto">
+            <button type="button" class="btn btn-info" data-toggle="modal" data-target="#KTPModal{{ $item->id }}">
+                KTP
+            </button>
+            </div>
+            @else
+            <div class="col-auto">
+            <button type="button" class="btn btn-info" data-container="body" data-toggle="popover" data-placement="top" data-content="Gambar KTP Belum dikirim">
+                KTP
+            </button>          
+            </div>
+            @endif
+
+            @endif
+
+            <div class="col-auto">
                 <button type="button" class="btn btn-danger mr-auto text-right " data-toggle="modal" data-target="#BuktiBayarModal{{ $item->id }}">
                     Bukti Bayar
                   </button>
+            </div>
+
+            <div class="col-auto">
                 <button type="button" class="text-right btn btn-info" data-toggle="modal" data-target="#infoOrder1">More Info</button>
             </div>
         </div>

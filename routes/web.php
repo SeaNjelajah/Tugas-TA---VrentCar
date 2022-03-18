@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\Admin\AccountManageController;
+
 use App\Http\Controllers\CombineController;
 use Illuminate\Support\Facades\Route;
 
@@ -14,9 +14,8 @@ use App\Http\Controllers\Admin\AccountManageController as Account;
 use App\Http\Controllers\Karyawan\KaryawanController as Karyawan;
 
 use App\Http\Controllers\LandingPageController as Landing;
-use App\Http\Controllers\UserPageController as User;
-
-
+use App\Http\Controllers\UserPageController as UserPage;
+use Carbon\Carbon;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,15 +36,41 @@ function placeRp ($num) {
     return implode(',', $g);
 }
 
+function ConvertDateToTextDateToIndonesia ($date) {
+  $CarbonDate = Carbon::create($date)->format('l j F Y h:i:s');
+  $FindingWord = [
+    "/Sunday/", "/Monday/", "/Tuesday/",
+    "/Thursday/", "/Friday/", "/Saturday/",
+    "/January/", "/February/", "/March/",
+    "/May/", "/June/", "/July/", "/August/",
+    "/October/", "/December/"
+  ];
+
+  $ReplaceWith = [
+    "Minggu", "Senin", "Selasa",
+    "Rabu", "Jum'at", "Sabtu",
+    "Januari", "Februari", "Maret",
+    "Mei", "Juni", "Juli", "Agustus",
+    "Oktober", "Desember"
+  ];
+
+  ksort($FindingWord);
+  ksort($ReplaceWith);
+
+  return preg_replace($FindingWord, $ReplaceWith, $CarbonDate);
+
+}
+
 
 Route::get('/register', [Register::class, 'RegisterView'])->name('RegisterView');
+Route::post('/register/check', [Register::class, 'Register'])->name('register');
+
 Route::get('/login', [Login::class, 'LoginView'])->name('LoginView');
-
-
 Route::post('/login/check', [Login::class, 'Login'])->name('Login');
-Route::post('/register/check', [Register::class, 'Login'])->name('register');
-
 Route::get('/logout', [Login::class,'signOut'])->name('Logout');
+
+
+
 
 
 Route::prefix('Admin')->name('admin.')->middleware('Admin')->group( function () {
@@ -70,8 +95,16 @@ Route::prefix('Admin')->name('admin.')->middleware('Admin')->group( function () 
       Route::post('/CariMobil', [Persewaan::class, 'CariMobilPersewaan'])->name('cari');
       Route::post('/CariMobil/add', [Persewaan::class, 'BuatPesanan'])->name('tambah');
       Route::post('/Verifikasi/Bukti', [Persewaan::class, 'VerifikasiBukti'])->name('verifikasi.bukti');
+      Route::post('/Tolak/Bukti', [Persewaan::class, 'TolakBuktiBayar'])->name('tolak.bukti');
       Route::post('/StatusOrder/update', [Persewaan::class, 'update_status_order'])->name('status.order.update');
       Route::post('/Order/Selesai', [Persewaan::class, 'Selesai'])->name('order.selesai');
+      Route::post('/Verifikasi/KTP', [Persewaan::class, 'VerifikasiKTP'])->name('verifikasi.ktp');
+      Route::post('/Tolak/KTP', [Persewaan::class, 'TolakKTP'])->name('tolak.ktp');
+      Route::post('/Verifikasi/KartuKeluarga', [Persewaan::class, 'VerifikasiKartuKeluarga'])->name('verifikasi.KartuKeluarga');
+      Route::post('/Tolak/KartuKeluarga', [Persewaan::class, 'TolakKartuKeluarga'])->name('tolak.KartuKeluarga');
+      Route::post('/Verifikasi/SimA', [Persewaan::class, 'VerifikasiSimA'])->name('verifikasi.SimA');
+      Route::post('/Tolak/SimA', [Persewaan::class, 'TolakSimA'])->name('tolak.SimA');
+      Route::post('/Tambah/Denda', [Persewaan::class, 'TambahDenda'])->name('tambah.denda');
     });
 
     Route::prefix('AccountManage')->name('AccountManage.')->group( function () {
@@ -91,23 +124,6 @@ Route::prefix('Karyawan')->name('karyawan.')->middleware('Karyawan')->group( fun
 
 });
 
-
-//Dashboard end
-
-//Armada Mobil Start
-
-//Armada Mobil end
-
-//Persewaan Start
-
-
-// Pesanan Order
-
-// Pesanan Order end 
-
-//carimobil
-
-//carimobil end
 
 
 Route::post('/Persewaan/Calculate', [CombineController::class, 'HitungPesanan'])->name('HitungPesanan')->middleware('Admin');
@@ -174,18 +190,18 @@ Route::get('/Tips', function() {
 
 
 Route::get('/FormOrder', [Landing::class, 'BookCar'])->name('FormOrder');
-
-
 Route::post('/FormOrder/create', [Landing::class, 'Booking'])->name('FormOrder.create');
 
-
-
 Route::prefix('User')->name('user.')->group( function () {
-  Route::get('/Dashboard', [User::class, 'DashboardPage'])->name('dashboard');
-  Route::get('/BookingBerjalan', [User::class, 'BookingBerjalanPage'])->name('bookingBerjalan');
-  Route::post('/RingkasanOrder', [User::class, 'RingkasanOrder'])->name('RingkasanOrder');
-  Route::get('/RingkasanOrder', [User::class, 'RingkasanOrderGet'])->name('RingkasanOrder');
-  Route::post('/RingkasanOrder/BuktiBayar/Upload', [User::class, 'KirimBuktiBayar'])->name('BuktiBayar.upload');
+  Route::get('/Dashboard', [UserPage::class, 'DashboardPage'])->name('dashboard');
+  Route::get('/BookingBerjalan', [UserPage::class, 'BookingBerjalanPage'])->name('bookingBerjalan');
+  Route::get('/RiwayatBooking', [UserPage::class, 'RiwayatBokingPage'])->name('RiwayatBooking');
+  Route::post('/RingkasanOrder', [UserPage::class, 'RingkasanOrder'])->name('RingkasanOrder');
+  Route::get('/RingkasanOrder', [UserPage::class, 'RingkasanOrderGet'])->name('RingkasanOrder');
+  Route::post('/RingkasanOrder/BuktiBayar/Upload', [UserPage::class, 'KirimBuktiBayar'])->name('BuktiBayar.upload');
+  Route::post('/RingkasanOrder/Ktp/Upload', [UserPage::class, 'KirimKtp'])->name('ktp.upload');
+  Route::post('/RingkasanOrder/KartuKeluarga/Upload', [UserPage::class, 'KirimKartuKeluarga'])->name('kartu.keluarga.upload');
+  Route::post('/RingkasanOrder/SimA/Upload', [UserPage::class, 'KirimSimA'])->name('simA.upload');
 });
 
 //Landing Page end

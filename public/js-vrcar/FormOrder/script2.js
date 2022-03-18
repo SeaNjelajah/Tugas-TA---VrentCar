@@ -93,3 +93,7 @@ document.getElementById('waktu-jam-pengembalian-tanpa-supir').addEventListener('
 document.getElementById('waktu-menit-pengembalian-tanpa-supir').addEventListener('change', checkTanpaSupir);
 
 // document.getElementById('cari-tanpa-supir').addEventListener('click', () => onClickSubmit('TanpaSupirForm'));
+
+$(document).ready ( function () {
+    checkTanpaSupir();
+});

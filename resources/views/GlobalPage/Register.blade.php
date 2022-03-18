@@ -34,12 +34,43 @@
     <div class="container-fluid pt-3 h-100 align-middle">
 
       <div class="card border-0 mb-0">
+
+        @if (!empty($error))
+
+            @if ($error->get('email'))
+            <div class="mx-5 alert alert-warning alert-dismissible fade show" role="alert">
+              {{ $error->get('email') }}
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            @endif
+
+            @if ($error->get('password'))
+            <div class="mx-5 alert alert-warning alert-dismissible fade show" role="alert">
+              {{ $error->get('password') }}
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            @endif
+
+            @if ($error->get('username'))
+            <div class="mx-5 alert alert-warning alert-dismissible fade show" role="alert">
+              {{ $error->get('username') }}
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            @endif
+            
+        @endif
         
         <div class="card-body px-lg-5 py-lg-5 mt-3">
           
 
-          <form role="form">
-
+          <form role="form" method="POST" action="{{ route('register') }}">
+            @csrf
             <div class="form-group mb-3">
               <div class="input-group input-group-merge input-group-alternative">
                 <div class="input-group-prepend">
@@ -69,14 +100,7 @@
 
             <div class="row mb-n3">
 
-              <div class="col text-left">
-                <div class="custom-control custom-control-alternative custom-checkbox">
-                  <input class="custom-control-input" id="Remember" type="checkbox" name="remember" {{ old('remember') ? 'checked' : '' }}>
-                  <label class="custom-control-label" for="Remember">
-                    <span class="text-muted">Remember me</span>
-                  </label>
-                </div>
-              </div>
+              
 
               <div class="col text-right">
                 <a class="btn btn-link" href="{{ route('LoginView') }}">Already have a account? Log in then.</a>
@@ -85,7 +109,7 @@
             </div>
 
             <div class="text-center">
-              <button type="button" class="btn btn-primary my-4 w-100">Register</button>
+              <button type="submit" class="btn btn-primary my-4 w-100">Register</button>
             </div>
 
           </form>

@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Global;
+
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
@@ -18,20 +19,20 @@ class RegisterController extends Controller
         return view('GlobalPage.Register');
     }
       
-    public function Registration(Request $request)
-    {  
-        $request->validate([
-            'username' => 'required',
-            'email' => 'required|email|unique:users,name',
-            'password' => 'required|min:6',
-        ]);
-           
-        $data = $request->all();
-
-        $this->create($data);
-        
-        return redirect(route('LoginView'))->with('Created', 'Your account Success to Created');
+    public function Register(Request $request)
+    { 
+      $request->validate([
+          'username' => 'required',
+          'email' => 'required|email|unique:users,email',
+          'password' => 'required|min:6',
+      ]);
+    
+      $data = $request->all();
+      $this->create($data);
+      
+      return redirect(route('LoginView'))->with('Created', 'Successfull to registered your new account');
     }
+
 
     public function create(array $data)
     {

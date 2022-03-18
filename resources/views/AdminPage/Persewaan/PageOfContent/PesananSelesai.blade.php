@@ -67,11 +67,13 @@ $supir = $item->supir()->first();
                                 <td class="col-1 font-poppins-400">Tipe Sewa</th>
                                 <td class="col font-poppins-400">{{ $tipe_sewa }}</td>
                             </tr>
-
+                            
+                            @if ($tipe_sewa == "Dengan Supir")
                             <tr>
                                 <td class="col-1 font-poppins-400">Supir</td>
                                 <td class="col font-poppins-400">{{ $supir->nama_lengkap }}</td>
                             </tr>
+                            @endif
 
                             <tr>
                                 <td class="col-1 font-poppins-400">Jenis Pembayaran</td>
@@ -82,9 +84,23 @@ $supir = $item->supir()->first();
                     </table>
                 </div>
 
-                <button type="button" class="float-left btn btn-danger mx-auto mb-3" data-toggle="modal" data-target="#BuktiBayarModal{{ $item->id }}">Bukti Bayar</button>
-                <button class="btn btn-info mb-1 text-center" data-toggle="modal" data-target="#HistoryOrder{{ $item->id }}">Histori Status Order </button> <br>
-                <button type="button" class="float-right btn btn-info mx-auto mb-3" data-toggle="modal" data-target="#infoOrder{{ $item->id }}">More Info</button>
+                <div class="row">
+                    @if ($tipe_sewa == "Tanpa Supir")
+                    <button type="button" class="btn btn-dark mx-auto mb-3" data-toggle="modal" data-target="#SimAModal{{ $item->id }}">
+                        SIM A
+                    </button>
+                    <button type="button" class="btn btn-warning mx-auto mb-3" data-toggle="modal" data-target="#KartuKeluargaModal{{ $item->id }}">
+                        Kartu Keluarga
+                    </button>
+                    <button type="button" class="btn btn-info mx-auto mb-3" data-toggle="modal" data-target="#KTPModal{{ $item->id }}">
+                        KTP
+                    </button>
+                    @endif
+                    <button type="button" class="btn btn-danger mx-auto mb-3" data-toggle="modal" data-target="#BuktiBayarModal{{ $item->id }}">Bukti Bayar</button>
+                    <button type="button" class="btn btn-info mx-auto mb-3" data-toggle="modal" data-target="#HistoryOrder{{ $item->id }}">Histori Status Order </button> <br>
+                    <button type="button" class="btn btn-info mx-auto mb-3" data-toggle="modal" data-target="#infoOrder{{ $item->id }}">More Info</button>
+                </div>
+
                 
 
 

@@ -29,10 +29,11 @@
                                 <a class="card-link" href="{{ route('user.dashboard') }}">My Profile</a>
                             </li>
                             <li class="list-group-item">
-                                Booking Yang Berjalan
+                                <a class="card-link" href="{{ route('user.bookingBerjalan') }}">Booking Yang Berjalan</a>
                             </li>
+
                             <li class="list-group-item">
-                                <a class="card-link" href="{{ route('user.RiwayatBooking') }}">Riwayat Booking</a>
+                                Riwayat Booking
                             </li>
                         </ul>
                     </div>
@@ -41,18 +42,18 @@
 
                 <div class="col">
 
-                    <span class="w-100 px-auto">Baru</span>
+                    <span class="w-100 px-auto">Dibatalkan</span>
                     <hr class="pl-3 mt-n1">
-                    @php
-                    $order = Auth::user()->order();
-                    @endphp
 
-                    @foreach ($order->where('status', 'Baru')->get() as $order)
+               
+
+
+
+                    @foreach (Auth::user()->order()->get()->where('status', 'Dibatalkan') as $order)
 
                     @php
                     $mobil = $order->mobil()->first();
                     $transmisi = $mobil->transmisi()->first()->nama_transmisi;
-                    $tipe_sewa = $mobil->tipe_sewa()->first()->tipe_sewa;
                     @endphp
 
                     <div class="card my-2">
@@ -64,13 +65,7 @@
 
                             <div class="card-body col-8">
                                 <h5 class="card-title">{{ $mobil->nama }}<span class="float-right" style="color: #01d28e">Rp. {{ placeRp($mobil->harga) }} / Hari</span></h5>
-                                <h6 class="card-subtitle mb-2 text-muted">{{ "Merek Belum" }}
-                                    @if ($tipe_sewa == "Dengan Supir")
-                                        <span class="float-right" style="color: #01d28e">Biaya Supir: Rp 150,000</span>
-                                    @else
-                                        <span class="float-right" style="color: #01d28e">Total: Rp {{ placeRp($order->total) }} ({{ $order->durasi_sewa }} Hari)</span>
-                                    @endif
-                                </h6>
+                                <h6 class="card-subtitle mb-2 text-muted">{{ "Merek Belum" }}<span class="float-right" style="color: #01d28e">Total: Rp {{ placeRp($order->total) }}</span></h6>
 
 
 
@@ -88,12 +83,6 @@
                                         <i class="fa fa-gear font-size-2 pr-3"></i>
                                         {{ $transmisi }}
                                     </div>
-
-                                    @if ($tipe_sewa == "Dengan Supir")
-                                    <div class="col">
-                                        <span class="float-right" style="color: #01d28e">Total: Rp {{ placeRp($order->total) }} ({{ $order->durasi_sewa }} Hari)</span>
-                                    </div>
-                                    @endif
 
                                 </div>
 
@@ -117,12 +106,10 @@
 
                     @endforeach
 
-                    <div class="mt-4"></div>
-                    <span class="w-100 px-auto text-lg">Berjalan</span>
+                    <span class="w-100 px-auto">Selesai</span>
                     <hr class="pl-3 mt-n1">
-                    
 
-                    @foreach ($order->where('status', 'Dalam Persewaan')->get() as $order)
+                    @foreach (Auth::user()->order()->get()->where('status', 'Selesai') as $order)
 
                     @php
                     $mobil = $order->mobil()->first();

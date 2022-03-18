@@ -36,7 +36,7 @@
         <div class="card border-0 mb-0">
 
             @if (!empty($error))
-            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            <div class="mx-5 alert alert-warning alert-dismissible fade show" role="alert">
                 Invalid Email or Password!
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
@@ -44,9 +44,12 @@
             </div>
             @endif
 
-            @if (session('Created'))
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    Your account successfull to Created!
+            @if (session()->get('Created'))
+                <div class="mx-5 alert alert-success alert-dismissible fade show" role="alert">
+                    {{ session()->get('Created') }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
             @endif
 

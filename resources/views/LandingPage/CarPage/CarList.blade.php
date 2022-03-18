@@ -38,14 +38,18 @@
 
 
 				@foreach ($mobil as $item)
-				@if ($item->status == 'Tidak Tersedia') @continue @endif
+          @if ($item->status != 'Tersedia') 
+            @continue
+          @endif
 				
     			<div class="col-md-4">
     				<div class="car-wrap rounded ftco-animate">
     					<div class="img rounded d-flex align-items-end" style="background-image: url('{{ asset('/assets/img/cars/' . $item->gambar) }}');">
     					</div>
     					<div class="text">
-    						<h2 class="mb-0"><a href="/car-single">{{ $item->nama }}</a></h2>
+
+    						<h2 class="mb-0">{{ $item->nama }}</h2>
+
     						<div class="d-flex mb-3">
 	    						{{-- @if(!empty($tag_decode['Merek'])) <span class="cat">{{ $tag_decode['Merek'] }}</span> @endif --}}
 	    						<p class="price ml-auto">Rp. {{ placeRp ($item->harga) }} <span>/day</span></p>
@@ -60,7 +64,6 @@
                 </form>
 
                 <form class="d-flex mb-0 d-block" method="GET" action="{{ Route('FormOrder') }}">
-                  {{-- @csrf --}}
                   <input type="hidden" name="id" value="{{ $item->id }}">
                   <input type="submit" class="btn btn-primary w-100" value="Book now">
                 </form>

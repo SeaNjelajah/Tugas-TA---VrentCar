@@ -49,86 +49,135 @@ class LandingPageController extends Controller {
     //Carlist Single end
 
     public function BookCar (Request $r) {
-        
         $mobil = mobil::find($r->id);
+        
         if ($mobil->status != "Tersedia")
             return redirect()->intended(route('CarListPage'));
 
         if ($mobil->tipe_sewa()->first()->tipe_sewa == "Dengan Supir")
-            return view ('LandingPage.ZTemplate.formOrder', compact('mobil'));
+            return view ('LandingPage.BookingPage.formOrderDenganSupir', compact('mobil'));
         else
-            return view ('LandingPage.ZTemplate.formOrderTanpaSupir', compact('mobil'));
-
+            return view ('LandingPage.BookingPage.formOrderTanpaSupir', compact('mobil'));
     }
 
-    public function BookCarGet (Request $r) {
-    
-        $mobil = mobil::find($r->id);
-
-        if ($mobil->tipe_sewa()->first()->tipe_sewa == "Dengan Supir")
-            return view ('LandingPage.ZTemplate.formOrder', compact('mobil'));
-        else
-            return view ('LandingPage.ZTemplate.formOrderTanpaSupir', compact('mobil'));
-
-    }
 
     public function Booking (Request $r) {
-    
         
-        $r->validate([
-            'penyewa' => 'required',
-            'No_tlp' => 'required|numeric',
-            'alamat_rumah' => 'required',
-            'alamat_temu' => 'required'
-        ]);
+        $BiayaSupir = 150000; // Untuk Tambahan Biaya Jika Dengan Supir
+        
+        $AlamatRental = "Jalan Kalibokor 3C / No. 37 C Surabaya";
+        // Untuk alamat serah terima tanpa supir
 
         $mobil = mobil::find($r->id);
-        $tipe_sewa = $mobil->tipe_sewa()->first()->tipe_sewa;
+        $tipe_sewa = $mobil->tipe_sewa()->first();
 
-        if ($tipe_sewa == "Dengan Supir") {
-            $new = $r->only('penyewa', 'No_tlp', 'alamat_rumah', 'alamat_temu', 'durasi_sewa');
+        if ($tipe_sewa->tipe_sewa == "Dengan Supir") {
+
+            $r->validate([
+                'penyewa' => 'required',
+                'No_tlp' => 'required|numeric',
+                'alamat_rumah' => 'required',
+                'alamat_temu' => 'required',
+                'tanggal_penjemputan' => 'required',
+                'jam_pejemputan' => 'required',
+                'menit_jam_penjemputan' => 'required',
+            ]);
+
+            $InputData = $r->only('penyewa', 'No_tlp', 'alamat_rumah', 'alamat_temu', 'durasi_sewa');
             
-            $tanggal = Carbon::create (
+            $date = Carbon::create (
                 $r->tanggal_penjemputan . "T" .
                 $r->jam_pejemputan . ":" .
                 $r->menit_jam_penjemputan
             );
 
-            $arr_tanggal = [
-                "tgl_mulai_sewa" => ($tanggal->toDateTimeLocalString()),
-                "tgl_akhir_sewa" => ($tanggal->add('day', $r->durasi_sewa)->toDateTimeLocalString())
+            $tanggal = [
+                "tgl_mulai_sewa" => ($date->toDateTimeLocalString()),
+                "tgl_akhir_sewa" => ($date->add('day', $r->durasi_sewa)->toDateTimeLocalString())
             ];
 
-            $total = $mobil->harga * $r->get('durasi_sewa');
+            $harga = $mobil->harga * $r->get('durasi_sewa') + $BiayaSupir; // $BiayaSupir = 150000
 
             $total = [
-                'total' => $total
+                'total' => $harga
             ];
 
             $status = [
                 'status' => 'Baru'
             ];
 
-            $order = order::create(array_merge($new, $arr_tanggal, $total, $status));
-            
-            
-            $order->mobil()->associate($mobil);
-            $mobil->status = "Dalam Sewa";
-            $mobil->save();
+            $orderData = array_merge(
+                $InputData, $tanggal, $total, $status
+            );
 
-            $tp_sewa = tipe_sewa::where('tipe_sewa', 'Dengan Supir')->first();
-            $order->tipe_sewa()->associate($tp_sewa);
+        } else if ($tipe_sewa->tipe_sewa == "Tanpa Supir") {
 
-            $user = User::find(Auth::user()->id);
-            $order->user()->associate($user);
+            $r->validate([
+                'penyewa' => 'required',
+                'No_tlp' => 'required|numeric',
+                'alamat_rumah' => 'required',
+                'tanggal_pengambilan' => 'required',
+                'jam_pengambilan' => 'required',
+                'menit_jam_pengambilan' => 'required',
+                'tanggal_pengembalian' => 'required',
+                'menit_jam_pengembalian' => 'required',
+                'jam_pengambilan' => 'required',
+            ]);
 
-            $order->save();
+            $InputData = $r->only('penyewa', 'No_tlp', 'alamat_rumah');
 
-        } else if ($tipe_sewa == "Tanpa Supir") {
+            $tgl_mulai_sewa = Carbon::create(
+                $r->tanggal_pengambilan . "T" . 
+                $r->jam_pengambilan . ":" . $r->menit_jam_pengambilan
+            );
+
+            $tgl_akhir_sewa = Carbon::create(
+                $r->tanggal_pengambilan . "T" . 
+                $r->jam_pengambilan . ":" . $r->menit_jam_pengambilan
+            );
+
+            $durasi_sewa = $tgl_mulai_sewa->diffInDays($tgl_akhir_sewa);
+
+            $waktu = [
+                "tgl_mulai_sewa" => $tgl_mulai_sewa,
+                "tgl_akhir_sewa" => $tgl_akhir_sewa,
+                "durasi_sewa" => $durasi_sewa
+            ];
+
+            $harga = $mobil->harga * $r->get('durasi_sewa'); // $BiayaSupir = 150000
+
+            $total = [
+                'total' => $harga
+            ];
+
+            $status = [
+                'status' => 'Baru'
+            ];
+
+            $AlamatSerahTerima = [
+                'alamat_temu' => $AlamatRental
+            ];
+
+            $orderData = array_merge(
+                $InputData, $waktu, $total, $status,
+                $AlamatSerahTerima
+            );
 
         } else {
             return redirect()->back()->withInput();
         }
+
+        $user = User::find(Auth::user()->id);
+
+        $order = $user->order()->create($orderData);
+        
+        $order->mobil()->associate($mobil);
+        $mobil->status = "Dalam Sewa";
+        
+        $order->tipe_sewa()->associate($tipe_sewa);
+
+        $mobil->save();
+        $order->save();
         
         return redirect(route('user.bookingBerjalan'));
     }
