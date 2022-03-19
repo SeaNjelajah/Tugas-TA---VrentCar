@@ -15,7 +15,6 @@ use App\Models\tbl_tipe_sewa as tipe_sewa;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Storage;
 
 class PersewaanController extends Controller
@@ -176,8 +175,8 @@ class PersewaanController extends Controller
         if ($tipe_sewa == "Dengan Supir") {
             if (empty($r->data_supir_id) || !is_numeric($r->data_supir_id)) return redirect()->back()->with('failed', 'Please select Driver first!');
             
-            $user = User::find($r->data_supir_id);
-            $karyawan = $user->karyawan()->first();
+           
+            $karyawan = supir::find($r->data_supir_id);
             $karyawan->status = 'Dalam Tugas';
 
             $order->supir()->associate($karyawan);
@@ -359,7 +358,7 @@ class PersewaanController extends Controller
         $tipe_sewa = $order->tipe_sewa()->first()->tipe_sewa;
         
         if ($tipe_sewa == "Dengan Supir") {
-            $supir = $user->karyawan()->first();
+            $supir = $order->supir()->first();
             $supir->status = "Siap";
             $supir->save();
         }

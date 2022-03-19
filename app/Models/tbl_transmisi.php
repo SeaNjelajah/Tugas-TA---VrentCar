@@ -9,4 +9,8 @@ class tbl_transmisi extends Model
 {
     use HasFactory;
     protected $table = 'tbl_transmisi';
+
+    protected $guarded = ["id"];
+
+    public $timestamps = false;
 }

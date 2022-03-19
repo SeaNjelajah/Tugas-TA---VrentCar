@@ -29,9 +29,25 @@
                         </li>
 
                         <li class="nav-item">
+                            <a class="nav-link {{ (Route::is('admin.fitur.mobil.show')) ? 'active' : '' }}" href="{{ Route('admin.fitur.mobil.show') }}">
+                                <i class="fas fa-wrench text-yellow"></i>
+                                <span class="nav-link-text">Fitur Mobil</span>
+                            </a>
+                        </li>
+
+
+
+                        <li class="nav-item">
                             <a class="nav-link {{ (Route::is('admin.Persewaan.show')) ? 'active' : '' }}" href="{{ Route('admin.Persewaan.show') }}">
                                 <i class="ni ni-chart-bar-32 text-purple"></i>
                                 <span class="nav-link-text">Persewaan</span>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link {{ (Route::is('admin.Laporan.Keuangan.show')) ? 'active' : '' }}" href="{{ Route('admin.Laporan.Keuangan.show') }}">
+                                <i class="ni ni-single-copy-04 text-green"></i>
+                                <span class="nav-link-text">Laporan Keuangan</span>
                             </a>
                         </li>
 

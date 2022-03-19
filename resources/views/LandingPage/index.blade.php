@@ -170,7 +170,7 @@
 
 	            <p>Nikmati kemudahan rental mobil di berbagai kota lebih leluasa bersama VRentcar. Ada banyak pilihan sewa mobil murah dengan tipe terbaik dan sopir berpengalaman yang siap mengantarkan Anda ketujuan. Perjalanan bisnis, liburan, atau acara pernikahan serahkan semua urusan transportasi Anda kepada kami.</p>
 	            <p></p>
-	            <p><a href="#" class="btn btn-primary py-3 px-4">Search Vehicle</a></p>
+	            <p><a href="{{ route('CarListPage') }}" class="btn btn-primary py-3 px-4">Search Vehicle</a></p>
 	          </div>
 					</div>
 				</div>

@@ -65,14 +65,14 @@ class LandingPageController extends Controller {
         
         $BiayaSupir = 150000; // Untuk Tambahan Biaya Jika Dengan Supir
         
-        $AlamatRental = "Jalan Kalibokor 3C / No. 37 C Surabaya";
+        $AlamatRental = "Jl. Jagir Sidoresmo VI/66";
         // Untuk alamat serah terima tanpa supir
 
         $mobil = mobil::find($r->id);
         $tipe_sewa = $mobil->tipe_sewa()->first();
 
         if ($tipe_sewa->tipe_sewa == "Dengan Supir") {
-
+            
             $r->validate([
                 'penyewa' => 'required',
                 'No_tlp' => 'required|numeric',
@@ -81,6 +81,7 @@ class LandingPageController extends Controller {
                 'tanggal_penjemputan' => 'required',
                 'jam_pejemputan' => 'required',
                 'menit_jam_penjemputan' => 'required',
+                'syarat' => 'accepted'
             ]);
 
             $InputData = $r->only('penyewa', 'No_tlp', 'alamat_rumah', 'alamat_temu', 'durasi_sewa');
@@ -122,6 +123,7 @@ class LandingPageController extends Controller {
                 'tanggal_pengembalian' => 'required',
                 'menit_jam_pengembalian' => 'required',
                 'jam_pengambilan' => 'required',
+                'syarat' => 'accepted'
             ]);
 
             $InputData = $r->only('penyewa', 'No_tlp', 'alamat_rumah');

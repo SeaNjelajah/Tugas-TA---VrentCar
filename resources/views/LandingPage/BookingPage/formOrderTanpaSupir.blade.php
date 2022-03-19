@@ -150,7 +150,7 @@
     
     <form class="mb-5" method="POST" action="{{ route('FormOrder.create') }}">
         @csrf
-        <input type="hidden" name="id" value="{{ $mobil->id }}">
+        <input required type="hidden" name="id" value="{{ $mobil->id }}">
         <div class="container">
             <div class="card">
                 <div class="card-body">
@@ -181,12 +181,12 @@
                         </div>
                         <div class="form-group">
                             <label for="penyewa" class="col-form-label">Nama Lengkap:</label>
-                            <input name="penyewa" type="text" class="form-control" id="penyewa" />
+                            <input required name="penyewa" type="text" class="form-control" id="penyewa" />
                         </div>
 
                         <div class="form-group">
                             <label for="No_tlp" class="col-form-label">Nomer Telepon / Whatsapp:</label>
-                            <input name="No_tlp" type="number" class="form-control" id="No_tlp" />
+                            <input required name="No_tlp" type="number" class="form-control" id="No_tlp" />
                         </div>
 
 
@@ -199,7 +199,7 @@
                                         <span class="input-group-text font-poppins-400">Pada Tanggal</span>
                                     </div>
 
-                                    <input daterange="date" date-range-target="#tanggal-pengembalian-tanpa-supir" name="tanggal_pengambilan" id="tanggal-pengambilan-tanpa-supir" type="date" class="col mr-3 form-control">
+                                    <input required daterange="date" date-range-target="#tanggal-pengembalian-tanpa-supir" name="tanggal_pengambilan" id="tanggal-pengambilan-tanpa-supir" type="date" class="col mr-3 form-control">
 
                                 </div>
 
@@ -246,7 +246,7 @@
                                         <span class="input-group-text font-poppins-400">Pada Tanggal</span>
                                     </div>
 
-                                    <input name="tanggal_pengembalian" id="tanggal-pengembalian-tanpa-supir" type="date" class="form-control" disabled="true">
+                                    <input required name="tanggal_pengembalian" id="tanggal-pengembalian-tanpa-supir" type="date" class="form-control" disabled="true">
                                 </div>
 
 
@@ -300,6 +300,13 @@
                             <label for="alamat_temu" class="col-form-label">Alamat Serah Terima Mobil:</label>
                             <textarea disabled name="alamat_temu" class="form-control" id="alamat_temu">Jalan Kalibokor 3C / No. 37 C Surabaya</textarea>
                             <small class="font-weight-bolder text-dark">Note: Alamat serah terima mobil hanya bisa berada di alamat rental mobil</small>
+                        </div>
+
+                        <div class="form-check">
+                            <input required class="form-check-input" name="syarat" type="checkbox">
+                            <label class="form-check-label" for="syarat">
+                              Dengan mencheck box ini anda telah membaca, dan setuju dengan <a class="btn btn-link m-0 p-0" href="{{ route('ketentuan') }}">persyaratan ini</a>.
+                            </label>
                         </div>
 
 

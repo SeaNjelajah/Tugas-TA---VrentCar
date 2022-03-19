@@ -45,10 +45,6 @@
                     <span class="w-100 px-auto">Dibatalkan</span>
                     <hr class="pl-3 mt-n1">
 
-               
-
-
-
                     @foreach (Auth::user()->order()->get()->where('status', 'Dibatalkan') as $order)
 
                     @php

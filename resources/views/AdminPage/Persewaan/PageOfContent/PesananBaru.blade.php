@@ -67,14 +67,22 @@
               <h3 class="mb-0 mt-2">Tipe sewa: {{ $tipe_sewa }}</h3>
               
               @if (strcmp($tipe_sewa, "Dengan Supir") == 0)
-              <select class="form-control ml-3 mt-3 col-6 col-lg-10 style="max-width: 85%;" onchange="document.getElementById('data_sp_id{{ $item->id }}').value = this.value;">
+              <select class="form-control ml-3 mt-3 col-6 col-lg-10 " style="max-width: 85%;" onchange="document.getElementById('data_sp_id{{ $item->id }}').value = this.value;">
                   <option selected value="">Menu Sopir</option>
 
                   @foreach ($karyawan as $orang)
-                   
-                    @if($orang->karyawan()->first()->status == "Siap")
-                    <option value="{{ $orang->id }}">{{ $orang->username }}</option>
+
+                    @php
+                    $data_karyawan = $orang->karyawan()->first();
+                    @endphp
+
+                    @if($data_karyawan->status == "Siap")
+                      @php 
+                      $nama_lengkap = $data_karyawan->nama_lengkap or "Nama Lengkap belum di set"
+                      @endphp
+                      <option value="{{ $data_karyawan->id }}">{{ $nama_lengkap }}</option>
                     @endif
+
                   @endforeach
 
               </select>

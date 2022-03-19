@@ -11,8 +11,13 @@ use App\Http\Controllers\Admin\DashboardController as Dashboard;
 use App\Http\Controllers\Admin\ArmadaMobilController as Armada;
 use App\Http\Controllers\Admin\PersewaanController as Persewaan;
 use App\Http\Controllers\Admin\AccountManageController as Account;
+use App\Http\Controllers\Admin\FiturController;
+use App\Http\Controllers\Admin\FiturMobilController as FiturMobil;
+use App\Http\Controllers\Admin\JenisMobilController;
+use App\Http\Controllers\Admin\JenisTransmisiController;
 use App\Http\Controllers\Karyawan\KaryawanController as Karyawan;
-
+use App\Http\Controllers\Admin\LaporanKeuanganController as Laporan;
+use App\Http\Controllers\Admin\MerekController;
 use App\Http\Controllers\LandingPageController as Landing;
 use App\Http\Controllers\UserPageController as UserPage;
 use Carbon\Carbon;
@@ -111,6 +116,21 @@ Route::prefix('Admin')->name('admin.')->middleware('Admin')->group( function () 
       Route::get('/', [Account::class, 'index'])->name('show');
       Route::post('/Create', [Account::class, 'Create'])->name('create');
       Route::post('/Update/Karyawan', [Account::class, 'Update_Karyawan'])->name('update.karyawan');
+    });
+
+    Route::prefix('Laporan')->name('Laporan.Keuangan.')->group( function () {
+      Route::get('/', [Laporan::class, 'index'])->name('show');
+      Route::get('/Get/Laporan', [Laporan::class, 'GetLaporan'])->name('get.laporan');
+    });
+
+    Route::prefix('FiturMobil')->name('fitur.mobil.')->group( function () {
+      Route::get('/', [FiturMobil::class, 'index'])->name('show');
+      Route::resources([
+        'Merek' => MerekController::class,
+        'Jenis_Mobil' => JenisMobilController::class,
+        'Jenis_Transmisi' => JenisTransmisiController::class,
+        'feature' => FiturController::class
+      ]);
     });
 
 });

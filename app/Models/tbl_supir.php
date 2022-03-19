@@ -14,4 +14,8 @@ class tbl_supir extends Model
     public function user () {
         $this->belongsTo(User::class, 'user_id');
     }
+
+    public function order () {
+        $this->hasMany(tbl_order::class, 'id_supir');
+    }
 }

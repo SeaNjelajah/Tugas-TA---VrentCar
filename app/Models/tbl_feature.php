@@ -9,4 +9,6 @@ class tbl_feature extends Model
 {
     use HasFactory;
     protected $table = 'tbl_feature';
+
+    protected $guarded = ['id'];
 }

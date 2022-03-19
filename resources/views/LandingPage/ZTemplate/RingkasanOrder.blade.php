@@ -446,11 +446,12 @@
                     Batas Pembayaran adalah {{ Carbon\Carbon::create($order->tgl_mulai_sewa)->add('hour', -8)->toDateTimeString(); }}, 8 Jam sebelum Waktu Mulai Sewa <i class="fas fa-exclamation float-right"></i>
                     <br>Setelah itu order dibatalkan secara Otomatis.
                 </div>
-
-                @if($bukti_bayar->terverifikasi == "Ditolak")
-                <div class="alert alert-danger">
-                    Bukti Anda di Tolak Silakan ulangi Upload Bukti Bayar Lagi
-                </div>
+                @if (!empty($bukti_bayar->terverifikasi))
+                    @if($bukti_bayar->terverifikasi == "Ditolak")
+                    <div class="alert alert-danger">
+                        Bukti Anda di Tolak Silakan ulangi Upload Bukti Bayar Lagi
+                    </div>
+                    @endif
                 @endif
 
                 <div class="alert alert-danger">

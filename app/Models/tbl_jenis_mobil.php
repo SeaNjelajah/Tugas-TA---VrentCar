@@ -9,4 +9,6 @@ class tbl_jenis_mobil extends Model
 {
     use HasFactory;
     protected $table = 'tbl_jenis_mobil';
+
+    protected $guarded = ["id"];
 }
