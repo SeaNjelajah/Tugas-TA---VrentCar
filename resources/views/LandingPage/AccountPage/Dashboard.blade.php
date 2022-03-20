@@ -50,7 +50,7 @@
                             $order = $user->order();
                             $order_count_of_selesai = $order->where('status', 'Selesai')->count();
                             $order_count_of_dibatalkan = $order->where('status', 'Dibatalkan')->count();
-                            $member = $user->member()->first();
+                            $member = $user->member()->first() or false;
                             @endphp
 
                             <div class="col-4 d-flex">
@@ -148,7 +148,15 @@
 
                                             <div class="form-group">
                                                 <label class="form-control-label" for="nama_lengkap">Nama Lengkap</label>
-                                                <input value="{{ $member->nama_lengkap }}" name="nama_lengkap" type="text" id="nama_lengkap" class="form-control" placeholder="Nama Lengkap">
+                                                @if ($member)
+                                                    @if (!empty($member->nama_lengkap))
+                                                    <input value="{{ $member->nama_lengkap }}" name="nama_lengkap" type="text" id="nama_lengkap" class="form-control" placeholder="Nama Lengkap">
+                                                    @else
+                                                    <input  name="nama_lengkap" type="text" id="nama_lengkap" class="form-control" placeholder="Nama Lengkap">
+                                                    @endif
+                                                @else
+                                                <input  name="nama_lengkap" type="text" id="nama_lengkap" class="form-control" placeholder="Nama Lengkap">
+                                                @endif
                                             </div>
 
                                             <div class="form-group">
@@ -179,7 +187,17 @@
                                         <div class="col-md-12">
                                             <div class="form-group">
                                                 <label class="form-control-label" for="alamat_rumah">Alamat Rumah</label>
-                                                <input value="{{ $member->alamat_rumah }}" name="alamat_rumah" id="alamat_rumah" class="form-control" placeholder="Alamat Rumah" type="text">
+                                                
+                                                @if ($member)
+                                                    @if (!empty($member->nama_lengkap))
+                                                    <input value="{{ $member->alamat_rumah }}" name="alamat_rumah" id="alamat_rumah" class="form-control" placeholder="Alamat Rumah" type="text">
+                                                    @else
+                                                    <input  name="alamat_rumah" id="alamat_rumah" class="form-control" placeholder="Alamat Rumah" type="text">
+                                                    @endif
+                                                @else
+                                                <input  name="alamat_rumah" id="alamat_rumah" class="form-control" placeholder="Alamat Rumah" type="text">
+                                                @endif
+                                                
                                             </div>
                                         </div>
                                     </div>
