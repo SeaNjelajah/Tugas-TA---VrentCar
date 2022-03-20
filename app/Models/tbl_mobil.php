@@ -29,4 +29,8 @@ class tbl_mobil extends Model
         return $this->belongsTo(tbl_jenis_mobil::class, 'id_jenis_mobil');
     }
 
+    public function merek () {
+        return $this->belongsTo(tbl_merek::class, 'id_merek');
+    }
+
 }

@@ -11,8 +11,7 @@ use App\Models\tbl_mobil as mobil;
 use App\Models\tbl_transmisi as transmisi;
 use App\Models\tbl_tipe_sewa as tipe_sewa;
 use App\Models\tbl_jenis_mobil as jenis_mobil;
-
-use Illuminate\Support\Facades\File;
+use App\Models\tbl_merek;
 
 class ArmadaMobilController extends Controller
 {
@@ -29,17 +28,15 @@ class ArmadaMobilController extends Controller
         return !empty($bagName) ? json_encode(array_filter($bagName)) : null;
     }
 
-    
-
-
     public function index()
     {
         $mobil = mobil::all();
         $transmisi = transmisi::all();
         $tipe_sewa = tipe_sewa::all();
         $jenis_mobil = jenis_mobil::all();
+        $mereks = tbl_merek::all();
 
-        return view('AdminPage.ArmadaMobil.main', compact('mobil', 'transmisi', 'tipe_sewa', 'jenis_mobil'));
+        return view('AdminPage.ArmadaMobil.main', compact('mobil', 'transmisi', 'tipe_sewa', 'jenis_mobil', 'mereks'));
     }
 
 
@@ -82,6 +79,7 @@ class ArmadaMobilController extends Controller
         // id_jenis_mobil
 
         $data = $req->except(['gambar','_token','modal','jenis_transmisi','tipe_sewa', 'jenis_mobil']);
+        
         $data = array_merge($data, ["gambar" => $imageName]);
 
 
@@ -95,6 +93,9 @@ class ArmadaMobilController extends Controller
 
         $jenis_mobil = jenis_mobil::find($req->jenis_mobil);
         $mobil->jenis_mobil()->associate($jenis_mobil);
+
+        $merek = tbl_merek::find($req->merek);
+        $mobil->merek()->associate($merek);
 
         $mobil->save();
         
@@ -201,6 +202,13 @@ class ArmadaMobilController extends Controller
             $jenis_mobil = jenis_mobil::find($r->jenis_mobil);
             $up->jenis_mobil()->associate($jenis_mobil);
         }
+
+        if ($up->id_merek != $r->merek)  {
+            $merek = tbl_merek::find($r->merek);
+            $up->merek()->associate($merek);
+        }
+
+        
 
         
         if ($up->isClean()) {

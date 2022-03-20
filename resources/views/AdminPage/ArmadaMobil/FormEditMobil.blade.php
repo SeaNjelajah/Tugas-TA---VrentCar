@@ -156,15 +156,7 @@
                             </div>
                         </div>
 
-                        <div class="col-md-12 col-lg-6">
-                            <div class="form-group">
-                                <label class="form-control-label" for="status">Set Status</label>
-                                <select class="form-control" name="status">
-                                    <option {{ ( $stat == 'Tersedia') ? 'selected' : '' }}>Tersedia</option>
-                                    <option {{ ( $stat == 'Tidak Tersedia') ? 'selected' : '' }}>Tidak Tersedia</option>
-                                </select>
-                            </div>
-                        </div>
+                        
 
                         <div class="col-md-12 col-lg-6">
                             <div class="form-group">
@@ -182,11 +174,35 @@
                                 @enderror
                             </div>
                         </div>
+
+                        <div class="col-md-12 col-lg-6">
+                            <div class="form-group">
+                                <label class="form-control-label" for="status">Set Status</label>
+                                <select class="form-control" name="status">
+                                    <option {{ ( $stat == 'Tersedia') ? 'selected' : '' }}>Tersedia</option>
+                                    <option {{ ( $stat == 'Tidak Tersedia') ? 'selected' : '' }}>Tidak Tersedia</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12 col-lg-6">
+                            <div class="form-group">
+                                <label class="form-control-label" for="merek">Merek</label>
+                                <select class="form-control" name="merek">
+                                    
+                                    @foreach ($mereks as $merek)
+                                        <option {{ ( $item->id_merek == $merek->id) ? 'selected' : '' }} value="{{ $merek->id }}" >{{ $merek->merek }}</option>
+                                    @endforeach
+
+                                </select>
+                            </div>
+                        </div>
+
                     </div>
 
 
 
-                    <hr class="my-4">
+                    {{-- <hr class="my-4">
 
                     <h6 class="heading-small text-muted mb-4">Other</h6>
 
@@ -206,7 +222,7 @@
                         </div>
                         @endif
 
-                    </div>
+                    </div> --}}
 
                     <hr class="my-4">
                     <!-- Description -->

@@ -1,4 +1,4 @@
-   <div class="mt-0 contained-fluid">
+   <div class="mt--8 contained-fluid">
 
 
 
@@ -34,6 +34,10 @@
                                     <button class="btn btn-primary">Search</button>
                                 </div>
                             </form>
+                        </div>
+
+                        <div class="col-auto  ml-2">
+                            <button id="createSupirbtn" class="btn h-100 btn-primary text-white" data-toggle="modal" data-target="#createSupir">Baru</button>
                         </div>
 
                     </div>
@@ -142,9 +146,57 @@
                             @else
                                 @include('AdminPage.AccountManage.modalEditKaryawan')  
                             @endif
-                           
 
-                        @endforeach
+                            
+                    
+                            @endforeach
+
+                            @empty($users)
+                            
+                            <tr class="text-center border border-top-0 border-bottom-0r">
+                                <th>
+                                    <span>0</span>
+                                </th>
+ 
+                                <td>
+                                    <div class="media align-items-center">
+                                     
+                                        <a href="#" data-toggle="tooltip" data-placement="top" title="No Data" class="avatar rounded-circle mr-3"  data-img="{{ asset('assets/img/users/NoUserPic.png') }}">
+                                        <img alt="Image placeholder" src="{{ asset('assets/img/users/NoUserPic.png') }}">
+                                        </a>
+
+                                        <div class="media-body text-left">
+                                            <span class="name mb-0 text-md">No Data</span>
+                                        </div>
+                                     
+                                    </div>
+                                   
+                                </td>
+ 
+                                <td>
+                                 No Data
+                                </td>
+ 
+                                <td>
+                                    No Data
+                                </td>
+ 
+                                <td>
+                                    <i class="fas fa-circle-xmark text-red"></i> No Data
+                                </td>
+ 
+                                <td class="text-center">
+                                 
+                                 <button class="btn btn-sm btn-warning" data-toggle="tooltip" data-placement="top" title="No Data" ><i class="fas fa-pencil"></i></button>
+                                 
+                                 <button class="btn btn-sm btn-danger" data-toggle="tooltip" data-placement="top" title="No Data"><i class="fas fa-trash"></i></button>
+                                 
+                                </td>
+ 
+                            </tr>
+
+                            @endempty
+
 
                        </tbody>
                    </table>
@@ -152,11 +204,109 @@
                </div>
 
            </div>
+
        </div>
 
-
-
        @endif
+
+        <!-- Modal Buat User Baru-->
+        <form action="{{ route('admin.AccountManage.create') }} " method="POST" enctype="multipart/form-data">
+            @csrf
+            
+            <input type="hidden" name="modal" value="createSupirbtn">
+            <div class="modal fade" id="createSupir" tabindex="-1" role="dialog" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h2 class="modal-title" >Form User Baru</h2>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  
+                    <div class="modal-body text-left">
+                                      
+                      <hr class="my-4">
+                      <h6 class="heading-small text-muted mb-4">Informasi User</h6>
+                      <div class="pl-lg-4 row clearfix">
+
+                          <div class="float-left w-50">
+                              <div class="form-group">
+                                  <figure class="figure text-center">
+                                      <img id="Preview" src="{{ asset('assets/img/users/NoUserPic.png') }}" class="figure-img img-fluid rounded border" alt="Gambar Supir">                                        
+                                      <input class="form-control" name="foto_profil" type="file" set="preview" to="#Preview">                                                            
+                                  </figure>
+                              </div>
+                          </div>
+                        
+      
+                          <div class="col-md-6 mt-n4">
+                                                                                                                              
+                              <div class="form-group">
+                              <label class="form-control-label" for="username">Username</label>
+                              <input type="text" name="username" id="username" class="form-control @error('username') is-invalid @enderror" placeholder="Username" value="{{ old('username') }}">
+                              @error('username')
+                              <div class="invalid-feedback">
+                                  {{ $message }}
+                              </div>
+                              @enderror
+                              </div>
+                              
+                              <div class="form-group">
+                                  <label class="form-control-label" for="email">Email</label>
+                                  <input type="email" name="email" id="email" class="form-control @error('email') is-invalid @enderror" placeholder="Email" value="{{ old('email') }}">
+                                  @error('email')
+                                  <div class="invalid-feedback">
+                                      {{ $message }}
+                                  </div>
+                                  @enderror
+                              </div>
+
+                          
+
+                              <div class="form-group">
+                                  <label class="form-control-label" for="password">Password</label>
+                                  <input type="text" name="password" id="password" class="form-control @error('password') is-invalid @enderror" placeholder="Password" value="{{ old('password') }}">
+                                  @error('password')
+                                  <div class="invalid-feedback">
+                                      {{ $message }}
+                                  </div>
+                                  @enderror
+                              </div>                                
+
+                          </div>                                                        
+                         
+      
+                      </div>
+
+                      <div class="pl-lg-4 row">
+
+                        <div class="col-12">
+
+                          <div class="form-group">
+                            <label for="group" class="form-control-label">User Group</label>
+                            <select name="group" class="form-control">
+                              <option>member</option>
+                              <option>karyawan</option>
+                              <option>admin</option>
+                            </select>
+                          </div>
+
+                        </div>
+
+                      </div>
+                                   
+                                                                                      
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                      <button type="submit" class="btn btn-primary">Create</button>
+                    </div>
+                  
+                </div>
+              </div>
+            </div>
+          </form>
 
    </div>
 

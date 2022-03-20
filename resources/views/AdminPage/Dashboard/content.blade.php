@@ -2,61 +2,139 @@
 
     <!-- core-of-contents -->
     <div class="row">
-      <div class="col-xl-8">
-        <div class="card bg-default">
-          <div class="card-header bg-transparent">
-            <div class="row align-items-center">
-              <div class="col">
-                <h6 class="text-light text-uppercase ls-1 mb-1">Overview</h6>
-                <h5 class="h3 text-white mb-0">Sales value</h5>
-              </div>
-              <div class="col">
-                <ul class="nav nav-pills justify-content-end">
-                  <li class="nav-item mr-2 mr-md-0" data-toggle="chart" data-target="#chart-sales-dark" data-update="{&quot;data&quot;:{&quot;datasets&quot;:[{&quot;data&quot;:[0, 20, 10, 30, 15, 40, 20, 60, 60]}]}}" data-prefix="$" data-suffix="k">
-                    <a href="#" class="nav-link py-2 px-3 active" data-toggle="tab">
-                      <span class="d-none d-md-block">Month</span>
-                      <span class="d-md-none">M</span>
-                    </a>
-                  </li>
-                  <li class="nav-item" data-toggle="chart" data-target="#chart-sales-dark" data-update="{&quot;data&quot;:{&quot;datasets&quot;:[{&quot;data&quot;:[0, 20, 5, 25, 10, 30, 15, 40, 40]}]}}" data-prefix="$" data-suffix="k">
-                    <a href="#" class="nav-link py-2 px-3" data-toggle="tab">
-                      <span class="d-none d-md-block">Week</span>
-                      <span class="d-md-none">W</span>
-                    </a>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-          <div class="card-body">
-            <!-- Chart -->
-            <div class="chart"><div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
-              <!-- Chart wrapper -->
-              <canvas id="chart-sales-dark" class="chart-canvas chartjs-render-monitor" width="635" height="350" style="display: block; width: 635px; height: 350px;"></canvas>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-xl-4">
+
+      <div class="col-xl-6">
         <div class="card">
-          <div class="card-header bg-transparent">
+          <div class="card-header border-0">
             <div class="row align-items-center">
               <div class="col">
-                <h6 class="text-uppercase text-muted ls-1 mb-1">Performance</h6>
-                <h5 class="h3 mb-0">Total orders</h5>
+                <h3 class="mb-0">Order Terbaru</h3>
+              </div>
+              <div class="col text-right">
+                <a href="{{ route('admin.Persewaan.show', ['v' => 'Baru']) }}" class="btn btn-sm btn-primary">See all</a>
               </div>
             </div>
           </div>
-          <div class="card-body">
-            <!-- Chart -->
-            <div class="chart"><div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
-              <canvas id="chart-bars" class="chart-canvas chartjs-render-monitor" style="display: block; width: 278px; height: 350px;" width="278" height="350"></canvas>
-            </div>
+          <div class="table-responsive" style="max-height: 500px;">
+            <!-- Projects table -->
+            <table class="table align-items-center table-flush">
+              <thead class="thead-light">
+                  
+                <tr>
+                  <th scope="col">Created At</th>
+                  <th scope="col">Nama Penyewa</th>
+                  <th scope="col">Nama Mobil</th>
+                  <th scope="col">Mulai Sewa</th>
+                  <th scope="col">Akhir Sewa</th>
+                  <th scope="col">Harga / Hari</th>
+                  <th scope="col">Durasi</th>
+                  <th scope="col">Total</th>
+
+                </tr>
+              </thead>
+              
+              <tbody>
+
+                  @foreach ($orders as $order)
+
+                  @php
+                  $mobil = $order->mobil()->first();
+                  $totalDenda = $order->denda()->get()->sum('denda');
+                  @endphp
+
+                  <tr scope="row">
+                      <th >
+                        {{ ConvertDateToTextDateToIndonesia ( $order->created_at ) }}
+                      </th>
+                      <td>
+                          {{ $order->penyewa }}
+                      </td>
+                      <td>
+                          {{ $order->mobil()->first()->nama }}
+                      </td>
+                      <td>
+                          {{ ConvertDateToTextDateToIndonesia ($order->tgl_mulai_sewa) }}
+                      </td>
+                      <td>
+                          {{ ConvertDateToTextDateToIndonesia ($order->tgl_akhir_sewa) }}
+                      </td>
+                      <td class="budget">
+                          Rp {{ placeRp($mobil->harga) }}
+                      </td>
+                      <td>
+                          {{ $order->durasi_sewa }} Hari
+                      </td>
+                      <td class="budget">
+                          Rp. {{ placeRp($order->total) }}
+                      </td>
+                  </tr>
+                  @endforeach
+               
+              </tbody>
+            </table>
           </div>
         </div>
+        
+
       </div>
+
+      <div class="col-xl-6">
+        
+        <div class="card">
+          <div class="card-header border-0">
+            <div class="row align-items-center">
+              <div class="col">
+                <h3 class="mb-0">User Terbaru</h3>
+              </div>
+              <div class="col text-right">
+                <a href="{{ route('admin.AccountManage.show') }}" class="btn btn-sm btn-primary">See all</a>
+              </div>
+            </div>
+          </div>
+          <div class="table-responsive" style="max-height: 500px;">
+            <!-- Projects table -->
+            <table class="table align-items-center table-flush">
+              <thead class="thead-light">
+                  
+                <tr>
+                  <th scope="col">Created At</th>
+                  <th scope="col">Username</th>
+                  <th scope="col">Email</th>
+
+                </tr>
+              </thead>
+              
+              <tbody>
+
+                @php
+                  $counter = 0;
+                  @endphp
+                  @foreach ($users as $user)
+
+                  <tr scope="row">
+                      <th >
+                          {{ ConvertDateToTextDateToIndonesia ( $user->created_at ) }}
+                      </th>
+                      <td>
+                          {{ $user->username }}
+                      </td>
+                      <td>
+                          {{ $user->email }}
+                      </td>
+                  </tr>
+                  @endforeach
+               
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+
+      </div>
+
     </div>
-    <div class="row">
+    
+    {{-- <div class="row">
       
       <div class="col">
         <div class="card">
@@ -158,34 +236,8 @@
         </div>
       </div>
       
-    </div>
+    </div> --}}
     <!-- /core-of-contents -->
 
-    <!-- Footer -->
-    <footer class="footer pt-0">
-      <div class="row align-items-center justify-content-lg-between">
-        <div class="col-lg-6">
-          <div class="copyright text-center  text-lg-left  text-muted">
-            © 2020 <a href="https://www.creative-tim.com" class="font-weight-bold ml-1" target="_blank">Creative Tim</a>
-          </div>
-        </div>
-        <div class="col-lg-6">
-          <ul class="nav nav-footer justify-content-center justify-content-lg-end">
-            <li class="nav-item">
-              <a href="https://www.creative-tim.com" class="nav-link" target="_blank">Creative Tim</a>
-            </li>
-            <li class="nav-item">
-              <a href="https://www.creative-tim.com/presentation" class="nav-link" target="_blank">About Us</a>
-            </li>
-            <li class="nav-item">
-              <a href="http://blog.creative-tim.com" class="nav-link" target="_blank">Blog</a>
-            </li>
-            <li class="nav-item">
-              <a href="https://github.com/creativetimofficial/argon-dashboard/blob/master/LICENSE.md" class="nav-link" target="_blank">MIT License</a>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </footer>
-    <!-- /Footer -->
+  
 </div>

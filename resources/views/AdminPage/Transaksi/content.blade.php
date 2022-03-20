@@ -1,6 +1,64 @@
 <div class="container-fluid mt-2">
     <div class="container">
 
+        <div class="card">
+            <div class="container p-3">
+                <figure class="figure w-100 p-0 d-flex d-md-none">
+                    <img src="" class="mx-auto figure-img img-fluid rounded" alt="Gambar Mobil">
+                </figure>
+                <div class="row pl-3">
+                    <span class="text-black font-poppins-400 font-size-2"></span>
+                    <button class="btn btn-outline-success bg-none ml-auto font-poppins-400 mr-3">Tersedia</button>
+                </div>
+                <div class="row pl-3 mt-1 h-100">
+                    <figure class="figure col-4 d-none d-md-flex">
+                        <img src="{{ asset('assets/img/cars/car-6.jpg') }}" class="img-fluid rounded" alt="Gambar Mobil">
+                    </figure>
+                    <div class="col pb-2">
+                        
+                        <div class="row mb-0"style="height: 10%">
+                            <div class="col-auto">
+
+                                <i class="fas fa-user  pr-3">4</i>
+                                
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-suitcase  pr-3">4</i>
+                                
+                            </div>
+                
+                            <div class="col-auto">
+                                <i class="fa fa-gear  pr-3">Manual</i>
+                                
+                            </div>
+                            
+                        </div>
+    
+                        <div class="row mb-0 mt-3 position-absolute">
+                            <p class="bg-lighter p-2 text-md rounded text-dark font-weight-600">
+                                Dark Underground
+                            </p>
+                        </div>
+    
+    
+                        <div class="row pl-0 mt-6 mt-md-8 align-content-end h-25">
+                            <div class="col text-left">
+                                <span class="mt-0 mt-md-2 font-poppins-400 d-flex w-100">Dari</span>
+                                <span class="font-poppins-400 font-size-2 text-red">Rp 
+                                    <span class="text-muted font-poppins-400">12.000 / hari</span>
+                                </span>
+                            </div>
+                            <div class="col text-right pt-3">
+                                <button data-toggle="modal" data-target="#modal" class="mx-auto btn btn-success font-poppins-400" style="width: 140px; ">Pilih</button>
+                            </div>
+                        </div>
+    
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+
 
         <div class="card">
             <div class="card-header">
@@ -187,7 +245,7 @@
             
                                 <select name="" id="" class="form-control">
                                     @for ($i = 0; $i < 24; $i++)
-                                        <option>{{ $i }}</option>
+                                        <option></option>
                                     @endfor
                                 </select>
             
@@ -204,7 +262,7 @@
             
                                 <select name="" id="" class="form-control">
                                     @for ($i = 0; $i < 60; $i += 15)
-                                        <option>{{ $i }}</option>
+                                        <option></option>
                                     @endfor
                                 </select>
             
@@ -283,7 +341,7 @@
 
                             <select class="form-control">
                                 @for ($i = 1; $i <= 24; $i += 1)
-                                <option>{{ $i }}</option>
+                                <option></option>
                                 @endfor
                             </select>
                         </div>
@@ -300,7 +358,7 @@
                         <div class="input-group">
                             <select class="form-control">
                                 @for ($i = 0; $i < 60; $i += 15)
-                                <option>{{ $i }}</option>
+                                <option></option>
                                 @endfor
                             </select>
                             <div class="input-group-append border-left">

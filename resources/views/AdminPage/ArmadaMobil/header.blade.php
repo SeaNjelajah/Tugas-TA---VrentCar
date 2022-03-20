@@ -1,21 +1,7 @@
-<div class="header pb-1" style="background-color: #01d28e;">
+<div class="header pb-9" style="background-color: #01d28e;">
     <div class="container-fluid">
 
-        <div class="header-body">
-
-            <div class="row align-items-center py-4">
-
-                <div class="col-12 text-right">
-                     <!-- Modal Button -->
-                    <a id="createMobilbtn" class="btn btn-sm btn-neutral text-primary" data-toggle="modal" data-target="#createMobil">New</a>
-
-                    <!-- Modal Button -->
-
-                </div>
-
-            </div>
-
-        </div>
+        
 
     </div>
 
@@ -214,9 +200,21 @@
                             </div>
                         </div>
 
+                        <div class="col-md-12 col-lg-6">
+                            <div class="form-group">
+                                <label class="form-control-label" for="merek">Merek</label>
+                                <select class="form-control" name="merek">
+                                    @foreach ($mereks as $merek)
+                                        <option value="{{ $merek->id }}" >{{ $merek->merek }}</option>
+                                    @endforeach
+
+                                </select>
+                            </div>
+                        </div>
+
                     </div>
 
-                    <hr class="my-4">
+                    {{-- <hr class="my-4">
                     <h6 class="heading-small text-muted mb-4">Other</h6>
 
                     @if (true)
@@ -234,7 +232,7 @@
                             </div>
                         </div>
                     </div>
-                    @endif
+                    @endif --}}
                 
 
                     <hr class="my-4">

@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 class CreateTblMereksTable extends Migration
@@ -18,6 +19,19 @@ class CreateTblMereksTable extends Migration
             $table->string('merek');
             $table->timestamps();
         });
+
+        DB::table('tbl_merek_mobil')->insert([
+            [
+                'merek' => 'Avanza'
+            ],
+            [
+                'merek' => 'Honda'
+            ],
+            [
+                'merek' => 'Crovelet'
+            ]
+        ]);
+
     }
 
     /**
