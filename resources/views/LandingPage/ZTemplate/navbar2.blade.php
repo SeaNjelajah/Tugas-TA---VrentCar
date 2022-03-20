@@ -75,7 +75,7 @@
                 <li class="nav-item {{ (Route::is('Service')) ? 'active' : '' }}"><a href="{{ Route('Service') }}" class="nav-link">Services</a></li>
 
                 <li class="nav-item {{ (Route::is('CarListPage')) ? 'active' : '' }}"><a href="{{ Route('CarListPage') }}" class="nav-link">Cars</a></li>
-                <li class="nav-item {{ (Route::is('blog')) ? 'active' : '' }}"><a href="{{ Route('blog') }}" class="nav-link">Blog</a></li>
+                {{-- <li class="nav-item {{ (Route::is('blog')) ? 'active' : '' }}"><a href="{{ Route('blog') }}" class="nav-link">Blog</a></li> --}}
                 <li class="nav-item {{ (Route::is('kontak')) ? 'active' : '' }}"><a href="{{ Route('kontak') }}" class="nav-link">Contact</a></li>
                 @if (!Auth::check())
                 <li class="nav-item {{ (Route::is('LoginView')) ? 'active' : '' }}"><a href="{{ Route('LoginView') }}" class="nav-link">Login</a></li>

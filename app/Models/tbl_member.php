@@ -22,4 +22,6 @@ class tbl_member extends Model
         return $this->hasOne(tbl_kartu_ktp::class, 'member_id');
     }
 
+    protected $guarded = ['id', 'created_at', 'updated_at'];
+
 }

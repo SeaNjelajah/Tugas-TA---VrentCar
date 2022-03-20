@@ -10,11 +10,20 @@
 
                             <div class="col-auto p-0 m-0 mr-3 pt-1 mr-auto">
 
-                                <div class="input-daterange datepicker row flex-row-reverse">
+                                <div class="input-daterange datepicker row">
 
-                                    <div class="col-auto m-0">
+                                    
 
-                                        <button type="submit" class="btn btn-primary">Search</button>
+                                    <div class="col-auto">
+
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text"><i class="ni ni-calendar-grid-58"></i></span>
+                                                </div>
+                                                <input class="form-control" name="mulai_sewa" placeholder="Tanggal Mulai Sewa" type="text" value="{{ Request::get('mulai_sewa'); }}">
+                                            </div>
+                                        </div>
 
                                     </div>
 
@@ -31,16 +40,9 @@
 
                                     </div>
 
-                                    <div class="col-auto">
+                                    <div class="col-auto m-0">
 
-                                        <div class="form-group">
-                                            <div class="input-group">
-                                                <div class="input-group-prepend">
-                                                    <span class="input-group-text"><i class="ni ni-calendar-grid-58"></i></span>
-                                                </div>
-                                                <input class="form-control" name="mulai_sewa" placeholder="Tanggal Mulai Sewa" type="text" value="{{ Request::get('mulai_sewa'); }}">
-                                            </div>
-                                        </div>
+                                        <button type="submit" class="btn btn-primary">Search</button>
 
                                     </div>
 
@@ -77,7 +79,9 @@
                                 <th scope="col" class="sort text-dark">Nama Mobil</th>
                                 <th scope="col" class="sort text-dark">Mulai Sewa</th>
                                 <th scope="col" class="sort text-dark">Akhir Sewa</th>
+                                <th scope="col" class="sort text-dark">Harga / Hari</th>
                                 <th scope="col" class="sort text-dark">Durasi</th>
+                                <th scope="col" class="sort text-dark">Denda</th>
                                 <th scope="col" class="sort text-dark">Total</th>
                             </tr>
                         </thead>
@@ -87,6 +91,12 @@
                             $counter = 0;
                             @endphp
                             @foreach ($orders as $order)
+
+                            @php
+                            $mobil = $order->mobil()->first();
+                            $totalDenda = $order->denda()->get()->sum('denda');
+                            @endphp
+
                             <tr>
                                 <th scope="row">
                                     {{ ++$counter }}
@@ -98,13 +108,19 @@
                                     {{ $order->mobil()->first()->nama }}
                                 </td>
                                 <td>
-                                    {{ $order->tgl_mulai_sewa }}
+                                    {{ ConvertDateToTextDateToIndonesia ($order->tgl_mulai_sewa) }}
                                 </td>
                                 <td>
-                                    {{ $order->tgl_akhir_sewa }}
+                                    {{ ConvertDateToTextDateToIndonesia ($order->tgl_akhir_sewa) }}
+                                </td>
+                                <td class="budget">
+                                    Rp {{ placeRp($mobil->harga) }}
                                 </td>
                                 <td>
                                     {{ $order->durasi_sewa }} Hari
+                                </td>
+                                <td>
+                                    Rp. {{ placeRp($totalDenda) }}
                                 </td>
                                 <td class="budget">
                                     Rp. {{ placeRp($order->total) }}
@@ -137,7 +153,7 @@
                     }
                     @endphp
                     
-                    <a class="btn btn-danger" href="{{ route('admin.Laporan.Keuangan.get.laporan', $currently) }}">Download Currenly Data</a>
+                    <a class="btn btn-danger" href="{{ route('admin.Laporan.Keuangan.get.laporan', $currently) }}">Download Currently Data</a>
                     <a class="btn btn-danger" href="{{ route('admin.Laporan.Keuangan.get.laporan', ['between' => 'all']) }}">Download All Data</a>
 
                     {{-- <nav aria-label="...">

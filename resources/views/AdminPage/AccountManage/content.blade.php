@@ -15,6 +15,29 @@
        <div class="container">
 
            <div class="card mt-3">
+               
+                <div class="card-header m-0">
+                    <div class="row p-0 m-0">
+                        
+                        <div class="col-auto align-middle align-item-center text-lg text-dark">
+                            Tabel User
+                        </div>
+
+                        <div class="ml-auto col-3 p-0 m-0">
+                            <form method="GET">
+                                <div class="row">
+
+                                    <div class="form-group m-0 p-0">
+                                        <input type="text" name="search" class="form-control" placeholder="Cari User" value="{{ Request::get('search') }}">
+                                    </div>
+    
+                                    <button class="btn btn-primary">Search</button>
+                                </div>
+                            </form>
+                        </div>
+
+                    </div>
+                </div>
 
                <div class="card-body">
 

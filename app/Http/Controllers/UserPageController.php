@@ -7,6 +7,7 @@ use App\Models\tbl_tipe_bayar as tipe_bayar;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 
 class UserPageController extends Controller
@@ -270,6 +271,63 @@ class UserPageController extends Controller
 
         return redirect()->intended(route('user.bookingBerjalan'));
 
+    }
+
+    public function update_member (Request $r) {
+
+        $r->validate([
+            'username' => 'required',
+            'email' => 'required',
+        ]);
+
+        $user = User::find(Auth::user()->id);
+        $data = $r->only(['username', 'email']);
+
+        if ($r->hasFile('foto_profil')) {
+
+            $CurrentImage = (empty($user->foto_profil)) ? 'NoUserPic.png' : $user->foto_profil;
+            $Imagename = $this->SaveFile($r, 'foto_profil', 'assets/img/users/', 'NoUserPic.png');
+            $this->DeleteFile($CurrentImage, 'assets/img/users/', 'NoUserPic.png');
+
+            $foto_profil = [
+                'foto_profil' => $Imagename
+            ];
+
+            $data = array_merge($data, $foto_profil);
+        }
+       
+        if (!empty($r->password_baru) and !empty($r->password_lama)) {
+           
+            
+            if (Hash::check($r->password_baru, $user->password)) {
+
+                $password = [
+                    'password' => Hash::make($r->password_baru)
+                ];
+
+                $data = array_merge($data, $password);
+
+            } else {
+                return redirect()->back()->withInput()->with('Password_Error', 'Password Lama tidak sama dengan yang terdaftar!'); 
+            }
+
+        }
+
+        
+        $user->update($data);
+     
+        
+        $memberData = $r->only('nama_lengkap' ,'alamat_rumah');
+        
+        $MemberM = $user->member()->first() or false;
+
+        if ($MemberM) {
+            $MemberM->update($memberData);
+        } else {
+            $user->member()->create($memberData);
+        }
+
+        return redirect()->back()->with('success', 'perubahan berhasi!');
     }
 
 }

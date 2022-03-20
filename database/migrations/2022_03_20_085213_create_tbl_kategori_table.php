@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class TblAdmin extends Migration
+class CreateTblKategoriTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,10 @@ class TblAdmin extends Migration
      */
     public function up()
     {
-        Schema::create('tbl_admin', function (Blueprint $table) {
+        Schema::create('tbl_kategori', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete()->cascadeOnUpdate();
-            $table->string('foto_diri')->nullable();
+            $table->string('kategori');
+            $table->timestamps();
         });
     }
 
@@ -27,6 +27,6 @@ class TblAdmin extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tbl_admin');
+        Schema::dropIfExists('tbl_kategori');
     }
 }

@@ -19,14 +19,14 @@ $supir = $item->supir()->first();
                 </div>
             </div>
 
-            <div class="col-11 text-center">
+            <div class="col-11 text-center text-white">
 
                 <div class="row d-lg-inline-block d-block mx-auto text-center">
-                    Selesai Pada | {{ $status_order_last->created_at }}
+                    Selesai Pada | {{ ConvertDateToTextDateToIndonesia($status_order_last->created_at) }}
                 </div>
 
                 <div class="row d-lg-inline-block d-block mx-auto text-center">
-                    Mulai Sewa | {{ $item->tgl_mulai_sewa }} --- Akhir Sewa | {{ $item->tgl_akhir_sewa }} || {{ $item->durasi_sewa }} Hari Sewa
+                    Mulai Sewa | {{ ConvertDateToTextDateToIndonesia ($item->tgl_mulai_sewa) }} --- Akhir Sewa | {{ ConvertDateToTextDateToIndonesia ($item->tgl_akhir_sewa) }} || {{ $item->durasi_sewa }} Hari Sewa
                 </div>
 
             </div>

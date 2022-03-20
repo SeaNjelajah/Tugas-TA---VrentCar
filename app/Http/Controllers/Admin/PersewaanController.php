@@ -21,9 +21,48 @@ class PersewaanController extends Controller
 {
     public function index(Request $r)
     {
-        
         $karyawan = User::has('karyawan')->get();
-        $order = order::all();
+
+        if (!empty($r->search)) {
+
+            $search = $r->search;
+
+            $order1 = order::whereHas('mobil', function($query) use ($search) {
+                $query->where ('nama', 'like' , "%$search%");
+            })->get();
+
+            $order2 = order::whereHas('supir', function($query) use ($search) {
+                $query->where ('nama_lengkap', 'like' , "%$search%");
+            })->get();
+
+            $order3 = order::whereHas('user', function($query) use ($search) {
+                $query->whereHas('member', function($query) use ($search) {
+                    $query->where ('nama_lengkap', 'like' , "%$search%");
+                });
+            })->get();
+
+            $order4 = order::whereHas('tipe_sewa', function($query) use ($search) {
+                $query->where ('tipe_sewa', 'like' , "%$search%");
+
+            })->get();
+
+            $order5 = order::where('penyewa', 'like', "%$search%")->get();
+
+            $order = $order1->merge($order2, $order3, $order4);
+            
+
+        } else {
+            $order = order::all();
+        }
+        
+
+        if (!empty($r->mulai_sewa) and !empty($r->akhir_sewa)) {
+            $Start = Carbon::create($r->mulai_sewa)->toDateTimeLocalString();
+            $End = Carbon::create($r->akhir_sewa)->toDateTimeLocalString();
+
+            $order = $order->whereBetween('created_at', [$Start, $End]);
+
+        }
 
         return view('AdminPage.Persewaan.main', compact('karyawan', 'order'));
     }
@@ -31,97 +70,189 @@ class PersewaanController extends Controller
     public function CariMobilPersewaan (Request $r) {
 
         if ($r->dengan_supir == "true") {
-            $mobil = tipe_sewa::where('tipe_sewa', 'Dengan Supir')->first()->mobil()->get();
+            $mobils = tipe_sewa::where('tipe_sewa', 'Dengan Supir')->first()->mobil()->get();
         } else if ($r->dengan_supir == "false") {
-            $mobil = tipe_sewa::where('tipe_sewa', 'Tanpa Supir')->first()->mobil()->get();
+            $mobils = tipe_sewa::where('tipe_sewa', 'Tanpa Supir')->first()->mobil()->get();
         } else {
             return redirect()->back()->withInput()->with("failed", "Something wrong! Try again.");
         }
         
         $tipe_bayar = tipe_bayar::all();
 
-        return view('AdminPage.Persewaan.PageBuatOrder.main2', compact('mobil', 'tipe_bayar'));
+        return view('AdminPage.Persewaan.PageBuatOrder.main2', compact('mobils', 'tipe_bayar'));
     }
 
     public function BuatPesanan (Request $r) {
+
+
+        $BiayaSupir = 150000; // Untuk Tambahan Biaya Jika Dengan Supir
         
+        $AlamatRental = "Jl. Jagir Sidoresmo VI/66";
+        // Untuk alamat serah terima Jika tanpa supir
+        $mobil = mobil::find($r->d_mobil_id);
+
         $r->session()->flash('failed', 'Some input are empty!');
-        
-        $r->validate([
-            "nama" => ['required'],
-            "No_tlp" => ['required'],
-            "address_home" => ['required'],
-            "total" => ['required'],
-            "tipe_bayar" => ['required']
-        ]);
-
-        $r->session()->forget('failed');
-
-
-        if($r->hasFile('GMB_Bukti') && $r->GMB_Bukti != "NoImageA.png") {
-            $filename = explode(".", $r->file('GMB_Bukti')->getClientOriginalName())[0] . "_" . time() . '.' . $r->GMB_Bukti->extension();
-            $r->file('GMB_Bukti')->move(public_path('assets/img/dataimg/buktibayar'), $filename);
-        } else {
-            $filename = null;
-        }
-
 
         if ($r->dengan_supir == "true") {
+            
+            $r->validate([
+                'penyewa' => 'required',
+                'No_tlp' => 'required|numeric',
+                'alamat_rumah' => 'required',
+                'alamat_temu' => 'required',
+                'tanggal_penjemputan' => 'required',
+                'jam_pejemputan' => 'required',
+                'menit_jam_penjemputan' => 'required',
 
-            $tanggal = Carbon::create (
+                'd_mobil_id' => 'required',
+                'bukti_bayar' => 'required|image',
+            ]);
+
+            $InputData = $r->only('penyewa', 'No_tlp', 'alamat_rumah', 'alamat_temu', 'durasi_sewa');
+            
+            $date = Carbon::create (
                 $r->tanggal_penjemputan . "T" .
                 $r->jam_pejemputan . ":" .
                 $r->menit_jam_penjemputan
             );
 
-            $order = order::create([
-                "penyewa" => $r->nama,
-                "No_tlp" => $r->No_tlp,
-                "mulai_sewa" => ($tanggal->toDateTimeLocalString()),
-                "akhir_sewa" => ($tanggal->add('day', $r->durasi_sewa)->toDateTimeLocalString()),
-                "tipe_sewa" => "Dengan Supir",
-                "address_home" => $r->address_home,
-                "address_serah_terima" => $r->address_serah_terima,
-                "tipe_bayar" => $r->tipe_bayar,
-                "total" => $r->total,
-                "bukti_bayar" => $filename,
-                "status" => "Baru",
-                "status_proses" => "Dalam Antrian"
-            ]);
+            $tanggal = [
+                "tgl_mulai_sewa" => ($date->toDateTimeLocalString()),
+                "tgl_akhir_sewa" => ($date->add('day', $r->durasi_sewa)->toDateTimeLocalString())
+            ];
 
-            $mobil = mobil::find($r->d_mobil_id);
-            $order->mobil()->associate($mobil);
+            $harga = $mobil->harga * $r->get('durasi_sewa') + $BiayaSupir; // $BiayaSupir = 150000
 
+            $total = [
+                'total' => $harga
+            ];
 
-            $order->save();
+            $status = [
+                'status' => 'Baru'
+            ];
+
+            $orderData = array_merge(
+                $InputData, $tanggal, $total, $status
+            );
 
         } else if ($r->dengan_supir == "false") {
-        
 
-            $tanggal_pengambilan = $r->tanggal_pengambilan."T".$r->jam_pengambilan.":".$r->menit_jam_pengambilan;
-            $tanggal_pengembalian = $r->tanggal_pengembalian."T".$r->jam_pengembalian.":".$r->menit_jam_pengembalian;
+            $r->validate([
+                'penyewa' => 'required',
+                'No_tlp' => 'required|numeric',
+                'alamat_rumah' => 'required',
+                'd_mobil_id' => 'required',
+                'bukti_bayar' => 'required|image',
 
-            order::create([
-                "d_mobil_id" => $r->d_mobil_id,
-                "nama" => $r->nama,
-                "No_tlp" => $r->No_tlp,
-                "mulai_sewa" => Carbon::create($tanggal_pengambilan)->toDateTimeLocalString(),
-                "akhir_sewa" => Carbon::create($tanggal_pengembalian)->toDateTimeLocalString(),
-                "tipe_sewa" => "Tanpa Supir",
-                "alamat_rumah" => $r->address_home,
-                "alamat_temu" => $r->address_serah_terima,
-                "tipe_bayar" => $r->tipe_bayar,
-                "total" => $r->total,
-                "bukti_bayar" => $filename,
-                "status" => "Baru",
-                "status_proses" => "Dalam Antrian"
+                'tanggal_pengambilan' => 'required',
+                'jam_pengambilan' => 'required',
+                'menit_jam_pengambilan' => 'required',
+                'tanggal_pengembalian' => 'required',
+                'menit_jam_pengembalian' => 'required',
+                'jam_pengambilan' => 'required',
+
             ]);
+
+            $InputData = $r->only('penyewa', 'No_tlp', 'alamat_rumah');
+
+            $tgl_mulai_sewa = Carbon::create(
+                $r->tanggal_pengambilan . "T" . 
+                $r->jam_pengambilan . ":" . $r->menit_jam_pengambilan
+            );
+
+            $tgl_akhir_sewa = Carbon::create(
+                $r->tanggal_pengembalian . "T" . 
+                $r->jam_pengembalian . ":" . $r->menit_jam_pengembalian
+            );
+
+            $durasi_sewa = $tgl_mulai_sewa->diffInDays($tgl_akhir_sewa);
+
+            $waktu = [
+                "tgl_mulai_sewa" => $tgl_mulai_sewa->toDateTimeLocalString(),
+                "tgl_akhir_sewa" => $tgl_akhir_sewa->toDateTimeLocalString(),
+                "durasi_sewa" => $durasi_sewa
+            ];
+
+            $harga = $mobil->harga * $durasi_sewa;
+
+            $total = [
+                'total' => $harga
+            ];
+
+            $status = [
+                'status' => 'Baru'
+            ];
+
+            $AlamatSerahTerima = [
+                'alamat_temu' => $AlamatRental
+            ];
+
+            $orderData = array_merge(
+                $InputData, $waktu, $total, $status,
+                $AlamatSerahTerima
+            );
+
+        } else {
+            return redirect()->back()->withInput();
+        }
+
+        $user = User::find(Auth::user()->id);
+
+        $tipe_sewa = $mobil->tipe_sewa()->first();
+
+        $order = $user->order()->create($orderData);
+        
+        $order->mobil()->associate($mobil);
+
+        $mobil->status = "Dalam Sewa";
+        $order->tipe_sewa()->associate($tipe_sewa);
+
+        $tipe_bayar = tipe_bayar::find($r->tipe_bayar);
+        $order->tipe_bayar()->associate($tipe_bayar);
+
+        $mobil->save();
+        $order->save();
+        
+        //-----------------------------------------------------
+
+        if ($r->hasFile('bukti_bayar')) {
+
+            $punya_bukti_bayar = $order->bukti_bayar()->first() or false;
+                
+            if ($punya_bukti_bayar) {
+                
+                $CurrentBuktiBayarName = $order->bukti_bayar()->first()->gambar_bukti;
+                
+                if (Storage::exists('/public/Bukti_Bayar/' . $CurrentBuktiBayarName))
+                Storage::delete('/public/Bukti_Bayar/' . $CurrentBuktiBayarName);
+                
+            }
+            
+            $Filename = uniqid() . "_" . $r->file('bukti_bayar')->getClientOriginalName(); 
+            Storage::putFileAs('/public/Bukti_Bayar/', $r->file('bukti_bayar'), $Filename);
+    
+    
+            if ($punya_bukti_bayar) {
+    
+                $bukti_bayar = $order->bukti_bayar()->first();
+    
+                $bukti_bayar->update([
+                    'gambar_bukti' => $Filename,
+                    'terverifikasi' => null
+                ]);
+    
+            } else {
+    
+                $order->bukti_bayar()->create ([
+                    'id_order' => $order->id,
+                    'gambar_bukti' => $Filename,
+                ]);
+    
+            }
 
         }
 
-        $mobil = mobil::find($r->d_mobil_id);
-        $mobil->status = "Dalam Sewa";
-        $mobil->save();
+        $r->session()->forget('failed');
 
         return redirect(route('admin.Persewaan.show'))->with('success', 'Pesanan berhasil ditambahkan');
     }

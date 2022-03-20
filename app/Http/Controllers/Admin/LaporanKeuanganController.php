@@ -17,7 +17,7 @@ class LaporanKeuanganController extends Controller
 
             if (!empty($r->mulai_sewa) and !empty($r->akhir_sewa)) {
     
-                $Start = Carbon::create($r->mulai_sea)->toDateTimeLocalString();
+                $Start = Carbon::create($r->mulai_sewa)->toDateTimeLocalString();
                 $End = Carbon::create($r->akhir_sewa)->toDateTimeLocalString();
     
             } else {

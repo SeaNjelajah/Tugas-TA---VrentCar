@@ -42,7 +42,7 @@ function placeRp ($num) {
 }
 
 function ConvertDateToTextDateToIndonesia ($date) {
-  $CarbonDate = Carbon::create($date)->format('l j F Y h:i:s');
+  $CarbonDate = Carbon::create($date)->format('l, j F Y H:i:s');
   $FindingWord = [
     "/Sunday/", "/Monday/", "/Tuesday/",
     "/Thursday/", "/Friday/", "/Saturday/",
@@ -116,6 +116,8 @@ Route::prefix('Admin')->name('admin.')->middleware('Admin')->group( function () 
       Route::get('/', [Account::class, 'index'])->name('show');
       Route::post('/Create', [Account::class, 'Create'])->name('create');
       Route::post('/Update/Karyawan', [Account::class, 'Update_Karyawan'])->name('update.karyawan');
+      Route::post('/Update/Member', [Account::class, 'Update_Member'])->name('update.member');
+      Route::post('/Update/Admin', [Account::class, 'Update_Admin'])->name('update.admin');
     });
 
     Route::prefix('Laporan')->name('Laporan.Keuangan.')->group( function () {
@@ -198,11 +200,16 @@ return view('LandingPage.ZTemplate.contact');
 
 Route::get('/Blog', function() {
   return view('LandingPage.ZTemplate.blog');
-  })->name('blog');
+})->name('blog');
+
+Route::get('/Blog/Single', function () {
+  return view('LandingPage.BlogPage.blog-single');
+})->name('blog.single');
+  
 
 Route::get('/Ketentuan', function() {
   return view('LandingPage.ZTemplate.ketentuan');
-  })->name('ketentuan');
+})->name('ketentuan');
 
 Route::get('/Tips', function() {
   return view('LandingPage.ZTemplate.booking-tips');
@@ -212,7 +219,7 @@ Route::get('/Tips', function() {
 Route::get('/FormOrder', [Landing::class, 'BookCar'])->name('FormOrder');
 Route::post('/FormOrder/create', [Landing::class, 'Booking'])->name('FormOrder.create');
 
-Route::prefix('User')->name('user.')->group( function () {
+Route::prefix('User')->name('user.')->middleware('Member')->group( function () {
   Route::get('/Dashboard', [UserPage::class, 'DashboardPage'])->name('dashboard');
   Route::get('/BookingBerjalan', [UserPage::class, 'BookingBerjalanPage'])->name('bookingBerjalan');
   Route::get('/RiwayatBooking', [UserPage::class, 'RiwayatBokingPage'])->name('RiwayatBooking');
@@ -222,6 +229,7 @@ Route::prefix('User')->name('user.')->group( function () {
   Route::post('/RingkasanOrder/Ktp/Upload', [UserPage::class, 'KirimKtp'])->name('ktp.upload');
   Route::post('/RingkasanOrder/KartuKeluarga/Upload', [UserPage::class, 'KirimKartuKeluarga'])->name('kartu.keluarga.upload');
   Route::post('/RingkasanOrder/SimA/Upload', [UserPage::class, 'KirimSimA'])->name('simA.upload');
+  Route::post('/Dashboard/Update/', [UserPage::class, 'Update_Member'])->name('update');
 });
 
 //Landing Page end

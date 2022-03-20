@@ -16,7 +16,7 @@ class LandingPageController extends Controller {
 
 
     public function Home () {
-        $mobil = mobil::all();
+        $mobil = mobil::limit(9)->get();
         return view('LandingPage.index', compact('mobil'));
     }
 
@@ -66,7 +66,7 @@ class LandingPageController extends Controller {
         $BiayaSupir = 150000; // Untuk Tambahan Biaya Jika Dengan Supir
         
         $AlamatRental = "Jl. Jagir Sidoresmo VI/66";
-        // Untuk alamat serah terima tanpa supir
+        // Untuk alamat serah terima Jika tanpa supir
 
         $mobil = mobil::find($r->id);
         $tipe_sewa = $mobil->tipe_sewa()->first();
@@ -134,19 +134,19 @@ class LandingPageController extends Controller {
             );
 
             $tgl_akhir_sewa = Carbon::create(
-                $r->tanggal_pengambilan . "T" . 
-                $r->jam_pengambilan . ":" . $r->menit_jam_pengambilan
+                $r->tanggal_pengembalian . "T" . 
+                $r->jam_pengembalian . ":" . $r->menit_jam_pengembalian
             );
 
             $durasi_sewa = $tgl_mulai_sewa->diffInDays($tgl_akhir_sewa);
 
             $waktu = [
-                "tgl_mulai_sewa" => $tgl_mulai_sewa,
-                "tgl_akhir_sewa" => $tgl_akhir_sewa,
+                "tgl_mulai_sewa" => $tgl_mulai_sewa->toDateTimeLocalString(),
+                "tgl_akhir_sewa" => $tgl_akhir_sewa->toDateTimeLocalString(),
                 "durasi_sewa" => $durasi_sewa
             ];
 
-            $harga = $mobil->harga * $r->get('durasi_sewa'); // $BiayaSupir = 150000
+            $harga = $mobil->harga * $durasi_sewa;
 
             $total = [
                 'total' => $harga

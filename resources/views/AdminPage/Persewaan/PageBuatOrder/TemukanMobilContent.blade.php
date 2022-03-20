@@ -1,51 +1,60 @@
 <div class="container-fluid mt-1">
-    @foreach ($mobil as $item)
+
+    @foreach ($mobils as $mobil)
     @php
         $getData = Request::all();
+        $tipe_sewa = $mobil->tipe_sewa()->first()->tipe_sewa;
+        $transmisi = $mobil->transmisi()->first()->nama_transmisi;
     @endphp
 
     <div class="card">
         <div class="container p-3">
             <figure class="figure w-100 p-0 d-flex d-md-none">
-                <img src="{{ asset('assets/img/cars/' . $item->gambar) }}" class="mx-auto figure-img img-fluid rounded" alt="A generic square placeholder image with rounded corners in a figure.">
+                <img src="{{ asset('assets/img/cars/' . $mobil->gambar) }}" class="mx-auto figure-img img-fluid rounded" alt="Gambar Mobil">
             </figure>
             <div class="row pl-3">
-                <span class="text-black font-poppins-400 font-size-2">{{ $item->nama }}</span>
-                <button class="btn btn-outline-success bg-none ml-auto font-poppins-400 mr-3">{{ $item->tipe_sewa()->first()->tipe_sewa }}</button>
+                <span class="text-black font-poppins-400 font-size-2">{{ $mobil->nama }}</span>
+                <button class="btn btn-outline-success bg-none ml-auto font-poppins-400 mr-3">{{ $tipe_sewa }}</button>
             </div>
             <div class="row pl-3 mt-1 h-100">
                 <figure class="figure col-4 d-none d-md-flex">
-                    <img src="{{ asset('assets/img/cars/' . $item->gambar) }}" class="img-fluid rounded" alt="A generic square placeholder image with rounded corners in a figure.">
+                    <img src="{{ asset('assets/img/cars/' . $mobil->gambar) }}" class="img-fluid rounded" alt="Gambar Mobil">
                 </figure>
                 <div class="col pb-2">
                     
                     <div class="row mb-0"style="height: 10%">
                         <div class="col-auto">
                             <i class="fas fa-user font-size-2 pr-3"></i>
-                            {{ $item->jumlah_kursi }}
+                            {{ $mobil->jumlah_kursi }}
                         </div>
                         <div class="col-auto">
                             <i class="fas fa-suitcase font-size-2 pr-3"></i>
-                            {{ $item->kapasitas_koper }}
+                            {{ $mobil->kapasitas_koper }}
                         </div>
             
                         <div class="col-auto">
                             <i class="fa fa-gear font-size-2 pr-3"></i>
-                            {{ $item->transmisi()->first()->nama_transmisi }}
+                            {{ $transmisi }}
                         </div>
                         
+                    </div>
+
+                    <div class="row mb-0 mt-3 position-absolute">
+                        <p class="bg-lighter p-2 text-md rounded text-dark font-weight-600">
+                            {{ $mobil->desc_mb }}
+                        </p>
                     </div>
 
 
                     <div class="row pl-0 mt-6 mt-md-8 align-content-end h-25">
                         <div class="col text-left">
                             <span class="mt-0 mt-md-2 font-poppins-400 d-flex w-100">Dari</span>
-                            <span class="font-poppins-400 font-size-2 text-red">Rp {{ placeRp($item->harga) }}
+                            <span class="font-poppins-400 font-size-2 text-red">Rp {{ placeRp($mobil->harga) }}
                                 <span class="text-muted font-poppins-400">/hari</span>
                             </span>
                         </div>
                         <div class="col text-right pt-3">
-                            <button data-toggle="modal" data-target="#modal{{ $item->id }}" class="mx-auto btn btn-success font-poppins-400" style="width: 140px; ">Pilih</button>
+                            <button data-toggle="modal" data-target="#modal{{ $mobil->id }}" class="mx-auto btn btn-success font-poppins-400" style="width: 140px; ">Pilih</button>
                         </div>
                     </div>
 
@@ -63,7 +72,7 @@
 
     <!-- Modal Pilih -->
     @if ($getData['dengan_supir'] == 'true')
-    <div class="modal fade" id="modal{{ $item->id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="modal{{ $mobil->id }}" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
           <div class="modal-content">
             <div class="modal-header">
@@ -78,27 +87,27 @@
 
                     <a class="row px-4" href="#">
                         <figure class="figure mx-auto mt-3">
-                            <img src="{{ asset('assets/img/cars/' . $item->gambar) }}" class=" w-100 figure-img img-fluid rounded" alt="Cars Picture">
+                            <img src="{{ asset('assets/img/cars/' . $mobil->gambar) }}" class=" w-100 figure-img img-fluid rounded" alt="Cars Picture">
                         </figure>
                     </a>
         
                     <div class="row pl-0">
-                        <span class="font-size-3 font-poppins-400 ml-3">{{ $item->nama }}</span>
+                        <span class="font-size-3 font-poppins-400 ml-3">{{ $mobil->nama }}</span>
                     </div>
 
                     <div class="container pl-4 mt-4 pb-4">
                         <div class="row mb-0">
                             <div class="col-auto">
                                 <i class="fas fa-user font-size-2 pr-3"></i>
-                                {{ $item->jumlah_kursi }}
+                                {{ $mobil->jumlah_kursi }}
                             </div>
                             <div class="col-auto">
                                 <i class="fas fa-suitcase font-size-2 pr-3"></i>
-                                {{ $item->kapasitas_koper }}
+                                {{ $mobil->kapasitas_koper }}
                             </div>
                             <div class="col-auto">
                                 <i class="fas fa-car font-size-2 pr-3"></i>
-                                <span class="font-poppins-400 text-muted">{{ $item->tahun }} atau setelahnya</span>
+                                <span class="font-poppins-400 text-muted">{{ $mobil->tahun }} atau setelahnya</span>
                             </div>
         
                         </div>
@@ -113,7 +122,7 @@
                         @foreach ($getData as $k => $v)
                         <input type="hidden" name="{{ $k }}" value="{{ $v }}">
                         @endforeach
-                        <input type="hidden" name="d_mobil_id" value="{{ $item->id }}">
+                        <input type="hidden" name="d_mobil_id" value="{{ $mobil->id }}">
 
                         <div class="card text-left">
             
@@ -134,16 +143,16 @@
                                                     <p>Harga sewa / Hari</p>
                                                 </div>
                                                 <div class="col">
-                                                    <p>Rp. {{ placeRp($item->harga) }}  </p>
+                                                    <p>Rp.{{ placeRp($mobil->harga) }}</p>
                                                 </div>
                                             </div>
             
                                             <div class="row">
                                                 <div class="col d-flex">
-                                                    <p>Total Harga sewa ( {{ $getData['durasi_sewa'] }}  Hari)</p>
+                                                    <p>Total Harga sewa ({{ $getData['durasi_sewa'] }}  Hari)</p>
                                                 </div>
                                                 <div class="col">
-                                                    <p>Rp  {{ placeRp($total = $getData['durasi_sewa'] * $item->harga) }}</p>
+                                                    <p>Rp  {{ placeRp($total = $getData['durasi_sewa'] * $mobil->harga) }}</p>
                                                 </div>
                                             </div>
                                               
@@ -216,16 +225,16 @@
                                                     <p>Harga sewa / Hari</p>
                                                 </div>
                                                 <div class="col">
-                                                    <p>Rp. {{ placeRp($item->harga) }}  </p>
+                                                    <p>Rp.{{ placeRp($mobil->harga) }}  </p>
                                                 </div>
                                             </div>
             
                                             <div class="row">
                                                 <div class="col d-flex">
-                                                    <p>Total Harga sewa ( {{ $getData['durasi_sewa'] }}  Hari)</p>
+                                                    <p>Total Harga sewa ({{ $getData['durasi_sewa'] }}  Hari)</p>
                                                 </div>
                                                 <div class="col">
-                                                    <p>Rp  {{ placeRp($total = $getData['durasi_sewa'] * $item->harga) }}</p>
+                                                    <p>Rp  {{ placeRp($total = $getData['durasi_sewa'] * $mobil->harga) }}</p>
                                                 </div>
                                             </div>
                                               
@@ -253,13 +262,12 @@
                                     
             
                                     <div class="form-group">
-                                        <label for="tipe_bayar">Lakukan Pembayaran Pada Salah Satu No.rekening dibawah:</label>
-                                        <select class="form-control" name="tipe_bayar" >
+                                        <label for="tipe_bayar">Lakukan Pembayaran Pada Salah Satu Cara pembayaran dibawah ini:</label>
+                                        <select class="form-control" name="tipe_bayar">
                                             @foreach ($tipe_bayar as $tipe)
-                                            <option value="{{ $tipe->nama }}">{{ $tipe->deskripsi }}</option>
+                                            <option value="{{ $tipe->id }}">{{ $tipe->deskripsi }}</option>
                                             @endforeach
                                         </select>
-            
                                     </div>
             
                                       
@@ -268,9 +276,9 @@
                                   
                                 <hr>
                                 <label for="catatan" class="col-form-label">Upload Bukti Pembayaran Anda (Struk/Screenshot Bukti Pembayaran)</label>
-                                <input class="form-control" type="file" name="bukti_bayar" set="preview" to="#buktibayar{{ $item->id }}">
+                                <input class="form-control" type="file" name="bukti_bayar" set="preview" to="#buktibayar{{ $mobil->id }}">
                                 <div class="container-fluid mt-3 text-center">
-                                    <img alt="Bukti Bayar" src="{{ asset('assets/img/cars/NoImageA.png') }}" id="buktibayar{{ $item->id }}" class="img-fluid img-thumbnail">
+                                    <img alt="Bukti Bayar" src="{{ asset('assets/img/cars/NoImageA.png') }}" id="buktibayar{{ $mobil->id }}" class="img-fluid img-thumbnail">
                                 </div>
                                   
                                 
@@ -303,7 +311,7 @@
     @endphp
 
 
-    <div class="modal fade" id="modal{{ $item->id }}" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal fade" id="modal{{ $mobil->id }}" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
           <div class="modal-content">
             <div class="modal-header">
@@ -318,26 +326,26 @@
 
                     <a class="row px-4" href="#">
                         <figure class="figure mx-auto mt-3">
-                            <img src="{{ asset('assets/img/cars/' . $item->gambar) }}" class=" w-100 figure-img img-fluid rounded" alt="A generic square placeholder image with rounded corners in a figure.">
+                            <img src="{{ asset('assets/img/cars/' . $mobil->gambar) }}" class=" w-100 figure-img img-fluid rounded" alt="Gambar Mobil">
                         </figure>
                     </a>
         
                     <div class="row pl-0">
-                        <span class="font-size-3 font-poppins-400 ml-3">{{ $item->nama }}</span>
+                        <span class="font-size-3 font-poppins-400 ml-3">{{ $mobil->nama }}</span>
                     </div>
                     <div class="container pl-4 mt-4 pb-4">
                         <div class="row mb-0">
                             <div class="col-auto">
                                 <i class="fas fa-user font-size-2 pr-3"></i>
-                                {{ $item->jumlah_kursi }}
+                                {{ $mobil->jumlah_kursi }}
                             </div>
                             <div class="col-auto">
                                 <i class="fas fa-suitcase font-size-2 pr-3"></i>
-                                {{ $item->kapasitas_koper }}
+                                {{ $mobil->kapasitas_koper }}
                             </div>
                             <div class="col-auto">
                                 <i class="fas fa-car font-size-2 pr-3"></i>
-                                <span class="font-poppins-400 text-muted">{{ $item->tahun }} atau setelahnya</span>
+                                <span class="font-poppins-400 text-muted">{{ $mobil->tahun }} atau setelahnya</span>
                             </div>
         
                         </div>
@@ -352,7 +360,7 @@
                         @foreach ($getData as $k => $v)
                         <input type="hidden" name="{{ $k }}" value="{{ $v }}">
                         @endforeach
-                        <input type="hidden" name="d_mobil_id" value="{{ $item->id }}">
+                        <input type="hidden" name="d_mobil_id" value="{{ $mobil->id }}">
 
                         <div class="card text-left">
             
@@ -373,7 +381,7 @@
                                                     <p>Harga sewa / Hari</p>
                                                 </div>
                                                 <div class="col">
-                                                    <p>Rp. {{ placeRp($item->harga) }}  </p>
+                                                    <p>Rp.{{ placeRp($mobil->harga) }}  </p>
                                                 </div>
                                             </div>
             
@@ -382,7 +390,7 @@
                                                     <p>Total Harga sewa ({{ $durasi = $tanggal_pengembalian->diff($tanggal_pengambilan)->d }}  Hari)</p>
                                                 </div>
                                                 <div class="col">
-                                                    <p>Rp  {{ placeRp($total = $durasi * $item->harga) }}</p>
+                                                    <p>Rp  {{ placeRp($total = $durasi * $mobil->harga) }}</p>
                                                 </div>
                                             </div>
                                               
@@ -403,7 +411,7 @@
             
                                     <div class="form-group">
                                         <label for="nama" class="col-form-label">Nama Lengkap:</label>
-                                        <input class="form-control" name="nama" value="{{ old('nama') }}">
+                                        <input class="form-control" name="penyewa" value="{{ old('penyewa') }}">
 
                                         <div class="invalid-feedback">
                                               
@@ -431,7 +439,8 @@
 
                                     <div class="form-group">
                                         <label for="alamat_temu" class="col-form-label">Alamat Serah Terima Mobil:</label>
-                                        <textarea class="form-control" name="alamat_temu">{{ old('alamat_temu') }}</textarea>
+                                        <textarea disabled class="form-control" name="alamat_temu">Jl. Jagir Sidoresmo VI/66</textarea>
+                                        <small>Alamat Serah Terima Hanya Bisa Berada di alamat Rental Mobil</small>
                                         <div class="invalid-feedback">
                                               
                                         </div>
@@ -447,7 +456,7 @@
                                                     <p>Harga sewa / Hari</p>
                                                 </div>
                                                 <div class="col">
-                                                    <p>Rp. {{ placeRp($item->harga) }}  </p>
+                                                    <p>Rp.{{ placeRp($mobil->harga) }}  </p>
                                                 </div>
                                             </div>
             
@@ -456,7 +465,7 @@
                                                     <p>Total Harga sewa ({{ $durasi = $tanggal_pengembalian->diff($tanggal_pengambilan)->d; }}  Hari)</p>
                                                 </div>
                                                 <div class="col">
-                                                    <p>Rp  {{ placeRp($total = $durasi * $item->harga) }}</p>
+                                                    <p>Rp  {{ placeRp($total = $durasi * $mobil->harga) }}</p>
                                                 </div>
                                             </div>
                                               
@@ -478,13 +487,12 @@
                                     
             
                                     <div class="form-group">
-                                        <label for="tipe_bayar">Lakukan Pembayaran Pada Salah Satu No.rekening dibawah:</label>
-                                        <select class="form-control" name="tipe_bayar" >
+                                        <label for="tipe_bayar">Lakukan Pembayaran Pada Salah Satu Cara pembayaran dibawah ini:</label>
+                                        <select class="form-control" name="tipe_bayar">
                                             @foreach ($tipe_bayar as $tipe)
-                                            <option value="{{ $tipe->nama }}">{{ $tipe->deskripsi }}</option>
+                                            <option value="{{ $tipe->id }}">{{ $tipe->deskripsi }}</option>
                                             @endforeach
                                         </select>
-            
                                     </div>
             
                                       
@@ -493,9 +501,9 @@
                                   
                                 <hr>
                                 <label for="catatan" class="col-form-label">Upload Bukti Pembayaran Anda (Struk/Screenshot Bukti Pembayaran)</label>
-                                <input class="form-control" type="file" name="bukti_bayar" set="preview" to="#buktibayar{{ $item->id }}">
+                                <input class="form-control" type="file" name="bukti_bayar" set="preview" to="#buktibayar{{ $mobil->id }}">
                                 <div class="container-fluid mt-3 text-center">
-                                    <img alt="Bukti Bayar" src="{{ asset('assets/img/cars/NoImageA.png') }}" id="buktibayar{{ $item->id }}" class="img-fluid img-thumbnail">
+                                    <img alt="Bukti Bayar" src="{{ asset('assets/img/cars/NoImageA.png') }}" id="buktibayar{{ $mobil->id }}" class="img-fluid img-thumbnail">
                                 </div>
                                   
                                 

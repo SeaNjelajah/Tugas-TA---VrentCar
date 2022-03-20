@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Laravel\Scout\Searchable;
 
 class tbl_mobil extends Model
 {
-    use HasFactory;
+    use HasFactory, Searchable;
 
     protected $table = 'tbl_mobil';
     protected $guarded = ['id', 'created_at', 'updated_at'];

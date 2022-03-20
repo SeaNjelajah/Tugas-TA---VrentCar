@@ -16,7 +16,6 @@
                 </div>
                 <div class="col-lg-6 col-5 text-right">
                     <a href="#" id="tambahPm" class="btn btn-sm btn-neutral" data-toggle="modal" data-target="#tambahPesanan">New</a>
-                    <a href="#" class="btn btn-sm btn-neutral">Filters</a>
                 </div>
             </div>
 

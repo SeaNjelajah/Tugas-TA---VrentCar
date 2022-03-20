@@ -20,6 +20,14 @@
           </button>
         </form> --}}
 
+        
+        <div class="text-left">
+          
+          @yield('breadcrumb')
+          
+        </div>
+        
+
         <!-- Navbar links -->
         <ul class="navbar-nav align-items-center  ml-md-auto ">
 

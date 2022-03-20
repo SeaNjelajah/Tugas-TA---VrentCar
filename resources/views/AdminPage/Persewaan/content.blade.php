@@ -2,33 +2,69 @@
     <!-- /.TabBar -->
     <div class="card text-center">
         <div class="card-header">
+
             <ul class="nav nav-tabs card-header-tabs">
                 <li class="nav-item mx-auto">
                     <a class="nav-link {{ (empty(Request::get('v'))) ? 'active' : '' }}" href="{{ Route('admin.Persewaan.show') }}">Semua Pesanan</a>
                 </li>
                 <li class="nav-item mx-auto">
-                    <a class="nav-link {{ (!empty(Request::get('v')) and Request::get('v') == 'Baru') ? 'active' : '' }}" href="{{ Route('admin.Persewaan.show', ['v' => 'Baru']) }}">Pesanan Baru</a>
+                    <a class="nav-link {{ (Request::get('v') == 'Baru') ? 'active' : '' }}" href="{{ Route('admin.Persewaan.show', ['v' => 'Baru']) }}">Pesanan Baru</a>
                 </li>
                 <li class="nav-item mx-auto">
-                    <a class="nav-link {{ (!empty(Request::get('v')) and Request::get('v') == 'DalamPersewaan') ? 'active' : '' }}" href="{{ Route('admin.Persewaan.show', ['v' => 'DalamPersewaan']) }}">Dalam Persewaan</a>
+                    <a class="nav-link {{ (Request::get('v') == 'DalamPersewaan') ? 'active' : '' }}" href="{{ Route('admin.Persewaan.show', ['v' => 'DalamPersewaan']) }}">Dalam Persewaan</a>
                 </li>
                 <li class="nav-item mx-auto">
-                    <a class="nav-link {{ (!empty(Request::get('v')) and Request::get('v') == 'Selesai') ? 'active' : '' }}" href="{{ Route('admin.Persewaan.show', ['v' => 'Selesai']) }}">Pesanan Selesai</a>
+                    <a class="nav-link {{ (Request::get('v') == 'Selesai') ? 'active' : '' }}" href="{{ Route('admin.Persewaan.show', ['v' => 'Selesai']) }}">Pesanan Selesai</a>
                 </li>
                 <li class="nav-item mx-auto">
-                    <a class="nav-link {{ (!empty(Request::get('v')) and Request::get('v') == 'Dibatalkan') ? 'active' : '' }}" href="{{ Route('admin.Persewaan.show', ['v' => 'Dibatalkan']) }}">Pesanan Dibatalkan</a>
+                    <a class="nav-link {{ (Request::get('v') == 'Dibatalkan') ? 'active' : '' }}" href="{{ Route('admin.Persewaan.show', ['v' => 'Dibatalkan']) }}">Pesanan Dibatalkan</a>
                 </li>
             </ul>
         </div>
-        <form class="row mt-3 mb-3 px-4">
-            <div class="mb-2 col-lg mx-md-auto col-md-12 d-inline-flex">
-                <input class="form-control" type="text" placeholder="Search">
+        <form class="row mt-3 mb-3 px-4" method="GET">
+            <div class="col-lg mx-md-auto col-md-12 d-inline-flex">
+                <input class="form-control" name="search" type="text" placeholder="{{ ($r = Request::get('search')) ? $r : "Search" }}" placeholder="">
+            </div>
+
+            <div class="cpl-auto mr-auto">
                 <input type="submit" class="btn btn-primary ml-2" value="Search">
             </div>
-            <div class="col-lg-7 mx-md-auto col-md-12 d-flex">
-                <input daterange="date" set-date-min="now" date-range-target="#end_date_filter" id="start_date_filter" min="{{ Carbon\Carbon::now()->toDateString() }}" class="form-control" type="date" placeholder="Date">
-                <span class="text-muted my-auto mx-3">to</span>
-                <input id="end_date_filter" class="form-control" type="date" placeholder="Date" disabled>
+
+            <div class="col-lg-7 col-md-12 p-0 m-0">
+
+                <div class="input-daterange datepicker row m-0 p-0">
+
+                    <div class="col-auto ml-auto">
+
+                        <div class="form-group">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="ni ni-calendar-grid-58"></i></span>
+                                </div>
+                                <input class="form-control" name="mulai_sewa" placeholder="Tanggal Mulai Sewa" type="text" placeholder="{{ Request::get('akhir_sewa'); }}">
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="col-auto">
+
+                        <div class="form-group">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="ni ni-calendar-grid-58"></i></span>
+                                </div>
+                                <input class="form-control" name="akhir_sewa" placeholder="Tanggal Akhir Sewa" type="text" placeholder="{{ Request::get('mulai_sewa'); }}">
+                            </div>
+                        </div>
+
+                    </div>
+
+
+
+
+                </div>
+
             </div>
             <button type="submit" class="mt-2 mt-lg-0 mx-auto col-11 col-md-11 col-lg-1 w-25 ml-2 btn btn-outline-primary form-control">Go</button>
         </form>
@@ -205,7 +241,7 @@
                                 <td class="d-flex">
                                     <h3 class="col-3 text-left">Tanggal Mulai Sewa</h3>
                                     <h3 class="col-1"> : </h3>
-                                    <h3 class="col-8 ">{{ $item->tgl_mulai_sewa }}</h3>
+                                    <h3 class="col-8 ">{{ ConvertDateToTextDateToIndonesia ($item->tgl_mulai_sewa) }}</h3>
                                 </td>
                             </tr>
 
@@ -213,7 +249,7 @@
                                 <td class="d-flex">
                                     <h3 class="col-3 text-left">Tanggal Akhir Sewa</h3>
                                     <h3 class="col-1"> : </h3>
-                                    <h3 class="col-8 ">{{ $item->tgl_akhir_sewa }}</h3>
+                                    <h3 class="col-8 ">{{ ConvertDateToTextDateToIndonesia ($item->tgl_akhir_sewa) }}</h3>
                                 </td>
                             </tr>
 
@@ -380,7 +416,7 @@
 
                                     <tr>
                                         <td>{{ ++$counter }}</td>
-                                        <td>{{ $status_order_item->created_at }}</td>
+                                        <td>{{ ConvertDateToTextDateToIndonesia ($status_order_item->created_at) }}</td>
                                         <td>{{ $status_order_item->status }}</td>
                                     </tr>
                                     @endforeach
@@ -667,7 +703,7 @@
                                     @foreach ($DataDenda as $denda)
                                     <tr>
                                         <td>{{ ++$counter }}</td>
-                                        <td>{{ $denda->created_at }}</td>
+                                        <td>{{ ConvertDateToTextDateToIndonesia ($denda->created_at) }}</td>
                                         <td>Rp {{ placeRp($denda->denda) }}</td>
                                         <td>{{ $denda->deskripsi }}</td>
                                     </tr>

@@ -20,7 +20,7 @@
           
           <div class="col-lg-6 col-5 text-right">
             <a id="createSupirbtn" class="btn btn-sm btn-neutral text-primary" data-toggle="modal" data-target="#createSupir">New</a>
-            <a href="#" class="btn btn-sm btn-neutral">Filters</a>
+
             
             <!-- Modal -->
             <form action="{{ route('admin.AccountManage.create') }} " method="POST" enctype="multipart/form-data">

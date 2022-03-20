@@ -20,7 +20,7 @@
               </div>
           </div>
           
-          <div class="col-11 text-center">
+          <div class="col-11 text-center text-dark">
 
               <div class="row d-lg-inline-block d-block mx-auto float-md-left">
                   Siap Diproses / {{ $item->tgl_mulai_sewa }} 

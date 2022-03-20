@@ -22,11 +22,11 @@ $supir = $item->supir()->first();
             <div class="col-11 text-center">
 
                 <div class="row d-block mx-auto my-1">
-                    Dibatalkan | {{ $status_order_last->created_at }}
+                    Dibatalkan | {{ ConvertDateToTextDateToIndonesia ($status_order_last->created_at) }}
                 </div>
 
                 <div class="row d-block mx-auto mb-1">
-                    Mulai Sewa | {{ $item->tgl_mulai_sewa }} --- Akhir Sewa | {{ $item->tgl_akhir_sewa }} || {{ $item->durasi_sewa }} Hari Sewa
+                    Mulai Sewa | {{ ConvertDateToTextDateToIndonesia ($item->tgl_mulai_sewa) }} --- Akhir Sewa | {{ ConvertDateToTextDateToIndonesia ($item->tgl_akhir_sewa) }} || {{ $item->durasi_sewa }} Hari Sewa
                 </div>
 
             </div>

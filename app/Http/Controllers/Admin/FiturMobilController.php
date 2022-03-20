@@ -25,8 +25,6 @@ class FiturMobilController extends Controller
             $jenis_mobils = tbl_jenis_mobil::all();
         }
 
-
-
         if (!empty($r->search_jenis_transmisi)) {
             $jenis_transmisis = tbl_transmisi::where('nama_transmisi', 'like', '%'.$r->search_jenis_transmisi.'%')->get();
         } else {
@@ -38,9 +36,6 @@ class FiturMobilController extends Controller
         } else {
             $features = tbl_feature::all();
         }
-
-
-
 
         return view('AdminPage.FiturMobil.main', compact('mereks', 'jenis_mobils', 'jenis_transmisis', 'features'));
     }

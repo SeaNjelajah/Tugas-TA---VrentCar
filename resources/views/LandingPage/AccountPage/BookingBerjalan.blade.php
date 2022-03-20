@@ -44,10 +44,9 @@
                     <span class="w-100 px-auto">Baru</span>
                     <hr class="pl-3 mt-n1">
                     @php
-                    $order = Auth::user()->order();
+                    $user = Auth::user();
                     @endphp
-
-                    @foreach ($order->where('status', 'Baru')->get() as $order)
+                    @foreach ($user->order()->where('status', 'Baru')->get() as $order)
 
                     @php
                     $mobil = $order->mobil()->first();
@@ -98,7 +97,7 @@
                                 </div>
 
                                 <div class="row justify-content-between mt-4 pl-3">
-                                    <p class="text-muted">{{ $order->tgl_mulai_sewa }} - {{ $order->tgl_akhir_sewa }}</p>
+                                    <p class="text-muted">{{ ConvertDateToTextDateToIndonesia ($order->tgl_mulai_sewa) }} - {{ ConvertDateToTextDateToIndonesia ($order->tgl_akhir_sewa) }}</p>
                                     <form action="{{ route('user.RingkasanOrder') }}" method="POST">
                                         @csrf
                                         <input type="hidden" name="id" value="{{ $order->id }}">
@@ -121,8 +120,8 @@
                     <span class="w-100 px-auto text-lg">Berjalan</span>
                     <hr class="pl-3 mt-n1">
                     
-
-                    @foreach ($order->where('status', 'Dalam Persewaan')->get() as $order)
+                    
+                    @foreach ($user->order()->where('status', 'Dalam Persewaan')->get() as $order)
 
                     @php
                     $mobil = $order->mobil()->first();
@@ -160,7 +159,7 @@
                                 </div>
 
                                 <div class="row justify-content-between mt-4 pl-3">
-                                    <p class="text-muted">{{ $order->tgl_mulai_sewa }} - {{ $order->tgl_akhir_sewa }}</p>
+                                    <p class="text-muted">{{ ConvertDateToTextDateToIndonesia ($order->tgl_mulai_sewa) }} - {{ ConvertDateToTextDateToIndonesia ($order->tgl_akhir_sewa) }}</p>
                                     <form action="{{ route('user.RingkasanOrder') }}" method="POST">
                                         @csrf
                                         <input type="hidden" name="id" value="{{ $order->id }}">

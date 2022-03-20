@@ -23,7 +23,7 @@ $supir = $item->supir()->first();
                 <tbody>
                     <tr class="bg-secondary">
                         <td class="text-md">{{ $status_order_last->status }}</td>
-                        <td class="text-md">{{ $status_order_last->created_at }}</td>
+                        <td class="text-md">{{ ConvertDateToTextDateToIndonesia ($status_order_last->created_at) }}</td>
                     </tr>
                 </tbody>
             </table>

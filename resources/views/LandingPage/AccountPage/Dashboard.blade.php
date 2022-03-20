@@ -45,17 +45,20 @@
                     <div class="card">
                         <div class="row">
 
-                            <div class="col-3">
-                                <img class="avatar position-absolute w-100 h-75 align-self-center" src="{{ asset('images/car-1.jpg') }}" style="transform: translate(23px, 31px);width: 120%!important;" alt="User Picture">
-                            </div>
                             @php
                             $user = Auth::user();
                             $order = $user->order();
                             $order_count_of_selesai = $order->where('status', 'Selesai')->count();
                             $order_count_of_dibatalkan = $order->where('status', 'Dibatalkan')->count();
+                            $member = $user->member()->first();
                             @endphp
 
-                            <div class="col">
+                            <div class="col-4 d-flex">
+                                <img class="avatar w-100 h-100 align-self-center" src="{{ asset('assets/img/users/' . ((!empty($user->foto_profil)) ? $user->foto_profil : 'NoUserPic.png')) }}" alt="User Picture">
+                            </div>
+
+
+                            <div class="col-8">
                                 <div class="row">
                                     <div class="col">
                                         <div class="card-profile-stats d-flex justify-content-center">
@@ -86,15 +89,16 @@
 
                     </div>
 
-                    <form>
+                    <form method="POST" enctype="multipart/form-data" action="{{ route('user.update') }}">
                         <div class="card mt-2">
+                            @csrf
                             <div class="card-header">
                                 <div class="row align-items-center">
                                     <div class="col-8">
                                         <h3 class="mb-0">Edit profile </h3>
                                     </div>
                                     <div class="col-4 text-right">
-                                        <a href="#!" type="submit" class="btn btn-sm btn-primary">Save</a>
+                                        <button type="submit" class="btn btn-sm btn-primary">Save</button>
                                     </div>
                                 </div>
                             </div>
@@ -102,28 +106,67 @@
 
                                 <h6 class="heading-small text-muted mb-4">User information</h6>
                                 <div class="pl-lg-4">
+
+                                    @if (session()->get('success'))
+                                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                        {{ session()->get('success') }}
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    @endif
+
+                                    @if (session()->get('Password_Error'))
+                                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                        {{ session()->get('Password_Error') }}
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    @endif
+
                                     <div class="row">
-                                        <div class="col-lg-6">
+                                        <div class="col-6 text-center">
                                             <div class="form-group">
-                                                <label class="form-control-label" for="username">Username</label>
-                                                <input type="text" id="username" class="form-control" placeholder="Username" value="{{ $user->username }}">
+                                                <label for="foto_profil">Foto Profil</label>
+                                                <figure class="figure text-center">
+                                                    <img id="PreviewMember{{ $user->id }}" src="{{ asset('assets/img/users/' . ((!empty($user->foto_profil)) ? $user->foto_profil : 'NoUserPic.png')) }}" class="figure-img img-fluid rounded border" alt="Foto Profil">
+                                                    <input class="form-control" name="foto_profil" type="file" set="preview" to="#PreviewMember{{ $user->id }}">
+                                                </figure>
                                             </div>
                                         </div>
                                         <div class="col-lg-6">
                                             <div class="form-group">
-                                                <label class="form-control-label" for="email">Email</label>
-                                                <input type="email" id="email" class="form-control" placeholder="email@example.com" value="{{ $user->email }}">
+                                                <label class="form-control-label" for="username">Username</label>
+                                                <input type="text" name="username" id="username" class="form-control" placeholder="Username" value="{{ $user->username }}">
                                             </div>
+
+                                            <div class="form-group">
+                                                <label class="form-control-label" for="email">Email</label>
+                                                <input type="email" name="email" id="email" class="form-control" placeholder="email@example.com" value="{{ $user->email }}">
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="form-control-label" for="nama_lengkap">Nama Lengkap</label>
+                                                <input value="{{ $member->nama_lengkap }}" name="nama_lengkap" type="text" id="nama_lengkap" class="form-control" placeholder="Nama Lengkap">
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="form-control-label" for="password_lama">Password Lama</label>
+                                                <input name="password_lama" type="password" id="password" class="form-control" placeholder="Isi Password Lama untuk merubah Password">
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="form-control-label" for="password_baru">Password Baru</label>
+                                                <input name="password_baru" type="password" id="password" class="form-control" placeholder="Isi Password Baru untuk merubah Password">
+                                            </div>
+
+
                                         </div>
                                     </div>
                                     <div class="row">
 
-                                        <div class="col">
-                                            <div class="form-group">
-                                                <label class="form-control-label" for="nama_lengkap">Nama Lengkap</label>
-                                                <input name="nama_lengkap" type="text" id="nama_lengkap" class="form-control" placeholder="Nama Lengkap">
-                                            </div>
-                                        </div>
+
 
                                     </div>
                                 </div>
@@ -136,7 +179,7 @@
                                         <div class="col-md-12">
                                             <div class="form-group">
                                                 <label class="form-control-label" for="alamat_rumah">Alamat Rumah</label>
-                                                <input name="alamat_rumah" id="alamat_rumah" class="form-control" placeholder="Alamat Rumah" type="text">
+                                                <input value="{{ $member->alamat_rumah }}" name="alamat_rumah" id="alamat_rumah" class="form-control" placeholder="Alamat Rumah" type="text">
                                             </div>
                                         </div>
                                     </div>
