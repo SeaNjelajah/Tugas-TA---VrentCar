@@ -186,7 +186,6 @@
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="form-group">
-                                                <label class="form-control-label" for="alamat_rumah">Alamat Rumah</label>
                                                 
                                                 @if ($member)
                                                     @if (!empty($member->nama_lengkap))
@@ -197,7 +196,7 @@
                                                 @else
                                                 <input  name="alamat_rumah" id="alamat_rumah" class="form-control" placeholder="Alamat Rumah" type="text">
                                                 @endif
-                                                
+
                                             </div>
                                         </div>
                                     </div>
