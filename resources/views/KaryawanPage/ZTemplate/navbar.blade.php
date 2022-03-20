@@ -6,7 +6,7 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
 
         <!-- Search form -->
-        <form class="navbar-search navbar-search-light form-inline mr-sm-3" id="navbar-search-main">
+        {{-- <form class="navbar-search navbar-search-light form-inline mr-sm-3" id="navbar-search-main">
           <div class="form-group mb-0">
             <div class="input-group input-group-alternative input-group-merge">
               <div class="input-group-prepend">
@@ -18,10 +18,18 @@
           <button type="button" class="close" data-action="search-close" data-target="#navbar-search-main" aria-label="Close">
             <span aria-hidden="true">×</span>
           </button>
-        </form>
+        </form> --}}
+
+        
+        <div class="text-left">
+          
+          @yield('breadcrumb')
+          
+        </div>
+        
 
         <!-- Navbar links -->
-        <ul class="navbar-nav align-items-center  ml-md-auto ">
+        {{-- <ul class="navbar-nav align-items-center  ml-md-auto ">
 
           <li class="nav-item d-xl-none">
             <!-- Sidenav toggler -->
@@ -198,8 +206,9 @@
               </div>
             </div>
           </li>
-        </ul>
-        <ul class="navbar-nav align-items-center  ml-auto ml-md-0 ">
+        </ul> --}}
+        
+        <ul class="navbar-nav align-items-center ml-auto ">
           <li class="nav-item dropdown">
             <a class="nav-link pr-0" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               <div class="media align-items-center">
@@ -212,7 +221,7 @@
               </div>
             </a>
             <div class="dropdown-menu  dropdown-menu-right ">
-              <div class="dropdown-header noti-title">
+              {{-- <div class="dropdown-header noti-title">
                 <h6 class="text-overflow m-0">Welcome!</h6>
               </div>
               <a href="#!" class="dropdown-item">
@@ -231,7 +240,7 @@
                 <i class="ni ni-support-16"></i>
                 <span>Support</span>
               </a>
-              <div class="dropdown-divider"></div>
+              <div class="dropdown-divider"></div> --}}
               <a href="{{ route('Logout') }}" class="dropdown-item">
                 <i class="ni ni-user-run"></i>
                 <span>Logout</span>

@@ -21,15 +21,132 @@
     $tipe_sewa = $mobil->tipe_sewa()->first()->tipe_sewa;
     $jenis_mobil = $mobil->jenis_mobil()->first()->jenis_mobil;
     $transmisi = $mobil->transmisi()->first()->nama_transmisi;
-
+    $status_order = $order->status;
     @endphp
 
     <div class="container my-5">
 
-        @if ($order->status == "Dalam Persewaan" || $order->status == "Selesai")
+        @if ($status_order == "Dalam Persewaan" )
         <div class="alert alert-success">
-            Pesanan anda telah sepenuhnya diterima <i class="float-right fas fa-check"></i>
+            Pesanan anda telah sepenuhnya diterima  <i class="float-right fas fa-check"></i>
         </div>
+        @elseif ($status_order == "Selesai")
+        <div class="alert alert-success">
+            Pesanan ini telah Selesai Terima Kasih. 😊 telah menggunakan layanan kami <i class="float-right fas fa-check"></i>
+        </div>
+        @elseif ($status_order == "Dibatalkan")
+        <div class="alert alert-success">
+            Pesanan ini telah Dibatalan kerena alasan tertentu. 😔 Mohon Maaf Kerena Ketidaknyaman nya <i class="float-right fas fa-circle-xmark"></i>
+        </div>
+        @endif
+
+        @if ($tipe_sewa == "Dengan Supir")
+        @php
+            $supir = $order->supir()->first();   
+        @endphp
+
+
+
+        <div class="alert alert-info">
+            Informasi tentang Driver yang melayani anda <i class="float-right fas fa-info"></i>
+        </div>
+
+        <div class="card mb-5">
+            
+
+            <div class="card-body">
+                
+
+
+                <div class="row px-4">
+
+                    <div class="col-12 col-lg-6 text-black">
+
+                        <figure class="figure mx-auto mt-3">
+                            @if ($supir->foto_diri)
+                            <img src="{{ asset('assets/img/foto-diri/' . $supir->foto_diri) }}" class=" w-100 figure-img img-fluid rounded" alt="Driver Picture">
+                            @else
+                            <img src="{{ asset('assets/img/foto-diri/NoUserPic.png') }}" class=" w-100 figure-img img-fluid rounded" alt="Driver Picture">
+                            @endif
+                        </figure>
+
+                        <div class="row">
+                            @if ($supir->nama_lengkap)
+                            <span class="font-size-3 font-poppins-400 ml-3 fs-25">{{ $supir->nama_lengkap }}</span>
+                            @else
+                            <span class="font-size-3 font-poppins-400 ml-3 fs-25">Mohon Maaf Nama Lengkap belum di isi</span>
+                            @endif
+                        </div>
+
+                    </div>
+
+                    
+                    <div class="col-12 col-lg-6">
+                        
+                        <div class="border w-100 p-4 rounded mb-2 d-flex mt-3">
+                            <div class="icon mr-3" style="color: blue;">
+                                <span class="icon-map-o"></span>
+                            </div>
+
+                            <p class="text-dark">
+                                @if ($supir->umur)
+                                <span>Umur:</span><br>
+                                {{ $supir->umur }}
+                                @else
+                                <span>Umur:</span><br>
+                                Mohon Maaf Umur Supir Belum terdaftar
+                                @endif
+                            
+                            </p>
+
+                        </div>
+
+                        <div class="border w-100 p-4 rounded mb-2 d-flex">
+                            <div class="icon mr-3" style="color: blue;">
+                                <span class="fs-25 icon-mobile-phone"></span>
+                            </div>
+
+                            <p class="text-dark">
+                                @if ($supir->no_tlp)
+                                <span>Nomor Telepon:</span><br>
+                                {{ $supir->no_tlp }}
+                                @else
+                                <span>Nomor Telepon:</span><br>
+                                Mohon Maaf Nomor Telepon Supir Belum terdaftar
+                                @endif
+                            
+                            </p>
+                            
+                        </div>
+
+                        <div class="border w-100 p-4 rounded mb-2 d-flex">
+                            <div class="icon mr-3" style="color: blue;">
+                                <span class="icon-map-o"></span>
+                            </div>
+
+                            <p class="text-dark">
+                                @if ($supir->alamat_rumah)
+                                <span>Alamat Rumah:</span><br>
+                                {{ $supir->alamat_rumah }}
+                                @else
+                                <span>Alamat Rumah:</span><br>
+                                Mohon Maaf Alamat Rumah Supir Belum terdaftar
+                                @endif
+                            
+                            </p>
+
+                        
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
         @endif
 
         <div class="card">
@@ -494,9 +611,17 @@
 
         </div>
 
-        @if ($order->status == "Dalam Persewaan" || $order->status == "Selesai")
-        <div class="alert alert-success mt-3">
-            Pesanan anda telah sepenuhnya diterima <i class="float-right fas fa-check"></i>
+        @if ($status_order == "Dalam Persewaan" )
+        <div class="alert alert-success">
+            Pesanan anda telah sepenuhnya diterima  <i class="float-right fas fa-check"></i>
+        </div>
+        @elseif ($status_order == "Selesai")
+        <div class="alert alert-success">
+            Pesanan ini telah Selesai Terima Kasih. 😊 telah menggunakan layanan kami <i class="float-right fas fa-check"></i>
+        </div>
+        @elseif ($status_order == "Dibatalkan")
+        <div class="alert alert-success">
+            Pesanan ini telah Dibatalan kerena alasan tertentu. 😔 Mohon Maaf Kerena Ketidaknyaman nya <i class="float-right fas fa-circle-xmark"></i>
         </div>
         @endif
 

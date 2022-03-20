@@ -142,6 +142,7 @@ Route::prefix('Karyawan')->name('karyawan.')->middleware('Karyawan')->group( fun
   Route::prefix('Dashboard')->name('dashboard.')->group( function () {
     Route::get('/', [Karyawan::class, 'index'])->name('show');
     Route::post('/Update/StatusOrder', [Karyawan::class, 'update_status_order'])->name('update.status.order');
+    Route::post('/Update/Member', [Karyawan::class, 'Update_Karyawan'])->name('update.karyawan');
   });
 
 });

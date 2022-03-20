@@ -42,7 +42,7 @@
                         <div class="img rounded" style="background-image: url({{ asset('assets/img/cars/' . $mobil->gambar) }});">
                         </div>
                         <div class="text text-center">
-                            {{-- @if(!empty($tag_decode['Merek'])) <span class="subheading">{{ $tag_decode['Merek'] }}</span>@endif --}}
+                            <span class="subheading">{{ $mobil->merek()->first()->merek }}</span>
                             <h2>{{ $mobil->nama }}</h2>
                         </div>
                     </div>
@@ -323,39 +323,41 @@
                 </div>
             </div>
             <div class="row">
+
+                @foreach ($relateds as $related)
+                @if ($related->id == $mobil->id)
+                    @continue
+                @endif
                 <div class="col-md-4">
                     <div class="car-wrap rounded ftco-animate">
                         <div class="img rounded d-flex align-items-end"
-                            style="background-image: url(images/car-1.jpg);">
+                            style="background-image: url({{ asset('assets/img/cars/' . $related->gambar) }});">
                         </div>
                         <div class="text">
-                            <h2 class="mb-0"><a href="car-single.html">{{ $mobil->nama }}</a></h2>
+                            <h2 class="mb-0">{{ $related->nama }}</a></h2>
                             <div class="d-flex mb-3">
                                 <span class="cat"></span>
-                                <p class="price ml-auto">$500 <span>/day</span></p>
+                                <p class="price ml-auto">Rp.{{ placeRp($related->harga) }} <span>/day</span></p>
                             </div>
-                            <p class="d-flex mb-0 d-block"><a href="#" class="btn btn-primary py-2 mr-1">Book now</a> <a
-                                    href="car-single.html" class="btn btn-secondary py-2 ml-1">Details</a></p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="car-wrap rounded ftco-animate">
-                        <div class="img rounded d-flex align-items-end"
-                            style="background-image: url(images/car-2.jpg);">
-                        </div>
-                        <div class="text">
-                            <h2 class="mb-0"><a href="car-single.html">Range Rover</a></h2>
-                            <div class="d-flex mb-3">
-                                <span class="cat">Subaru</span>
-                                <p class="price ml-auto">$500 <span>/day</span></p>
-                            </div>
-                            <p class="d-flex mb-0 d-block"><a href="#" class="btn btn-primary py-2 mr-1">Book now</a> <a
-                                    href="car-single.html" class="btn btn-secondary py-2 ml-1">Details</a></p>
-                        </div>
-                    </div>
-                </div>
+
+                            <form class="d-flex mb-0 d-block" method="POST" action="{{ Route('CarSinglePage') }}">
+                                @csrf
+                                <input type="hidden" name="id" value="{{ $related->id }}">
                 
+                                <input type="submit" class="w-100 btn btn-secondary mb-2" value="Details">
+              
+                            </form>
+              
+                            <form class="d-flex mb-0 d-block" method="GET" action="{{ Route('FormOrder') }}">
+                                <input type="hidden" name="id" value="{{ $related->id }}">
+                                <input type="submit" class="btn btn-primary w-100" value="Book now">
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+                @endforeach
+
             </div>
         </div>
     </section>

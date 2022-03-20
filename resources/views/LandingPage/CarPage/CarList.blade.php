@@ -51,7 +51,7 @@
     						<h2 class="mb-0">{{ $item->nama }}</h2>
 
     						<div class="d-flex mb-3">
-	    						{{-- @if(!empty($tag_decode['Merek'])) <span class="cat">{{ $tag_decode['Merek'] }}</span> @endif --}}
+	    						<span class="cat">{{ $item->merek()->first()->merek }}</span>
 	    						<p class="price ml-auto">Rp. {{ placeRp ($item->harga) }} <span>/day</span></p>
     						</div>                
 

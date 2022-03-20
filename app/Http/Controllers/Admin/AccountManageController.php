@@ -105,7 +105,7 @@ class AccountManageController extends Controller
 
             $CurrentImage = (empty($user->karyawan()->first()->foto_diri)) ? 'NoImageA.png' :$user->karyawan()->first()->foto_diri;
             $Imagename = $this->SaveFile($r, 'foto_diri', 'assets/img/foto-diri/', $CurrentImage);
-            $this->DeleteFile($CurrentImage, 'assets/img/users/', 'NoImageA.png');
+            $this->DeleteFile($CurrentImage, 'assets/img/foto_diri/', 'NoImageA.png');
 
             $foto_diri = [
                 'foto_diri' => $Imagename
@@ -220,7 +220,7 @@ class AccountManageController extends Controller
 
             $CurrentImage = (empty($user->karyawan()->first()->foto_diri)) ? 'NoImageA.png' :$user->karyawan()->first()->foto_diri;
             $Imagename = $this->SaveFile($r, 'foto_diri', 'assets/img/foto-diri/', $CurrentImage);
-            $this->DeleteFile($CurrentImage, 'assets/img/users/', 'NoImageA.png');
+            $this->DeleteFile($CurrentImage, 'assets/img/foto-diri/', 'NoImageA.png');
 
             $foto_diri = [
                 'foto_diri' => $Imagename

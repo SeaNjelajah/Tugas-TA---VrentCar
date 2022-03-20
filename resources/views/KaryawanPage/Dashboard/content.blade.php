@@ -1,98 +1,102 @@
+
 @php
-$supir = Auth::user()->karyawan()->first();
+$supir = Auth::user()->karyawan()->first() or false;
+
 @endphp
 
-<div class="container-fluid mt-3">
+<div class="container-fluid mt--9">
+    <form action="{{ route('karyawan.dashboard.update.karyawan') }}" method="POST" enctype="multipart/form-data">
+        <div class="card pt-2 border border-dark mb-3">
 
-    <div class="card pt-2 border border-dark mb-3">
+            <div class="row d-block d-md-flex text-center">
 
-        <div class="row d-block d-md-flex text-center">
+                <div class="col-md-4 col p-0 m-0 px-4 pb-3 pt-2">
 
-            <div class="col-md-4 col p-0 m-0 px-4 pb-3 pt-2">
-                <img class="img-thumbnail mb-2 mt-2 mx-0 h-100" src="{{ asset('assets/img/foto-diri/' . $supir->foto_diri) }}" alt="Gambar Diri Supir">
-            </div>
+                    <label class="form-control-label d-block font-size-2" for="foto_diri">Foto Diri</label>
 
-            <div class="col col-md-8 text-left text-black font-weight-bolder pl-3 pl-md-0" style="font-family: Quicksand;">
-                <div class="container">
-                    <div class="row">
-                        <div class="card-title col display-4">IDENTITAS DRIVER</div>
-                    </div>
-                    <div class="row">
-                        <div class="col">
-                            <p class="font-size-2">Nama Lengkap</p>
-                        </div>
-                        <div class="col-auto">
-                            :
-                        </div>
-                        <div class="col">
-                            <p class="font-size-2">
-                                {{ (!empty($supir->nama_lengkap)) ? $supir->nama_lengkap : 'Belum Diisi' }}
-                            </p>
-                        </div>
-                    </div>
+                    @if ($supir->foto_diri)
+                    <img id="preview_karyawan" class="img-thumbnail mb-2 mt-2 mx-auto" src="{{ asset('assets/img/foto-diri/' . $supir->foto_diri) }}" alt="Gambar Diri Supir">
+                    @else
+                    <img id="preview_karyawan" class="img-thumbnail mb-2 mt-2 mx-auto" src="{{ asset('assets/img/foto-diri/NoUserPic.png') }}" alt="Gambar Diri Supir">
+                    @endif
 
-                    <div class="row">
-                        <div class="col">
-                            <p class="font-size-2">Umur</p>
-                        </div>
-                        <div class="col-auto">
-                            :
-                        </div>
-                        <div class="col">
-                            <p class="font-size-2">
-                                {{ (!empty($supir->umur)) ? $supir->umur : 'Belum Diisi' }}
-                            </p>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col">
-                            <p class="font-size-2">Alamat Rumah</p>
-                        </div>
-                        <div class="col-auto">
-                            :
-                        </div>
-                        <div class="col">
-                            <p class="font-size-2">
-                                {{ (!empty($supir->alamat_rumah)) ? $supir->alamat_rumah : 'Belum Diisi' }}
-                            </p>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col">
-                            <p class="font-size-2">No. Telepon</p>
-                        </div>
-                        <div class="col-auto">
-                            :
-                        </div>
-                        <div class="col">
-                            <p class="font-size-2">
-                                {{ (!empty($supir->no_tlp)) ? $supir->no_tlp : 'Belum Diisi' }}
-                            </p>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col">
-                            <p class="font-size-2">Status</p>
-                        </div>
-                        <div class="col-auto">
-                            :
-                        </div>
-                        <div class="col">
-                            <p class="font-size-2">
-                                {{ (!empty($supir->status)) ? $supir->status : 'Belum Diisi' }}
-                            </p>
-                        </div>
-                    </div>
+                    <input type="file" name="foto_diri" class="form-control mx-auto" set="preview" to="#preview_karyawan">
 
                 </div>
+
+                <div class="col col-md-8 text-left text-black font-weight-bolder pl-3 pl-md-0" style="font-family: Quicksand;">
+                    <div class="container">
+                        <div class="row">
+                            <div class="card-title col display-4">IDENTITAS DRIVER</div>
+
+                            <div class="col-auto">
+                                @csrf
+                                <button type="submit" class="btn btn-primary">Save</button>
+                            </div>
+                        </div>
+
+                        <div class="form-group pr-6">
+
+                            <label class="form-label" for="nama_lengkap">Nama Lengkap</label>
+                            @if ($supir->nama_lengkap)
+                                <input name="nama_lengkap" class="form-control" type="text" placeholder="Nama Lengkap" value="{{ $supir->nama_lengkap }}">
+                            @else
+                                <input name="nama_lengkap"  class="form-control" type="text" placeholder="Nama Lengkap Belum Di isi">
+                            @endif
+                            
+                        </div>
+
+                        <div class="form-group pr-6">
+
+                            <label class="form-label" for="umur">Umur</label>
+                            @if ($supir->umur)
+                                <input name="umur" class="form-control" type="number" placeholder="Umur" value="{{ $supir->umur }}">
+                            @else
+                                <input name="umur" class="form-control" type="number" placeholder="Umur Belum Di isi">
+                            @endif
+                            
+                        </div>
+
+                        <div class="form-group pr-6">
+
+                            <label class="form-label" for="alamat_rumah">Alamat Rumah</label>
+                            @if ($supir->alamat_rumah)
+                                <input name="alamat_rumah" class="form-control" type="text" placeholder="Alamat Rumah" value="{{ $supir->alamat_rumah }}">
+                            @else
+                                <input name="alamat_rumah" class="form-control" type="text" placeholder="Alamat Rumah Belum Di isi">
+                            @endif
+                            
+                        </div>
+
+                        <div class="form-group pr-6">
+
+                            <label class="form-label" for="no_tlp">Nomor Telepon</label>
+                            @if ($supir->no_tlp)
+                                <input name="no_tlp" class="form-control" type="number" placeholder="Nomor Telepon" value="{{ $supir->no_tlp }}">
+                            @else
+                                <input name="no_tlp" class="form-control" type="number" placeholder="Nomor Telepon Belum Di isi">
+                            @endif
+                            
+                        </div>
+
+                        <div class="row font-size-2 pl-3 mb-3">
+                            <div class="col-12 p-0 m-0">
+                                Status : {{ (!empty($supir->status)) ? $supir->status : 'Belum Diisi' }}
+                            </div>
+
+                            <div class="col-12 p-0 m-0 ml-auto">
+                                Catatan Isi Data ini akan ditampilkan pada Penyewa jadi, isi dengan benar
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+
             </div>
 
         </div>
-
-    </div>
+    </form>
 
     @php
     $order = Auth::user()->order()->where('status', 'Dalam Persewaan')->first() or false;

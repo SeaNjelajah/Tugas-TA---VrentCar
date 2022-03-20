@@ -42,7 +42,14 @@ class LandingPageController extends Controller {
 
     public function CarSingle(Request $r) {
         $mobil = mobil::find($r->id);
-        return view('LandingPage.CarPage.CarSingle', compact('mobil'));
+
+        $search = $mobil->merek()->first()->merek;
+
+        $relateds = mobil::whereHas('merek', function ($query) use ($search) {
+            $query->where('merek', 'like', "%$search%");
+        })->limit(9)->get();
+
+        return view('LandingPage.CarPage.CarSingle', compact('mobil', 'relateds'));
     }
 
 
