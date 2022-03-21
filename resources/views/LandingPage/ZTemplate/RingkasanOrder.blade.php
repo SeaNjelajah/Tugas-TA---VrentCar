@@ -42,11 +42,11 @@
 
         @if ($tipe_sewa == "Dengan Supir")
         @php
-            $supir = $order->supir()->first();   
+            $supir = $order->supir()->first() or false;   
         @endphp
 
 
-
+            @if ($supir)
         <div class="alert alert-info">
             Informasi tentang Driver yang melayani anda <i class="float-right fas fa-info"></i>
         </div>
@@ -147,6 +147,7 @@
 
         </div>
 
+            @endif
         @endif
 
         <div class="card">
