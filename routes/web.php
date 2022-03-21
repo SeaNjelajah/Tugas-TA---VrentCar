@@ -44,7 +44,7 @@ function placeRp ($num) {
 function ConvertDateToTextDateToIndonesia ($date) {
   $CarbonDate = Carbon::create($date)->format('l, j F Y H:i:s');
   $FindingWord = [
-    "/Sunday/", "/Monday/", "/Tuesday/",
+    "/Sunday/", "/Monday/", "/Tuesday/", "/Wednesday/",
     "/Thursday/", "/Friday/", "/Saturday/",
     "/January/", "/February/", "/March/",
     "/May/", "/June/", "/July/", "/August/",
@@ -53,7 +53,7 @@ function ConvertDateToTextDateToIndonesia ($date) {
 
   $ReplaceWith = [
     "Minggu", "Senin", "Selasa",
-    "Rabu", "Jum'at", "Sabtu",
+    "Rabu", "Kamis", "Jum'at", "Sabtu",
     "Januari", "Februari", "Maret",
     "Mei", "Juni", "Juli", "Agustus",
     "Oktober", "Desember"
