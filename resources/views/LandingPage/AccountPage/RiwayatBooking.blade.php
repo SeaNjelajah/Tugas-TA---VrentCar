@@ -50,9 +50,17 @@
                     @php
                     $mobil = $order->mobil()->first();
                     $transmisi = $mobil->transmisi()->first()->nama_transmisi;
+                    $merek = $mobil->merek()->first()->merek;
+                    $tipe_sewa = $mobil->tipe_sewa()->first()->tipe_sewa;
+
                     @endphp
 
                     <div class="card my-2">
+
+                        <div class="card-header text-center text-black">
+                            Pesanan InI Di Batalkan
+                        </div>
+                           
 
                         <div class="row">
                             <figure class="col-4">
@@ -60,8 +68,14 @@
                             </figure>
 
                             <div class="card-body col-8">
-                                <h5 class="card-title">{{ $mobil->nama }}<span class="float-right" style="color: #01d28e">Rp. {{ placeRp($mobil->harga) }} / Hari</span></h5>
-                                <h6 class="card-subtitle mb-2 text-muted">{{ "Merek Belum" }}<span class="float-right" style="color: #01d28e">Total: Rp {{ placeRp($order->total) }}</span></h6>
+                                <h5 class="card-title">{{ $mobil->nama }}<span class="float-right" style="color: black">Rp. {{ placeRp($mobil->harga) }} / Hari</span></h5>
+                                <h6 class="card-subtitle mb-2 text-muted">{{ $merek }}
+                                    @if ($tipe_sewa == "Dengan Supir")
+                                        <span class="float-right" style="color: #999999">Biaya Supir: Rp 150,000</span>
+                                    @else
+                                        <span class="float-right" style="color: #e3a10d">Total: Rp {{ placeRp($order->total) }} ({{ $order->durasi_sewa }} Hari)</span>
+                                    @endif
+                                </h6>
 
 
 
@@ -80,20 +94,34 @@
                                         {{ $transmisi }}
                                     </div>
 
+                                    @if ($tipe_sewa == "Dengan Supir")
+                                    <div class="col">
+                                        <span class="float-right" style="color: #e3a10d">Total: Rp {{ placeRp($order->total) }} ({{ $order->durasi_sewa }} Hari)</span>
+                                    </div>
+                                    @endif
+
+
                                 </div>
 
-                                <div class="row justify-content-between mt-4 pl-3">
-                                    <p class="text-muted">{{ $order->tgl_mulai_sewa }} - {{ $order->tgl_akhir_sewa }}</p>
+                                <div class="row justify-content-end mt-4 pl-3">
+                                    
                                     <form action="{{ route('user.RingkasanOrder') }}" method="POST">
                                         @csrf
                                         <input type="hidden" name="id" value="{{ $order->id }}">
-                                        <button type="submit" class="card-link btn btn-danger mr-3">Ringkasan</button>
+                                        <button type="submit" class="card-link btn btn-primary mr-3">Ringkasan</button>
                                     </form>
                                 </div>
 
 
 
                             </div>
+
+                            <div class="col-12 mt-3 pl-4">
+
+                                <p class="text-muted fs-20">{{ ConvertDateToTextDateToIndonesia ($order->tgl_mulai_sewa) }} - {{ ConvertDateToTextDateToIndonesia ($order->tgl_akhir_sewa) }}</p>
+
+                            </div>
+
 
 
                         </div>
@@ -114,6 +142,14 @@
 
                     <div class="card my-2">
 
+                       
+                        <div class="card-header text-center text-black">
+                            Pesanan InI Telah Selesai
+                        </div>
+
+
+                       
+
                         <div class="row">
                             <figure class="col-4">
                                 <img class="rounded figure img-fluid" src="{{ asset('assets/img/cars/' . $mobil->gambar) }}" style="transform: translate(10px, 25px);">
@@ -121,8 +157,13 @@
 
                             <div class="card-body col-8">
                                 <h5 class="card-title">{{ $mobil->nama }}<span class="float-right" style="color: #01d28e">Rp. {{ placeRp($mobil->harga) }} / Hari</span></h5>
-                                <h6 class="card-subtitle mb-2 text-muted">{{ "Merek Belum" }}<span class="float-right" style="color: #01d28e">Total: Rp {{ placeRp($order->total) }}</span></h6>
-
+                                <h6 class="card-subtitle mb-2 text-muted">{{ $merek }}
+                                    @if ($tipe_sewa == "Dengan Supir")
+                                        <span class="float-right" style="color: #999999">Biaya Supir: Rp 150,000</span>
+                                    @else
+                                        <span class="float-right" style="color: #e3a10d">Total: Rp {{ placeRp($order->total) }} ({{ $order->durasi_sewa }} Hari)</span>
+                                    @endif
+                                </h6>
 
 
                                 <div class="row">
@@ -140,14 +181,21 @@
                                         {{ $transmisi }}
                                     </div>
 
+                                    @if ($tipe_sewa == "Dengan Supir")
+                                    <div class="col">
+                                        <span class="float-right" style="color: #e3a10d">Total: Rp {{ placeRp($order->total) }} ({{ $order->durasi_sewa }} Hari)</span>
+                                    </div>
+                                    @endif
+
+
                                 </div>
 
-                                <div class="row justify-content-between mt-4 pl-3">
-                                    <p class="text-muted">{{ $order->tgl_mulai_sewa }} - {{ $order->tgl_akhir_sewa }}</p>
+                                <div class="row justify-content-end mt-4 pl-3">
+                                    
                                     <form action="{{ route('user.RingkasanOrder') }}" method="POST">
                                         @csrf
                                         <input type="hidden" name="id" value="{{ $order->id }}">
-                                        <button type="submit" class="card-link btn btn-danger mr-3">Ringkasan</button>
+                                        <button type="submit" class="card-link btn btn-primary mr-3">Ringkasan</button>
                                     </form>
                                 </div>
 
@@ -155,6 +203,11 @@
 
                             </div>
 
+                            <div class="col-12 mt-3 pl-4">
+                                
+                                <p class="text-muted fs-20">{{ ConvertDateToTextDateToIndonesia ($order->tgl_mulai_sewa) }} - {{ ConvertDateToTextDateToIndonesia ($order->tgl_akhir_sewa) }}</p>
+
+                            </div>
 
                         </div>
 

@@ -99,7 +99,7 @@ $supir = Auth::user()->karyawan()->first() or false;
     </form>
 
     @php
-    $order = Auth::user()->order()->where('status', 'Dalam Persewaan')->first() or false;
+    $order = $supir->order()->where('status', 'Dalam Persewaan')->first() or false;
     @endphp
 
     @if ($order)
@@ -155,7 +155,7 @@ $supir = Auth::user()->karyawan()->first() or false;
 
                         <div class="row">
                             <div class="col">
-                                <p class="font-size-2">Tanggal Sewa: {{ $order->tgl_mulai_sewa }} - {{ $order->tgl_akhir_sewa }}</p>
+                                <p class="font-size-2">Tanggal Sewa: {{ ConvertDateToTextDateToIndonesia($order->tgl_mulai_sewa) }} Sampai {{ ConvertDateToTextDateToIndonesia($order->tgl_akhir_sewa) }}</p>
                             </div>
                         </div>
 

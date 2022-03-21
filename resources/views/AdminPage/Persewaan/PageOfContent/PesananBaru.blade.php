@@ -78,7 +78,12 @@
 
                     @if($data_karyawan->status == "Siap")
                       @php 
-                      $nama_lengkap = $data_karyawan->nama_lengkap or "Nama Lengkap belum di set"
+                      $nama_lengkap = $data_karyawan->nama_lengkap or false;
+
+                      if (!$nama_lengkap) {
+                        $nama_lengkap = "Nama Lengkap belum di set";
+                      }
+
                       @endphp
                       <option value="{{ $data_karyawan->id }}">{{ $nama_lengkap }}</option>
                     @endif

@@ -1,10 +1,12 @@
 <?php
 
+use Carbon\Carbon;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+
 
 class CreateUsersTable extends Migration
 {
@@ -27,10 +29,23 @@ class CreateUsersTable extends Migration
         });
 
         DB::table('users')->insert([
-            'username' => 'admin',
-            'email' => 'hani12alhayyan@gmail.com',
-            'group' => 'admin',
-            'password' => Hash::make('456321hani'),
+            [
+                'username' => 'admin',
+                'email' => 'hani12alhayyan@gmail.com',
+                'group' => 'admin',
+                'password' => Hash::make('456321hani'),
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now()
+            ],
+            [
+                'username' => 'agus',
+                'email' => 'agus@gmail.com',
+                'group' => 'admin',
+                'password' => Hash::make('123123'),
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now()
+            ] 
+            
         ]);
     }
 

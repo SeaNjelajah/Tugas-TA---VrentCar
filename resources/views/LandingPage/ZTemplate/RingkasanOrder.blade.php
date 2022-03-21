@@ -46,7 +46,7 @@
         @endphp
 
 
-            @if ($supir)
+        @if ($supir)
         <div class="alert alert-info">
             Informasi tentang Driver yang melayani anda <i class="float-right fas fa-info"></i>
         </div>

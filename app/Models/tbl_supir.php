@@ -12,10 +12,10 @@ class tbl_supir extends Model
     protected $guarded = ['id', 'created_at', 'updated_at'];
 
     public function user () {
-        $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     public function order () {
-        $this->hasMany(tbl_order::class, 'id_supir');
+        return $this->hasMany(tbl_order::class, 'id_supir');
     }
 }

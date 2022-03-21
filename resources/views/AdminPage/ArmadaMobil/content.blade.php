@@ -32,9 +32,9 @@
                             @if ($stat == "Tersedia")
                             <button class=" btn btn-outline-success">Tersedia</button>
                             @elseif ($stat == "Tidak Tersedia")
-                            <button class=" btn btn-outline-Danger">Tidak Tersedia</button>
+                            <button class=" btn btn-outline-danger">Tidak Tersedia</button>
                             @else
-                            <button class=" btn btn-outline-Danger">Dalam Sewa</button>
+                            <button class=" btn btn-outline-warning">Dalam Sewa</button>
                             @endif
                         </div>
                         
