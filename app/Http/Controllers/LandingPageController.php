@@ -69,6 +69,8 @@ class LandingPageController extends Controller {
 
 
     public function Booking (Request $r) {
+
+        
         
         $BiayaSupir = 150000; // Untuk Tambahan Biaya Jika Dengan Supir
         
@@ -76,6 +78,11 @@ class LandingPageController extends Controller {
         // Untuk alamat serah terima Jika tanpa supir
 
         $mobil = mobil::find($r->id);
+
+        if ($mobil->status != "Tersedia") {
+            abort(404); 
+        }
+
         $tipe_sewa = $mobil->tipe_sewa()->first();
 
         if ($tipe_sewa->tipe_sewa == "Dengan Supir") {

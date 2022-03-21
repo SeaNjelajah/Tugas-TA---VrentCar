@@ -90,6 +90,10 @@ class PersewaanController extends Controller
         $AlamatRental = "Jl. Jagir Sidoresmo VI/66";
         // Untuk alamat serah terima Jika tanpa supir
         $mobil = mobil::find($r->d_mobil_id);
+        
+        if ($mobil->status != "Tersedia") {
+            abort(404); 
+        }
 
         $r->session()->flash('failed', 'Some input are empty!');
 
@@ -459,7 +463,10 @@ class PersewaanController extends Controller
 
         $order->save();
         $mobil->save();
-        $supir->save();
+       
+        if ($tipe_sewa == "Dengan Supir") {
+            $supir->save();
+        }
 
         return redirect()->back()->with('success', 'The order has canceled');
     }
