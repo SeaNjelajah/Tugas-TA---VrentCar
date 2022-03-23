@@ -64,6 +64,8 @@ class PersewaanController extends Controller
 
         }
 
+        $order = $order->sortBy('status');
+
         return view('AdminPage.Persewaan.main', compact('karyawan', 'order'));
     }
 

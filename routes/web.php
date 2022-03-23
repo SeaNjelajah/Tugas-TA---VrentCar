@@ -97,7 +97,7 @@ Route::prefix('Admin')->name('admin.')->middleware('Admin')->group( function () 
       Route::get('/', [Persewaan::class, 'index'])->name('show');
       Route::post('/Setujui/{id}', [Persewaan::class, 'Setujui'])->name('setujui');
       Route::post('/Batalkan/{id}', [Persewaan::class, 'Batalkan'])->name('batalkan');
-      Route::post('/CariMobil', [Persewaan::class, 'CariMobilPersewaan'])->name('cari');
+      Route::match(['post', 'get'], '/CariMobil', [Persewaan::class, 'CariMobilPersewaan'])->name('cari');
       Route::post('/CariMobil/add', [Persewaan::class, 'BuatPesanan'])->name('tambah');
       Route::post('/Verifikasi/Bukti', [Persewaan::class, 'VerifikasiBukti'])->name('verifikasi.bukti');
       Route::post('/Tolak/Bukti', [Persewaan::class, 'TolakBuktiBayar'])->name('tolak.bukti');
