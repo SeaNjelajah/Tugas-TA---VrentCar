@@ -76,6 +76,8 @@ class PersewaanController extends Controller
         } else {
             return redirect()->back()->withInput()->with("failed", "Something wrong! Try again.");
         }
+
+        $mobils = $mobils->where("status", "Tersedia");
         
         $tipe_bayar = tipe_bayar::all();
 
@@ -442,6 +444,9 @@ class PersewaanController extends Controller
     public function Batalkan ($id) {
         
         $order = order::find($id);
+
+        $status_awal_order = $order->status;
+
         $order->status = "Dibatalkan";
        
 
@@ -451,7 +456,7 @@ class PersewaanController extends Controller
 
         $tipe_sewa = $mobil->tipe_sewa()->first()->tipe_sewa;
 
-        if ($tipe_sewa == "Dengan Supir") {
+        if ($tipe_sewa == "Dengan Supir" and $status_awal_order != "Baru") {
             $supir = $order->supir()->first();
             $supir->status = "Siap";
         }
@@ -464,7 +469,7 @@ class PersewaanController extends Controller
         $order->save();
         $mobil->save();
        
-        if ($tipe_sewa == "Dengan Supir") {
+        if ($tipe_sewa == "Dengan Supir" and $status_awal_order != "Baru") {
             $supir->save();
         }
 

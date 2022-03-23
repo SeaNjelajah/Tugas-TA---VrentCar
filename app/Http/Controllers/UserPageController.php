@@ -327,7 +327,7 @@ class UserPageController extends Controller
             $user->member()->create($memberData);
         }
 
-        return redirect()->back()->with('success', 'perubahan berhasi!');
+        return redirect()->back()->with('success', 'Perubahan Berhasil!');
     }
 
 }

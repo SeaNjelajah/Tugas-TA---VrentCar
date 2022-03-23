@@ -1,4 +1,4 @@
-<div class="container-fluid mt-1">
+<div class="container-fluid mt--6">
 
     @foreach ($mobils as $mobil)
     @php

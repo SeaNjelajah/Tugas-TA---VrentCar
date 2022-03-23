@@ -268,11 +268,13 @@
                         </div>
                         <hr class="pl-3 mt-2">
 
-
+                        @php
+                            $member = Auth::user()->member()->first() or false;
+                        @endphp
 
                         <div class="form-group">
                             <label for="alamat_rumah" class="col-form-label">Alamat Tempat Tinggal:</label>
-                            <textarea name="alamat_rumah" class="form-control" id="alamat_rumah" placeholder="Isi alamat lengkap tempat tinggal Anda">{{ old('alamat_rumah') }}</textarea>
+                            <textarea name="alamat_rumah" class="form-control" id="alamat_rumah" placeholder="Isi alamat lengkap tempat tinggal Anda">@if ($member){{ $member->alamat_rumah }}@else{{ old('alamat_rumah') }}@endif</textarea>
                         </div>
 
                         <div class="form-group">

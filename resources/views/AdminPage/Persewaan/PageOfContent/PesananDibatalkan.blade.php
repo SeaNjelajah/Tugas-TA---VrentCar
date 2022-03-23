@@ -4,7 +4,7 @@
 $status_order_last = $item->status_order()->orderBy('created_at', 'desc')->first();
 $tipe_sewa = $mobil->tipe_sewa()->first()->tipe_sewa;
 $tipe_bayar = $item->tipe_bayar()->first() or false;
-$supir = $item->supir()->first();
+$supir = $item->supir()->first() or false;
 @endphp
 
 <div class="card mt-n3">
@@ -68,17 +68,29 @@ $supir = $item->supir()->first();
                                 <td class="col font-poppins-400">{{ $tipe_sewa }}</td>
                             </tr>
 
-                            @if ($tipe_sewa == "Dengan Supir")
+                            @if ($tipe_sewa == "Dengan Supir" and $supir)
                             <tr>
                                 <td class="col-1 font-poppins-400">Supir</td>
                                 <td class="col font-poppins-400">{{ $supir->nama_lengkap }}</td>
                             </tr>
+                            @else
+                            <tr>
+                                <td class="col-1 font-poppins-400">Supir</td>
+                                <td class="col font-poppins-400">Tidak Ada</td>
+                            </tr>
                             @endif
 
+                            @if ($tipe_bayar)
                             <tr>
                                 <td class="col-1 font-poppins-400">Jenis Pembayaran</td>
                                 <td class="col font-poppins-400">{{ $tipe_bayar->deskripsi }}</td>
                             </tr>
+                            @else
+                            <tr>
+                                <td class="col-1 font-poppins-400">Jenis Pembayaran</td>
+                                <td class="col font-poppins-400">Tidak Ada</td>
+                            </tr>
+                            @endif
 
                         </tbody>
                     </table>
