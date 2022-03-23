@@ -97,20 +97,10 @@ class ArmadaMobilController extends Controller
         $merek = tbl_merek::find($req->merek);
         $mobil->merek()->associate($merek);
 
+
+
         $mobil->save();
         
-        // mobil::create([
-        //     'nama' => $req->nm_mb,
-        //     'jumlah_kursi' => $req->jumlah_kursi,
-        //     'tahun' => $req->thn_m,
-        //     'gambar' => $imageName,
-        //     'pelat' => $req->pl_mb,
-        //     'desc_mb' => $req->desc_mb,
-        //     'harga' => $req->hs_ph,
-        //     'kapasitas_koper' => $req->Bagasi,
-        //     'millage' => $req->Millage,
-        //     'status' => $req->st_mb
-        // ]);
 
 
 
@@ -198,7 +188,7 @@ class ArmadaMobilController extends Controller
             $up->tipe_sewa()->associate($jenis_sewa);
         }
 
-        if ($up->id_jenis_mobil != $r->jenis_transmisi)  {
+        if ($up->id_jenis_mobil != $r->jenis_mobil)  {
             $jenis_mobil = jenis_mobil::find($r->jenis_mobil);
             $up->jenis_mobil()->associate($jenis_mobil);
         }

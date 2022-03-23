@@ -15,7 +15,7 @@
         @php $num = 0; @endphp
         @foreach ($mobil as $item)
 
-        <div class="card rounded" id="Card{{ $item->id }}">
+        <div class="card rounded" id="r{{ $num }}">
             <div class="row">
                 <div class="col-4 p-0 m-0">
                     <img class="img-fluid" src="{{ asset('assets/img/cars/' . $item->gambar) }}" alt="Car Picture">

@@ -97,6 +97,8 @@ $supir = $item->supir()->first() or false;
                 </div>
 
                 <div class="row">
+
+                    
                     @if ($tipe_sewa == "Tanpa Supir")
                     <button type="button" class="btn btn-dark mx-auto mb-3" data-toggle="modal" data-target="#SimAModal{{ $item->id }}">
                         SIM A
@@ -108,6 +110,8 @@ $supir = $item->supir()->first() or false;
                         KTP
                     </button>
                     @endif
+
+
                     <button type="button" class="btn btn-danger mx-auto mb-3" data-toggle="modal" data-target="#BuktiBayarModal{{ $item->id }}">Bukti Bayar</button>
                     <button type="button" class="btn btn-info mx-auto mb-3" data-toggle="modal" data-target="#HistoryOrder{{ $item->id }}">Histori Status Order </button> <br>
                     <button type="button" class="btn btn-info mx-auto mb-3" data-toggle="modal" data-target="#infoOrder{{ $item->id }}">More Info</button>

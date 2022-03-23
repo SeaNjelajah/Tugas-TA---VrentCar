@@ -7,67 +7,62 @@
         $transmisi = $mobil->transmisi()->first()->nama_transmisi;
     @endphp
 
-    <div class="card">
-        <div class="container p-3">
-            <figure class="figure w-100 p-0 d-flex d-md-none">
-                <img src="{{ asset('assets/img/cars/' . $mobil->gambar) }}" class="mx-auto figure-img img-fluid rounded" alt="Gambar Mobil">
-            </figure>
-            <div class="row pl-3">
-                <span class="text-black font-poppins-400 font-size-2">{{ $mobil->nama }}</span>
-                <button class="btn btn-outline-success bg-none ml-auto font-poppins-400 mr-3">{{ $tipe_sewa }}</button>
+    <div class="card rounded">
+        <div class="row">
+            <div class="col-4 p-0 m-0">
+                <img class="img-fluid" src="{{ asset('assets/img/cars/' . $mobil->gambar) }}" alt="Car Picture">
             </div>
-            <div class="row pl-3 mt-1 h-100">
-                <figure class="figure col-4 d-none d-md-flex">
-                    <img src="{{ asset('assets/img/cars/' . $mobil->gambar) }}" class="img-fluid rounded" alt="Gambar Mobil">
-                </figure>
-                <div class="col pb-2">
+
+            <div class="col font-poppins-400 ">
+                <div class="row pr-4">
+                    <div class="col-auto mt-3">
+                        <h2>Description</h2>
+                    </div>
+
+                    <div class="col-auto ml-auto mt-2">
+                        <button class="btn btn-outline-success">{{ $tipe_sewa }}</button>
+                    </div>
                     
-                    <div class="row mb-0"style="height: 10%">
-                        <div class="col-auto">
-                            <i class="fas fa-user font-size-2 pr-3"></i>
-                            {{ $mobil->jumlah_kursi }}
-                        </div>
-                        <div class="col-auto">
-                            <i class="fas fa-suitcase font-size-2 pr-3"></i>
-                            {{ $mobil->kapasitas_koper }}
-                        </div>
-            
-                        <div class="col-auto">
-                            <i class="fa fa-gear font-size-2 pr-3"></i>
-                            {{ $transmisi }}
-                        </div>
-                        
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-auto">
+                        <i class="fas fa-user font-size-2 pr-3"></i>
+                        {{ $mobil->jumlah_kursi }}
                     </div>
-
-                    <div class="row mb-0 mt-3 position-absolute">
-                        <p class="bg-lighter p-2 text-md rounded text-dark font-weight-600">
-                            {{ $mobil->desc_mb }}
-                        </p>
+                    <div class="col-auto">
+                        <i class="fas fa-suitcase font-size-2 pr-3"></i>
+                        {{ $mobil->kapasitas_koper }}
                     </div>
-
-
-                    <div class="row pl-0 mt-6 mt-md-8 align-content-end h-25">
-                        <div class="col text-left">
-                            <span class="mt-0 mt-md-2 font-poppins-400 d-flex w-100">Dari</span>
-                            <span class="font-poppins-400 font-size-2 text-red">Rp {{ placeRp($mobil->harga) }}
-                                <span class="text-muted font-poppins-400">/hari</span>
-                            </span>
-                        </div>
-                        <div class="col text-right pt-3">
-                            <button data-toggle="modal" data-target="#modal{{ $mobil->id }}" class="mx-auto btn btn-success font-poppins-400" style="width: 140px; ">Pilih</button>
-                        </div>
+        
+                    <div class="col-auto">
+                        <i class="fa fa-gear font-size-2 pr-3"></i>
+                        {{ $transmisi }}
                     </div>
+                    
+                </div>
 
+                <p>{{ $mobil->desc_mb }}.</p>
+                
+
+            </div>
+        </div>
+        <div class="card-footer py-2 pr-0 rounded border border-lighter border-bottom-0 border-right-0 border-left-0">
+            <div class="row m-0 p-0 pr-3">
+
+                <div class="col text-left">
+                    <span class="mt-0 mt-md-2 font-poppins-400 d-flex w-100">Dari</span>
+                    <span class="font-poppins-400 font-size-2 text-red">Rp {{ placeRp($mobil->harga) }}
+                        <span class="text-muted font-poppins-400">/hari</span>
+                    </span>
+                </div>
+                
+                <div class="col text-right pt-3">
+                    <button data-toggle="modal" data-target="#modal{{ $mobil->id }}" class="mx-auto btn btn-success font-poppins-400" style="width: 140px; ">Pilih</button>
                 </div>
             </div>
-            
         </div>
     </div>
-
-
-
-
-
 
 
     <!-- Modal Pilih -->

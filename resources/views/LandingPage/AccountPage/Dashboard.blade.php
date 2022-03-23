@@ -189,7 +189,7 @@
                                                 
                                                 @if ($member)
                                                     @if (!empty($member->nama_lengkap))
-                                                    <input value="{{ $member->alamat_rumah }}" name="alamat_rumah" id="alamat_rumah" class="form-control" placeholder="Alamat Rumah" type="text">
+                                                    <input  value="{{ $member->alamat_rumah }}" name="alamat_rumah" id="alamat_rumah" class="form-control" placeholder="Alamat Rumah" type="text">
                                                     @else
                                                     <input  name="alamat_rumah" id="alamat_rumah" class="form-control" placeholder="Alamat Rumah" type="text">
                                                     @endif
