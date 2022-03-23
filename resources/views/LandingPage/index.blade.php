@@ -134,7 +134,7 @@
 		    						</div>
 		    						<p class="d-flex mb-0 d-block">
 											
-                      <form method="GET" action="{{ route('CarSinglePage') }}">
+                      <form method="POST" action="{{ route('CarSinglePage') }}">
                         @csrf
                         <input type="hidden" name="id" value="{{ $item->id }}">
 
@@ -142,7 +142,6 @@
                       </form>
 
                       <form  method="GET" action="{{ route('FormOrder') }}">
-                        @csrf
                         <input type="hidden" name="id" value="{{ $item->id }}">
                         <button type="submit"  class="btn btn-primary py-2 mr-1 w-100 mb-2 mt-2">Book now</button>
                       </form>
