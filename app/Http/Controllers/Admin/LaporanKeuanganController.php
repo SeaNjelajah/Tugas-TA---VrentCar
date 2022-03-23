@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Exports\OrdersExport;
+use App\Exports\OrdersAllExport;
+use App\Exports\OrdersCurrentlyExport;
+
 use App\Http\Controllers\Controller;
 use App\Models\tbl_order as order;
+use App\Models\tbl_order;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
@@ -68,7 +71,8 @@ class LaporanKeuanganController extends Controller
             if (!empty($r->between)) {
 
                 if ($r->between == "all") {
-                    return Excel::download(new OrdersExport(0), 'All Order Data.csv');
+                    $FileName = time() . " All Order Data.csv";
+                    return Excel::download(new OrdersAllExport, $FileName);  
                 }
 
                 $between = $r->between;
@@ -76,9 +80,7 @@ class LaporanKeuanganController extends Controller
                 $between = "week";
             }
 
-
-
-
+          
             $now = Carbon::now();
             $Start = $now->startOf($between)->toDateTimeLocalString();            
             $End = $now->EndOf($between)->toDateTimeLocalString();
@@ -86,10 +88,12 @@ class LaporanKeuanganController extends Controller
             $FileName = $now->EndOf($between)->toDateString() . " - " .
                         $now->startOf($between)->toDateString() . " A " .
                         $between . " Order Data";
-    
+            
         }
-        
-        return Excel::download(new OrdersExport(1, $Start, $End), $FileName . '.csv');
+
+        $orders = tbl_order::where('status', 'Selesai')->whereBetween('created_at', [$Start, $End])->getQuery();
+
+        return Excel::download(new OrdersCurrentlyExport($orders), $FileName . ".csv");
 
     }
 }
