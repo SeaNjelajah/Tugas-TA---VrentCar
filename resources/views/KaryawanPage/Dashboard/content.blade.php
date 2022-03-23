@@ -204,7 +204,7 @@ $supir = Auth::user()->karyawan()->first() or false;
                     @foreach ($order->status_order()->orderBy('created_at', 'desc')->get() as $status_order_item)
                     <tr>
                         <td>{{ ++$counter }}</td>
-                        <td>{{ $status_order_item->created_at }}</td>
+                        <td>{{ ConvertDateToTextDateToIndonesia ($status_order_item->created_at) }}</td>
                         <td>{{ $status_order_item->status }}</td>
                     </tr>
                     @endforeach
