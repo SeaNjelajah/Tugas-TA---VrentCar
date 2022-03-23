@@ -490,13 +490,7 @@ class PersewaanController extends Controller
     public function Selesai (Request $r) {
 
         $order = order::find($r->id);
-
         $mobil = $order->mobil()->first();
-        $user = $order->user()->first();
-        
-        
-        $mobil->status = "Tersedia";
-        $order->status = "Selesai";
 
         $tipe_sewa = $order->tipe_sewa()->first()->tipe_sewa;
         
@@ -506,8 +500,12 @@ class PersewaanController extends Controller
             $supir->save();
         }
 
-        $mobil->save();
-        $order->save();
+        $mobil->update([
+            "status" => "Tersedia"
+        ]);
+        $order->update([
+            "status" => "Selesai"
+        ]);
 
         $order->status_order()->create([
             'status' => 'Selesai',

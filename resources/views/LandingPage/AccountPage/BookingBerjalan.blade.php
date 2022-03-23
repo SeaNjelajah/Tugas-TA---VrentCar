@@ -58,9 +58,15 @@
                     $bukti_bayar = $order->bukti_bayar()->first() or false;
 
                     $member = $user->member()->first();
-                    $sim_a = $member->sim_a()->first() or false;
-                    $ktp = $member->ktp()->first() or false;
-                    $kartu_keluarga = $member->kartu_keluarga()->first() or false;
+                    if ($member) {
+                        $sim_a = $member->sim_a()->first() or false;
+                        $ktp = $member->ktp()->first() or false;
+                        $kartu_keluarga = $member->kartu_keluarga()->first() or false;
+                    } else {
+                        $sim_a = false;
+                        $ktp = false;
+                        $kartu_keluarga = false;
+                    }
 
                     @endphp
 
@@ -170,10 +176,16 @@
 
                     $bukti_bayar = $order->bukti_bayar()->first() or false;
 
-                    $member = $user->member()->first();
-                    $sim_a = $member->sim_a()->first() or false;
-                    $ktp = $member->ktp()->first() or false;
-                    $kartu_keluarga = $member->kartu_keluarga()->first() or false;
+                    $member = $user->member()->first() or false;
+                    if ($member) {
+                        $sim_a = $member->sim_a()->first() or false;
+                        $ktp = $member->ktp()->first() or false;
+                        $kartu_keluarga = $member->kartu_keluarga()->first() or false;
+                    } else {
+                        $sim_a = false;
+                        $ktp = false;
+                        $kartu_keluarga = false;
+                    }
 
                     @endphp
 

@@ -59,7 +59,7 @@ class LandingPageController extends Controller {
         $mobil = mobil::find($r->id);
         
         if ($mobil->status != "Tersedia")
-            return redirect()->intended(route('CarListPage'));
+            return redirect()->named('CarListPage');
 
         if ($mobil->tipe_sewa()->first()->tipe_sewa == "Dengan Supir")
             return view ('LandingPage.BookingPage.formOrderDenganSupir', compact('mobil'));
