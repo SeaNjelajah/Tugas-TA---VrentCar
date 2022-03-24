@@ -302,7 +302,7 @@
 
                         <div class="form-group">
                             <label for="alamat_temu" class="col-form-label">Alamat Serah Terima Mobil:</label>
-                            <textarea disabled name="alamat_temu" class="form-control" id="alamat_temu">Jalan Kalibokor 3C / No. 37 C Surabaya</textarea>
+                            <textarea disabled name="alamat_temu" class="form-control" id="alamat_temu">Jl. Jagir Sidoresmo VI/66</textarea>
                             <small class="font-weight-bolder text-dark">Note: Alamat serah terima mobil hanya bisa berada di alamat rental mobil</small>
                         </div>
 
