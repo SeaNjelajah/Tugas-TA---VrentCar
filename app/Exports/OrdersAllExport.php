@@ -21,6 +21,7 @@ class OrdersAllExport implements FromQuery, WithHeadings, WithMapping
 
     public function map($order): array
     {
+
         $totalDenda = $order->denda()->get()->sum('denda');
         $hargaPerHari = $order->mobil()->first()->harga;
 
@@ -28,13 +29,19 @@ class OrdersAllExport implements FromQuery, WithHeadings, WithMapping
             $totalDenda = "0";
         }
 
+        if ($order->supir()->exists()) {
+            $supir = "150000";
+        } else {
+            $supir = "0";
+        }
+
         return [
             $order->id, $order->status, $order->penyewa,
             $order->No_tlp, $order->tgl_mulai_sewa, 
             $order->tgl_akhir_sewa, $order->alamat_rumah,
-            $order->alamat_temu, $hargaPerHari,
-            strval($order->durasi_sewa) . " Hari",
-            $totalDenda, $order->total
+            $order->alamat_temu, $supir, $totalDenda,
+            $hargaPerHari, $order->durasi_sewa . " Hari",
+            $order->total,
         ];
     }
 
@@ -50,9 +57,10 @@ class OrdersAllExport implements FromQuery, WithHeadings, WithMapping
             "Tanggal Akhir Sewa",
             "Alamat Rumah",
             "Alamat Temu",
+            "Biaya Supir",
+            "Denda",
             "Harga / Hari",
             "Durasi",
-            "Denda",
             "Total"
         ];
     }

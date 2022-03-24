@@ -7,7 +7,7 @@ use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
 use Maatwebsite\Excel\Concerns\FromQuery;
-use Illuminate\Database\Query\Builder;
+use Illuminate\Database\Eloquent\Builder;
 class OrdersCurrentlyExport implements FromQuery, WithHeadings, WithMapping
 {
     protected Builder $orders;
@@ -26,21 +26,29 @@ class OrdersCurrentlyExport implements FromQuery, WithHeadings, WithMapping
     public function map($order): array
     {   
 
-        $Model = tbl_order::find($order->id);
-        $totalDenda = $Model->denda()->get()->sum('denda');
-        $hargaPerHari = $Model->mobil()->first()->harga;
-
+        $totalDenda = $order->denda()->get()->sum('denda');
+        $hargaPerHari = $order->mobil()->first()->harga;
+        
+        $supir = $order->supir()->first() or false;
+       
         if ($totalDenda == 0) {
             $totalDenda = "0";
         }
+
+        if ($order->supir()->exists()) {
+            $supir = "150000";
+        } else {
+            $supir = "0";
+        }
+
 
         return [
             $order->id, $order->status, $order->penyewa,
             $order->No_tlp, $order->tgl_mulai_sewa, 
             $order->tgl_akhir_sewa, $order->alamat_rumah,
-            $order->alamat_temu, $hargaPerHari,
-            strval($order->durasi_sewa) . " Hari",
-            $totalDenda, $order->total
+            $order->alamat_temu, $supir, $totalDenda,
+            $hargaPerHari, $order->durasi_sewa . " Hari",
+            $order->total
         ];
     }
 
@@ -56,10 +64,11 @@ class OrdersCurrentlyExport implements FromQuery, WithHeadings, WithMapping
             "Tanggal Akhir Sewa",
             "Alamat Rumah",
             "Alamat Temu",
+            "Biaya Supir",
+            "Denda",
             "Harga / Hari",
             "Durasi",
-            "Denda",
-            "Total"
+            "Total",
         ];
     }
 }

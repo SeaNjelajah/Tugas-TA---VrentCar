@@ -91,7 +91,7 @@ class LaporanKeuanganController extends Controller
             
         }
 
-        $orders = tbl_order::where('status', 'Selesai')->whereBetween('created_at', [$Start, $End])->getQuery();
+        $orders = tbl_order::where('status', 'Selesai')->whereBetween('created_at', [$Start, $End]);
 
         return Excel::download(new OrdersCurrentlyExport($orders), $FileName . ".csv");
 

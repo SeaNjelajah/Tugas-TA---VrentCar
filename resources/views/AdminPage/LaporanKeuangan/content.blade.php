@@ -79,9 +79,10 @@
                                 <th scope="col" class="sort text-dark">Nama Mobil</th>
                                 <th scope="col" class="sort text-dark">Mulai Sewa</th>
                                 <th scope="col" class="sort text-dark">Akhir Sewa</th>
+                                <th scope="col" class="sort text-dark">Biaya sopir</th>
+                                <th scope="col" class="sort text-dark">Denda</th>
                                 <th scope="col" class="sort text-dark">Harga / Hari</th>
                                 <th scope="col" class="sort text-dark">Durasi</th>
-                                <th scope="col" class="sort text-dark">Denda</th>
                                 <th scope="col" class="sort text-dark">Total</th>
                             </tr>
                         </thead>
@@ -95,6 +96,7 @@
                             @php
                             $mobil = $order->mobil()->first();
                             $totalDenda = $order->denda()->get()->sum('denda');
+                            $supir = $order->supir()->first() or false;
                             @endphp
 
                             <tr>
@@ -113,15 +115,29 @@
                                 <td>
                                     {{ ConvertDateToTextDateToIndonesia ($order->tgl_akhir_sewa) }}
                                 </td>
-                                <td class="budget">
-                                    Rp {{ placeRp($mobil->harga) }}
-                                </td>
+                                @php
+                                    $BiayaSupir = 150000;
+                                @endphp
                                 <td>
-                                    {{ $order->durasi_sewa }} Hari
+                                    @if ($supir)
+                                    Rp. {{ placeRp($BiayaSupir) }}
+                                    @else
+                                    Rp. 0
+                                    @endif
                                 </td>
+
                                 <td>
                                     Rp. {{ placeRp($totalDenda) }}
                                 </td>
+                                
+                                <td class="budget">
+                                    Rp {{ placeRp($mobil->harga) }}
+                                </td>
+
+                                <td>
+                                    {{ $order->durasi_sewa }} Hari
+                                </td>
+
                                 <td class="budget">
                                     Rp. {{ placeRp($order->total) }}
                                 </td>
