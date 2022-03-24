@@ -167,14 +167,7 @@
                                         <p style="color: orangered">Rp {{ placeRp($mobil->harga) }}</p>
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <div class="col">
-                                        <p>Biaya Sopir</p>
-                                    </div>
-                                    <div class="col">
-                                        <p>Rp 150.000</p>
-                                    </div>
-                                </div>
+                                
 
                             </div>
 
