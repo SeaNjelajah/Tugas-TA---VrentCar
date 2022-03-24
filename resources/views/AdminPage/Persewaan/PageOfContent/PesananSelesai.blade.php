@@ -69,10 +69,21 @@ $supir = $item->supir()->first();
                             </tr>
                             
                             @if ($tipe_sewa == "Dengan Supir")
-                            <tr>
-                                <td class="col-1 font-poppins-400">Supir</td>
-                                <td class="col font-poppins-400">{{ $supir->nama_lengkap }}</td>
-                            </tr>
+                                @if (empty($supir->nama_lengkap))
+
+                                <tr>
+                                    <td class="col-1 font-poppins-400">Supir</td>
+                                    <td class="col font-poppins-400">Nama Lengkap Tidak Ada</td>
+                                </tr>
+
+                                @else
+
+                                <tr>
+                                    <td class="col-1 font-poppins-400">Supir</td>
+                                    <td class="col font-poppins-400">{{ $supir->nama_lengkap }}</td>
+                                </tr>
+
+                                @endif
                             @endif
 
                             <tr>

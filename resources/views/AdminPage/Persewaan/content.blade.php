@@ -269,6 +269,21 @@
                                 </td>
                             </tr>
 
+                            @php
+                            $TotalDenda = $item->denda()->get()->sum('denda') or false;
+                            @endphp
+
+                            @if ($TotalDenda)
+                            <tr>
+                                <td class="d-flex">
+                                    <h3 class="col-3 text-left">Denda</h3>
+                                    <h3 class="col-1"> : </h3>
+                                    <h3 class="col-8 ">Rp. {{ placeRp ($TotalDenda) }}</h3>
+                                </td>
+                            </tr>
+                            @endif
+
+
                             <tr>
                                 <td class="d-flex">
                                     <h3 class="col-3 text-left">Total Harga</h3>

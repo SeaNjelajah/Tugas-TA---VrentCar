@@ -279,7 +279,9 @@ class PersewaanController extends Controller
         }
 
         if ($tipe_sewa == "Tanpa Supir") {
+
             $penyewa = $order->user()->first();
+
             $data_member = $penyewa->member()->first();
             
             $ktp = $data_member->ktp()->first() or false;
@@ -304,7 +306,7 @@ class PersewaanController extends Controller
 
             if ($sim_a) {
                 if ($sim_a->terverifikasi != "Diterima")
-                    return redirect()->back()->with('failed', 'Bukti Bayar harus terverifikasi');
+                    return redirect()->back()->with('failed', 'SIM A harus terverifikasi');
             } else {
                 return redirect()->back()->with('failed', 'SIM A harus terverifikasi');
             }

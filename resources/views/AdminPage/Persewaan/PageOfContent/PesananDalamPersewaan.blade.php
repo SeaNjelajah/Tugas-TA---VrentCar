@@ -238,7 +238,7 @@ $supir = $item->supir()->first();
             </div>
 
             <div class="col-auto">
-                <button type="button" class="text-right btn btn-info" data-toggle="modal" data-target="#infoOrder1">More Info</button>
+                <button type="button" class="text-right btn btn-info" data-toggle="modal" data-target="#infoOrder{{ $item->id }}">More Info</button>
             </div>
         </div>
 
