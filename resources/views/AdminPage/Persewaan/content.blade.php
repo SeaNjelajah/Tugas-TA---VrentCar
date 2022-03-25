@@ -443,6 +443,8 @@
 
 
                 </div>
+                
+            
             </div>
         </div>
     </div>
@@ -630,7 +632,7 @@
                     @elseif ($sim_a->terverifikasi == "Ditolak")
                     <button type="button" class="btn btn-outline-danger"><i class="fas fa-circle-xmark"></i> SIM A Di Tolak</button>
 
-                    <form action="{{ route('admin.Persewaan.verifikasi.sim_a') }}" method="POST">
+                    <form action="{{ route('admin.Persewaan.verifikasi.SimA') }}" method="POST">
                         @csrf
                         <input type="hidden" name="sim_a_id" value="{{ $sim_a->id }}">
                         <button type="submit" class="btn btn-primary">Vertifikasi SIM A</button>

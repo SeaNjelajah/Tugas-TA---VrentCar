@@ -85,7 +85,11 @@
                         @endif 
 
                         @if ($tipe_sewa == "Tanpa Supir" and $bukti_bayar and $sim_a and $ktp and $kartu_keluarga)
-                            @if($bukti_bayar->terverifikasi != "Diterima" or $sim_a->terverifikasi != "Diterima" or $ktp->terverifikasi != "Diterima" or $kartu_keluarga->terverifikasi != "Diterima")
+                            @if($bukti_bayar->terverifikasi == "Ditolak" or $sim_a->terverifikasi == "Ditolak" or $ktp->terverifikasi == "Ditolak" or $kartu_keluarga->terverifikasi == "Ditolak")
+                            <div class="card-header text-center text-black">
+                                Salah Satu Persyaratan Ditolak, (Mohon Melengkapi Kembali)
+                            </div>
+                            @elseif($bukti_bayar->terverifikasi == "Diterima" or $sim_a->terverifikasi == "Diterima" or $ktp->terverifikasi == "Diterima" or $kartu_keluarga->terverifikasi == "Diterima")
                             <div class="card-header text-center text-black">
                                 Menunggu Vertifikasi
                             </div>
@@ -204,7 +208,11 @@
                         @endif 
 
                         @if ($tipe_sewa == "Tanpa Supir" and $bukti_bayar and $sim_a and $ktp and $kartu_keluarga)
-                            @if($bukti_bayar->terverifikasi != "Diterima" or $sim_a->terverifikasi != "Diterima" or $ktp->terverifikasi != "Diterima" or $kartu_keluarga->terverifikasi != "Diterima")
+                            @if($bukti_bayar->terverifikasi == "Ditolak" or $sim_a->terverifikasi == "Ditolak" or $ktp->terverifikasi == "Ditolak" or $kartu_keluarga->terverifikasi == "Ditolak")
+                            <div class="card-header text-center text-black">
+                                Salah Satu Persyaratan Ditolak, (Mohon Melengkapi Kembali)
+                            </div>
+                            @elseif($bukti_bayar->terverifikasi == "Diterima" or $sim_a->terverifikasi == "Diterima" or $ktp->terverifikasi == "Diterima" or $kartu_keluarga->terverifikasi == "Diterima")
                             <div class="card-header text-center text-black">
                                 Menunggu Vertifikasi
                             </div>
